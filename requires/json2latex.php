@@ -121,7 +121,6 @@ class json2latex {
         //Also declare $grouped array to check grouped question matrices in the form
         $choices = array();
         $grouped = array();
-        $hidden = array();
 
         //Get an array of all answer choices for each question, 
         //must be done before finding groups of same answers
@@ -188,10 +187,12 @@ class json2latex {
         //Run through each question in the survey and generate the final LaTeX result
         foreach($meta as $key => $val) {
 
-            //If the field is flagged as hidden, we skip it
-            /* if(strpos($val->field_annotation, '@HIDDEN-SURVEY') !== false || strpos($val->field_annotation, '@HIDDEN') !== false) {
+            //If the field is flagged as hidden, we skip it and don't include it on the survey
+            if(strpos($val->field_annotation, '@HIDDEN-SURVEY') !== false || strpos($val->field_annotation, '@HIDDEN') !== false) {
                 continue;
-            } */
+            }
+            //NOTE: Skipping other types (text, notes, etc, will require making a file of those types
+            //      and passing them to export_results_func.php so each type can be dynamically ignored for the project)
 
             //Removes errant HTML objects from field labels and section headers (both descriptive)
             $val->field_label = preg_replace('/<(.*?)>/', '', $val->field_label);

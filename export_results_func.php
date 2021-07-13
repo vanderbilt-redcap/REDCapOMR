@@ -28,27 +28,33 @@ use IU\PHPCap\PhpCapException;
         foreach($meta as $key => $val) {
             //Don't include descriptive fields lik with empty form creation
             if($val->field_type !== 'descriptive') {
-                $formFieldTypes[$index] = $val->field_type;
-
-                //Make array of answers
-                $formChoices[$index] = explode('|', $val->select_choices_or_calculations);
-                //Remove all numeric characters before the first comma
-                $formChoices[$index] = preg_replace('/,.*$/', '', $formChoices[$index]);
-        
-                foreach($formChoices[$index] as $num => $choice) {
-                    $formChoices[$index][$num] = trim($choice);
-                }
-
+                //If we have a hidden field, we add it to the index so we can pass over its value later
                 if(strpos($val->field_annotation, '@HIDDEN-SURVEY') !== false || strpos($val->field_annotation, '@HIDDEN') !== false) {
                     $hidden[$index] = true;
                 }
+                //If it's not hidden, we populate the two associative arrays with the question's data
                 else {
                     $hidden[$index] = false;
-                }
 
-                $index++;
+                    $formFieldTypes[$index] = $val->field_type;
+
+                    //Make array of answers
+                    $formChoices[$index] = explode('|', $val->select_choices_or_calculations);
+                    //Remove all numeric characters before the first comma
+                    $formChoices[$index] = preg_replace('/,.*$/', '', $formChoices[$index]);
+        
+                    foreach($formChoices[$index] as $num => $choice) {
+                        $formChoices[$index][$num] = trim($choice);
+                    }
+
+                    $index++;
+                }
             }
         }
+
+        echo var_dump($formChoices);
+        echo var_dump($formFieldTypes);
+
 
         //Create the vars to hold the csv with parsed data without "review" cols
         //AND global_id, empty, valid, recognized, review, verified (index 1-6)
@@ -108,7 +114,6 @@ use IU\PHPCap\PhpCapException;
             }
         }
 
-
         //Create our final csv file to be sent to the server
         $csv = $redcapFormData . "\r\n";
 
@@ -121,9 +126,10 @@ use IU\PHPCap\PhpCapException;
                     $csv = $csv . $trimmedCsv[$i][0][0] . ',';
                 }
                 //Skip hidden fields and leave their spots empty to ensure that their data is left blank
-                /* else if($hidden[$j]) {
+                if($hidden[$j]) {
+                    echo "Skipped ".var_dump($trimmedCsv[$i][$j])." with j = $j\r\n";
                     $csv = $csv . ',';
-                } */
+                }
                 //We don't have support for OCR, so we enter nothing for those fields
                 else if($formFieldTypes[$j] === 'text' || $formFieldTypes[$j] === 'notes') {
                     $csv = $csv . ',';
@@ -165,7 +171,6 @@ use IU\PHPCap\PhpCapException;
             $csv = $csv . "1\r\n";
         }
 
-        //echo $csv;
         return $csv;
     }
 
