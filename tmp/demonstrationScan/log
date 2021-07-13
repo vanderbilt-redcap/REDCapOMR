@@ -1,0 +1,199 @@
+------------------------------------------------------------------------------
+- SDAPS -- setup
+------------------------------------------------------------------------------
+Running pdflatex now multiple times to generate the questionnaire.
+Running pdflatex now multiple imes to generate the questionnaire.
+Research Participant Perception Survey - SP
+Author: Vanderbilt
+------------------------------------------------------------------------------
+- SDAPS -- stamp
+------------------------------------------------------------------------------
+Running pdflatex now multiple times to generate the stamped questionnaire.
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Processing /tmp/sdaps-convert-4lhf7m1n.tif
+Done
+------------------------------------------------------------------------------
+- SDAPS -- reset
+------------------------------------------------------------------------------
+Removing stored data...
+Done
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Processing /tmp/sdaps-convert-_637lf_j.tif
+Done
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+1 sheet
+Warning: Neither 1.tif, 5 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 5 or DUMMY, 0 has a known page number!
+Warning: No page number for page 1.tif, 5 exists.
+Processed 1 of 1 sheets, took 4.082514 seconds
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+1 sheet
+Processed 0 of 1 sheets, took 0.009900 seconds
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- reset
+------------------------------------------------------------------------------
+Removing stored data...
+Done
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Processing /tmp/sdaps-convert-gpi85n0x.tif
+Done
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+2 sheets
+Warning: Neither 1.tif, 1 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 2 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 1 or DUMMY, 0 has a known page number!
+Warning: Neither 1.tif, 2 or DUMMY, 0 has a known page number!
+Warning: No page number for page 1.tif, 1 exists.
+Warning: No page number for page 1.tif, 2 exists.
+Warning: Got a wrong survey ID (1.tif, 1)! It is None, but should be 4183094652.
+Warning: Could not read questionnaire ID of either 1.tif, 5 or DUMMY, 0!
+Warning: Got different IDs on different pages for at least one sheet! Do *NOT* try to use filters with this survey! You have to run a "reorder" step for this to work properly!
+Warning: Neither 1.tif, 13 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 13 or DUMMY, 0 has a known page number!
+Warning: No page number for page 1.tif, 13 exists.
+Processed 2 of 2 sheets, took 5.909455 seconds
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- reset
+------------------------------------------------------------------------------
+Removing stored data...
+Done
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Processing /tmp/sdaps-convert-rd3oomq8.tif
+Done
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+2 sheets
+Warning: Neither 1.tif, 1 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 2 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 1 or DUMMY, 0 has a known page number!
+Warning: Neither 1.tif, 2 or DUMMY, 0 has a known page number!
+Warning: No page number for page 1.tif, 1 exists.
+Warning: No page number for page 1.tif, 2 exists.
+Warning: Got a wrong survey ID (1.tif, 1)! It is None, but should be 4183094652.
+Warning: Could not read questionnaire ID of either 1.tif, 5 or DUMMY, 0!
+Warning: Got different IDs on different pages for at least one sheet! Do *NOT* try to use filters with this survey! You have to run a "reorder" step for this to work properly!
+Warning: Neither 1.tif, 13 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 13 or DUMMY, 0 has a known page number!
+Warning: No page number for page 1.tif, 13 exists.
+Processed 2 of 2 sheets, took 5.829545 seconds
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- reset
+------------------------------------------------------------------------------
+Removing stored data...
+Done
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Processing /tmp/sdaps-convert-6tgj6weq.tif
+Done
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+2 sheets
+Warning: Neither 1.tif, 1 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 2 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 1 or DUMMY, 0 has a known page number!
+Warning: Neither 1.tif, 2 or DUMMY, 0 has a known page number!
+Warning: No page number for page 1.tif, 1 exists.
+Warning: No page number for page 1.tif, 2 exists.
+Warning: Got a wrong survey ID (1.tif, 1)! It is None, but should be 4183094652.
+Warning: Could not read questionnaire ID of either 1.tif, 5 or DUMMY, 0!
+Warning: Got different IDs on different pages for at least one sheet! Do *NOT* try to use filters with this survey! You have to run a "reorder" step for this to work properly!
+Warning: Neither 1.tif, 13 or DUMMY, 0 has a known rotation!
+Warning: Neither 1.tif, 13 or DUMMY, 0 has a known page number!
+Warning: No page number for page 1.tif, 13 exists.
+Processed 2 of 2 sheets, took 6.780886 seconds
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- reset
+------------------------------------------------------------------------------
+Removing stored data...
+Done
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Processing /tmp/sdaps-convert-9wd_zmv2.tif
+Done
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+3 sheets
+Processed 3 of 3 sheets, took 6.250620 seconds
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- reset
+------------------------------------------------------------------------------
+Removing stored data...
+Done
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Processing /tmp/sdaps-convert-bjzw206t.tif
+Done
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+3 sheets
+Processed 3 of 3 sheets, took 6.043901 seconds
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------

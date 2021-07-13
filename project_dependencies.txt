@@ -1,0 +1,44 @@
+OMR RPPS Project List of Dependencies:
+
+Basic dependencies:
+- SDAPS version 1.9.9 (https://github.com/sdaps/sdaps)
+  Note: this version should be downloaded from Github and installed with 
+        ./setup.py install --install-tex (this installs the SDAPS LaTeX package)
+
+- PHP version 7.4.3
+  Note: (May change and upload files directly to REDCap for organization purposes, but currently upload_max_filesize, post_max_size should be made much bigger)
+
+- SDAPS LaTeX package (https://ctan.org/pkg/sdaps?lang=en)
+
+- python 3.6
+- python distutils and distutils-extra (https://docs.python.org/3/library/distutils.html) probably install through pip3 (https://launchpad.net/python-distutils-extra)
+- python3-cairo including dev tools (python3-cairo-dev, https://packages.ubuntu.com/bionic/python3-cairo-dev)
+- libtiff and dev packages (could never find dev packages but it works for me)(https://gitlab.com/libtiff/libtiff)
+- pkg-config (https://www.freedesktop.org/wiki/Software/pkg-config/)
+- python-zbar (https://pypi.org/project/zbar/)
+- python3 dev files (might have to do some searching to find exact install)
+- python3-opencv
+- Poppler and introspection data
+- python3-gi
+
+
+Graphical User Interface (GUI):
+- GTK+ and introspection data
+- python3-gi
+
+
+LaTeX-based questionnaires:
+- pdfTeX (used 2019 version locally, newer versions are definitely encouraged.  I had to jump through way too many hoops to get the 2019 version working properly) (https://www.tug.org/applications/pdftex/)
+- TikZ and PGF
+- beamer
+- package for sans-serif font family (installed on first run using \sfdefault, not sure of the package name)
+
+
+Dependencies for my code pulled through composer:
+- SdapsPHP (I used this code as my basis for my class and edited this code highly, it was completely unusable with SDAPS 1.9.9) (https://github.com/jansenfelipe/sdaps-php)
+- PHPCap (https://github.com/IUREDCap/phpcap)
+
+
+Possible future dependencies:
+- Docker (to create a Docker VM for the application, not too sure of the scope of the complete implementation yet)
+- PHP library parallel (will possibly add if time permits, allows multithreading in PHP and would vastly improve useability and speed by dividing tasks among different threads.  Will be VERY hard to implement) (https://github.com/krakjoe/parallel)
