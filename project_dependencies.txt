@@ -5,7 +5,7 @@ Basic dependencies:
   Note: this version should be downloaded from Github and installed with 
         ./setup.py install --install-tex (this installs the SDAPS LaTeX package)
 
-- PHP version 7.4.3
+- PHP version >= 7.4.3 (need to check)
   Note: (May change and upload files directly to REDCap for organization purposes, but currently upload_max_filesize, post_max_size should be made much bigger)
 
 - SDAPS LaTeX package (https://ctan.org/pkg/sdaps?lang=en)
