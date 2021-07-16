@@ -26,11 +26,14 @@
         <select class="hidden" name="instruments" id="instruments" hidden>
         </select>
         <br>
+        <div id="recordsDiv" class="hidden" hidden>
+            <p class="hidden" hidden>Specify which records you want to make printouts of:</p>
+            <button id="getRecords" class="hidden" type="button" hidden>Get Records</button>
+            <ul id="recordsUl" class="hidden" hidden></ul>
+        </div>
+        <br>
         <p class="hidden" hidden>Enter an SDAPS project name:</p>
         <input type="text" class="hidden" id="projName" name="projName" hidden>
-        <br>
-        <p class="hidden" hidden>Specify number of documents to create (starts from last record ID):</p>
-        <input type="text" class="hidden" id="docNum" name="docNum" hidden>
         <br>
         <br>
         <button id="create" class="hidden" type="button" hidden>Create Form</button>

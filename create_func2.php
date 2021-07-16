@@ -170,13 +170,14 @@ if(($projectPath = SdapsPHP::createProject($projectPath, $texPath)) !== '') {
 
     //Deletes generated .tex file in tmp/ directory
     unlink($texPath);
-    
+
     if($num >= 0) {
         SdapsPHP::stampIDs($projectPath, $docs);
     }
     else {
         echo "You did not create any stamped IDs with your project.  Go to 'Create Printouts' to add them.\r\n";
     }
+
     echo $projectPath;
 }
 else {

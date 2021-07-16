@@ -61,67 +61,12 @@ $(document).ready(function() {
                 }
             }
         });
-    });
-
-    $('#getRecords').on('click', function() {
-        $.ajax({
-            type: "POST",
-            url: "../requires/get_record_ids.php",
-            data: {
-                apiToken: $('#apiToken').val(),
-                apiUrl: $('#apiUrl').val(),
-                instruments: $('#instruments').val()
-            },
-            dataType: "JSON",
-            success: function(response) {
-                console.log(response);
-                OMR_ProjectCreateVars.records = response;
-                OMR_ProjectCreateVars.recordsUl = document.getElementById('recordsUl');
-
-                //Deletes the previous records shown on screen if the "Get Records" button is pressed again
-                OMR_ProjectCreateVars.recordsUl.innerHTML = "";
-
-                OMR_ProjectCreateVars.columnAmt = 0;
-
-                OMR_ProjectCreateVars.records.forEach(function(item, index) {
-                    //Adds 1 to a variable to make columns for every 10 elements
-                    if((index+1) % 10 === 0) {
-                        OMR_ProjectCreateVars.columnAmt++;
-                    }
-
-                    if(index !== 0) {
-                        OMR_ProjectCreateVars.br = document.createElement('br');
-                        OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.br);
-                    }
-
-                    OMR_ProjectCreateVars.check = document.createElement('input');
-                    OMR_ProjectCreateVars.check.type = 'checkbox';
-                    OMR_ProjectCreateVars.check.value = item;
-                    OMR_ProjectCreateVars.check.id = item;
-                    OMR_ProjectCreateVars.check.name = 'records[]';
-                    OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.check);
-
-                    OMR_ProjectCreateVars.check.setAttribute('disabled', 'disabled');
-
-                    OMR_ProjectCreateVars.label = document.createElement('label');
-                    OMR_ProjectCreateVars.label.innerHTML = item;
-                    OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.label);
-                });
-
-                //Create a new column for every 10 elements
-                OMR_ProjectCreateVars.recordsUl.style.columnCount = OMR_ProjectCreateVars.columnAmt;
-            },
-            error: function(response) {
-                alert(response);
-                console.log(response);
-            }
-        });
-    });
+    })
 
     $('#create').on('click', function() {
         $.ajax({
             type: "POST",
-            url: "../create_func2.php",
+            url: "../create_func.php",
             data: {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val(),
