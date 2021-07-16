@@ -1,18 +1,18 @@
 $(document).ready(function() {
-    let OMR_DataExportVars = {};
+    let OMR_ProjectCreateVars = {};
 
     $('#validate').on('click', function () {
         //Defines global object holding all variables for this project to prevent conflicts
-        OMR_DataExportVars.select = document.getElementById('instruments');
-        OMR_DataExportVars.form = document.getElementById('formHeader');
-        OMR_DataExportVars.instruments = 0;
-        OMR_DataExportVars.error = '';
+        OMR_ProjectCreateVars.select = document.getElementById('instruments');
+        OMR_ProjectCreateVars.form = document.getElementById('formHeader');
+        OMR_ProjectCreateVars.instruments = 0;
+        OMR_ProjectCreateVars.error = '';
 
         //Clean up any instrument options from previous validation attempt
-        for (i = OMR_DataExportVars.select.length - 1; i >= 0; i--) {
-	        OMR_DataExportVars.select.remove(i);
+        for (i = OMR_ProjectCreateVars.select.length - 1; i >= 0; i--) {
+	        OMR_ProjectCreateVars.select.remove(i);
         }
-        OMR_DataExportVars.select.length = 0;
+        OMR_ProjectCreateVars.select.length = 0;
 
 
         $.ajax({
@@ -25,128 +25,110 @@ $(document).ready(function() {
             dataType: "JSON",
             success: function(response) {
                 //Parse the json result from the php file
-                OMR_DataExportVars.instruments = response;
+                OMR_ProjectCreateVars.instruments = response;
 
-                OMR_DataExportVars.error = document.getElementById('error');
-                if(OMR_DataExportVars.error) {
-                    console.log(OMR_DataExportVars.error);
+                OMR_ProjectCreateVars.error = document.getElementById('error');
+                if(OMR_ProjectCreateVars.error) {
+                    console.log(OMR_ProjectCreateVars.error);
                     document.getElementById('error').outerHTML = '';
                 }
 
-                for(let i = 0; i < OMR_DataExportVars.instruments.length; i++) {
-                    OMR_DataExportVars.opt = document.createElement('option');
-                    OMR_DataExportVars.opt.value = OMR_DataExportVars.instruments[i]['instrument_name'];
-                    OMR_DataExportVars.opt.innerHTML = OMR_DataExportVars.instruments[i]['instrument_name'];
-                    OMR_DataExportVars.select.appendChild(OMR_DataExportVars.opt);
+                for(let i = 0; i < OMR_ProjectCreateVars.instruments.length; i++) {
+                    OMR_ProjectCreateVars.opt = document.createElement('option');
+                    OMR_ProjectCreateVars.opt.value = OMR_ProjectCreateVars.instruments[i]['instrument_name'];
+                    OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.instruments[i]['instrument_name'];
+                    OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
                 }
 
-                OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                    OMR_DataExportVars.elements[i].removeAttribute('hidden');
+                OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                    OMR_ProjectCreateVars.elements[i].removeAttribute('hidden');
                 }
             },
             error: function() {
                 console.log("Could not retrieve project information from API key and URL.");
 
-                OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                    OMR_DataExportVars.elements[i].setAttribute('hidden', '');
+                OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                    OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
                 }
 
                 if(!$('#error').length) {
-                    OMR_DataExportVars.error = document.createElement('h4');
-                    OMR_DataExportVars.error.id = 'error';
-                    OMR_DataExportVars.error.innerHTML = 'API token is incorrect for the given URL.';
-                    OMR_DataExportVars.form.appendChild(OMR_DataExportVars.error);
+                    OMR_ProjectCreateVars.error = document.createElement('h4');
+                    OMR_ProjectCreateVars.error.id = 'error';
+                    OMR_ProjectCreateVars.error.innerHTML = 'API token is incorrect for the given URL.';
+                    OMR_ProjectCreateVars.form.appendChild(OMR_ProjectCreateVars.error);
                 }
             }
         });
     });
 
-    $("#projects").change(function(){
-        OMR_DataExportVars.projectPath = document.getElementById('projects').value;
-
-        $.ajax({
-            type: "POST", 
-            url: "../requires/check_csv.php",
-            data: {
-                projectPath: OMR_DataExportVars.projectPath
-            },
-            dataType: "text",
-            success: function(response) {
-                OMR_DataExportVars.runRecognition = document.getElementById('runRecognition');
-                OMR_DataExportVars.runButton = document.getElementById('run');
-                OMR_DataExportVars.sdapsTable = document.getElementById('sdapsTable');
-                OMR_DataExportVars.noUploads = document.getElementById('noUploadsText');
-                OMR_DataExportVars.optionId = $(this).find("option:selected").attr("id");
-                
-                 if(!OMR_DataExportVars.optionId == document.getElementById('default')) {
-                    OMR_DataExportVars.runRecognition.setAttribute('hidden', '');
-                }
-                else {
-                    OMR_DataExportVars.runRecognition.removeAttribute('hidden');
-                    if(response == 'true') {
-                        OMR_DataExportVars.runButton.removeAttribute('hidden');
-                        OMR_DataExportVars.sdapsTable.removeAttribute('hidden');
-                        OMR_DataExportVars.noUploads.setAttribute('hidden', '');
-                    }
-                    else {
-                        OMR_DataExportVars.noUploads.removeAttribute('hidden');
-                        OMR_DataExportVars.sdapsTable.setAttribute('hidden', '');
-                        OMR_DataExportVars.runButton.setAttribute('hidden', '');
-                    }
-                }
-
-                //Creates function to send ajax call to our csv file and print its contents
-                OMR_DataExportVars.createTable = function() {
-                    $.ajax({
-                        url: OMR_DataExportVars.projectPath + '/data_1.csv',
-                        dataType: 'text',
-                        success: function(data) {
-                            OMR_DataExportVars.sdapsData = data.split(/\r?\n|\r/);
-                            OMR_DataExportVars.tableData = '<table class="table table-bordered table-striped">';
-            
-                            for(OMR_DataExportVars.count = 0; OMR_DataExportVars.count < OMR_DataExportVars.sdapsData.length-1; OMR_DataExportVars.count++) {
-                                OMR_DataExportVars.cellData = OMR_DataExportVars.sdapsData[OMR_DataExportVars.count].split(",");
-                                OMR_DataExportVars.tableData += '<tr>';
-             
-                                for(OMR_DataExportVars.cellCount = 0; OMR_DataExportVars.cellCount<OMR_DataExportVars.cellData.length; OMR_DataExportVars.cellCount++) {
-                                    if(OMR_DataExportVars.count === 0) {
-                                        OMR_DataExportVars.tableData += '<th>'+OMR_DataExportVars.cellData[OMR_DataExportVars.cellCount]+'</th>';
-                                    }
-                                    else {
-                                        OMR_DataExportVars.tableData += '<td>'+OMR_DataExportVars.cellData[OMR_DataExportVars.cellCount]+'</td>';
-                                    }
-                                }
-                                OMR_DataExportVars.tableData += '</tr>';
-                            }
-                            OMR_DataExportVars.tableData += '</table></div>';
-                            $('#sdapsTable').html(OMR_DataExportVars.tableData);
-                        },
-                        error: function(response) {
-                            console.log('Could not find file ' + OMR_DataExportVars.projectPath + '/data_1.csv');
-                        }
-                    });
-                };
-
-                //Call our function to create the table and its data
-                OMR_DataExportVars.createTable();
-            },
-            error: function() {
-                alert('Failed to find csv data in project: ' + OMR_DataExportVars.projectPath);
-            }
-        });
-    });
-
-    $('#run').on('click', function() {
+    $('#getRecords').on('click', function() {
         $.ajax({
             type: "POST",
-            url: "../export_results_func.php",
+            url: "../requires/get_record_ids.php",
+            data: {
+                apiToken: $('#apiToken').val(),
+                apiUrl: $('#apiUrl').val(),
+                instruments: $('#instruments').val()
+            },
+            dataType: "JSON",
+            success: function(response) {
+                console.log(response);
+                OMR_ProjectCreateVars.records = response;
+                OMR_ProjectCreateVars.recordsUl = document.getElementById('recordsUl');
+
+                //Deletes the previous records shown on screen if the "Get Records" button is pressed again
+                OMR_ProjectCreateVars.recordsUl.innerHTML = "";
+
+                OMR_ProjectCreateVars.columnAmt = 0;
+
+                OMR_ProjectCreateVars.records.forEach(function(item, index) {
+                    //Adds 1 to a variable to make columns for every 10 elements
+                    if((index+1) % 10 === 0) {
+                        OMR_ProjectCreateVars.columnAmt++;
+                    }
+
+                    if(index !== 0) {
+                        OMR_ProjectCreateVars.br = document.createElement('br');
+                        OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.br);
+                    }
+
+                    OMR_ProjectCreateVars.check = document.createElement('input');
+                    OMR_ProjectCreateVars.check.type = 'checkbox';
+                    OMR_ProjectCreateVars.check.value = item;
+                    OMR_ProjectCreateVars.check.id = item;
+                    OMR_ProjectCreateVars.check.name = 'records[]';
+                    OMR_ProjectCreateVars.check.className = 'records';
+                    OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.check);
+
+                    //OMR_ProjectCreateVars.check.setAttribute('disabled', 'disabled');
+
+                    OMR_ProjectCreateVars.label = document.createElement('label');
+                    OMR_ProjectCreateVars.label.innerHTML = item;
+                    OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.label);
+                });
+
+                //Create a new column for every 10 elements
+                OMR_ProjectCreateVars.recordsUl.style.columnCount = OMR_ProjectCreateVars.columnAmt;
+            },
+            error: function(response) {
+                alert(response);
+                console.log(response);
+            }
+        });
+    });
+
+    $('#create').on('click', function() {
+        $.ajax({
+            type: "POST",
+            url: "../create_func2.php",
             data: {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val(),
                 instruments: $('#instruments').val(),
-                projectPath: $('#projects').val()
+                records: $('.records:checked').serialize(),
+                projName: $('#projName').val()
             },
             dataType: "text",
             beforeSend: function() {
@@ -160,13 +142,76 @@ $(document).ready(function() {
                 $('#loadingText').css("display", "none");
             },
             success: function(response) {
-                console.log(response);
-                alert(response);
+                OMR_ProjectCreateVars.response = response;
+
+                //Split the response between the path and the printouts created
+                OMR_ProjectCreateVars.responseArr = OMR_ProjectCreateVars.response.split(';');
+
+                //Get path of questionnaire from response
+                OMR_ProjectCreateVars.newPath = OMR_ProjectCreateVars.responseArr[0];
+                //Get array of printouts created
+                OMR_ProjectCreateVars.docNum = OMR_ProjectCreateVars.responseArr[1].split(',');
+
+                alert("Successfully created project directory " + OMR_ProjectCreateVars.newPath + ".  \r\nYou can now leave the page.");
+                console.log("Successfully created project directory " + OMR_ProjectCreateVars.newPath + ".  \r\nYou can now leave the page.");
+
+                try {
+                    //Remove the download links/display of previous project if it is displayed
+                    document.body.removeChild(OMR_ProjectCreateVars.iframeContainer);
+                }
+                catch(e) {
+                    //Do nothing
+                } 
+
+                //Create a div holding iframes of the questionnaire and stamped files,
+                //along with download links to both
+                OMR_ProjectCreateVars.iframeContainer = document.createElement('div');
+                OMR_ProjectCreateVars.iframeContainer.class = 'container';
+                OMR_ProjectCreateVars.iframeContainer.id = 'iframeContainer';
+                document.body.appendChild(OMR_ProjectCreateVars.iframeContainer);
+
+                //Creates div and content for questionnaire 
+                OMR_ProjectCreateVars.questionnaireContainer = document.createElement('div');
+                OMR_ProjectCreateVars.questionnaireContainer.id = 'questionnaireContainer';
+
+                //Creates questionnaire iframe that holds sdaps result
+                OMR_ProjectCreateVars.questionnairePath = '../'+OMR_ProjectCreateVars.newPath+'/questionnaire.pdf';
+                OMR_ProjectCreateVars.questionnaire = document.createElement('iframe');
+                OMR_ProjectCreateVars.questionnaire.id = 'questionnaire';
+                OMR_ProjectCreateVars.questionnaire.src = OMR_ProjectCreateVars.questionnairePath;
+
+                //Create the download link for the questionnaire
+                OMR_ProjectCreateVars.questionnaireContainer.innerHTML += "<p>Download questionnaire <a href="+OMR_ProjectCreateVars.questionnairePath+" download>here.</a></p>";
+
+                //Add questionnaire container to div container, append questionnaire to it
+                OMR_ProjectCreateVars.iframeContainer.appendChild(OMR_ProjectCreateVars.questionnaireContainer);
+                OMR_ProjectCreateVars.questionnaireContainer.appendChild(OMR_ProjectCreateVars.questionnaire);
+
+                //Only show scans if the user specified an amount above 0 
+                if(OMR_ProjectCreateVars.docNum.length > 0) {
+                    //Create scans container
+                    OMR_ProjectCreateVars.scansContainer = document.createElement('div');
+                    OMR_ProjectCreateVars.scansContainer.id = 'scansContainer';
+
+                    //Creates scans iframe that holds sdaps scans result
+                    OMR_ProjectCreateVars.scansPath = '../'+OMR_ProjectCreateVars.newPath+'/stamped_1.pdf';
+                    OMR_ProjectCreateVars.scans = document.createElement('iframe');
+                    OMR_ProjectCreateVars.scans.id = 'scans';
+                    OMR_ProjectCreateVars.scans.src = OMR_ProjectCreateVars.scansPath;
+
+                    //Create the download link for the scans
+                    OMR_ProjectCreateVars.scansContainer.innerHTML += "<p>Download scans <a href="+OMR_ProjectCreateVars.scansPath+" download>here.</a></p>";
+
+                    //Add scans container to div container, append scans to it
+                    OMR_ProjectCreateVars.iframeContainer.appendChild(OMR_ProjectCreateVars.scansContainer);
+                    OMR_ProjectCreateVars.scansContainer.appendChild(OMR_ProjectCreateVars.scans);
+                }
+
             },
             error: function(response) {
-                console.log(response);
                 alert(response);
+                console.log(response);
             }
         });
-    });
+    })
 });
