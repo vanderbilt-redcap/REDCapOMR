@@ -52,9 +52,6 @@ use IU\PHPCap\PhpCapException;
             }
         }
 
-        echo var_dump($formChoices);
-        echo var_dump($formFieldTypes);
-
 
         //Create the vars to hold the csv with parsed data without "review" cols
         //AND global_id, empty, valid, recognized, review, verified (index 1-6)
@@ -213,7 +210,7 @@ catch(PhpCapException $exception) {
 
 //Check if path to the project exists, get it in a variable if so
 if(isset($_POST['projectPath']) && !empty($_POST['projectPath'])) {
-    $projectPath = str_ireplace('../', '', $_POST['projectPath']) . '/';
+    $projectPath = str_ireplace('..'.DIRECTORY_SEPARATOR, '', $_POST['projectPath']) . DIRECTORY_SEPARATOR;
     if(!file_exists($projectPath)) {
         echo "Directory does not exist.  Please validate the project name.\r\n";
     }
@@ -227,7 +224,7 @@ $formData = $formData[0];
 //Can't tell whether to check for only data_1.csv or more...
 //The previous data_1 should get replaced when recognizing again,
 //so there should only be a data_1.csv
-$csvFilename = $projectPath.'/data_1.csv';
+$csvFilename = $projectPath.DIRECTORY_SEPARATOR.'data_1.csv';
 $sdapsCsv = fopen($csvFilename, 'r+');
 if(!$sdapsCsv) {
     echo "Failed to open file at " . $csvFilename . "\r\n";

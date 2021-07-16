@@ -7,7 +7,7 @@ use JansenFelipe\SdapsPHP\SdapsPHP;
 
 //Check if path to the project exists
 if(isset($_POST['projectPath']) && !empty($_POST['projectPath'])) {
-    $projectPath = str_ireplace('../', '', $_POST['projectPath']) . '/';
+    $projectPath = str_ireplace('..'.DIRECTORY_SEPARATOR, '', $_POST['projectPath']) . DIRECTORY_SEPARATOR;
     if(!file_exists($projectPath)) {
         echo "Directory does not exist.  Please validate the project name.\r\n";
     }
@@ -15,7 +15,7 @@ if(isset($_POST['projectPath']) && !empty($_POST['projectPath'])) {
 
 //Check if the path to the /uploads subdirectory exists
 if(isset($_POST['uploadPath']) && !empty($_POST['uploadPath'])) {
-    $uploadPath = str_ireplace('../', '', $_POST['uploadPath']) . '/';
+    $uploadPath = str_ireplace('..'.DIRECTORY_SEPARATOR, '', $_POST['uploadPath']) . DIRECTORY_SEPARATOR;
     if(!file_exists($uploadPath)) {
         echo "Project's uploads subdirectory does not exist.\r\n";
     }

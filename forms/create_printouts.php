@@ -27,8 +27,9 @@
         </select>
         <br>
         <?php 
-        if(file_exists('../tmp/')) {
-            $directories = glob('../tmp/' . '*' , GLOB_ONLYDIR);
+        // ../tmp/ in the Linux file system
+        if(file_exists('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR)) {
+            $directories = glob('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'*' , GLOB_ONLYDIR);
 
             echo '<br>
             <div id="runRecognition" class="hidden" hidden>
@@ -37,7 +38,7 @@
                   <option id="default" hidden selected>Select a project...</option>';
 
             foreach($directories as $key => $dir) {
-                $parsedDir = str_replace('../tmp/', '', $dir);
+                $parsedDir = str_replace('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR, '', $dir);
                 echo '<option value="'.$dir.'" name="'.$parsedDir.'" id="'.$parsedDir.'">'.$parsedDir.'</option><br><br>';
             }
 

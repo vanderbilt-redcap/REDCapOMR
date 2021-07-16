@@ -133,14 +133,14 @@ catch(PhpCapException $exception) {
 //Creates the LaTeX questionnaire of the REDCap data dictionary
 $tex = json2latex::createQuestionnaire($meta, $instruments, $_POST['apiUrl']);
 //Saves the questionnaire to the /tmp/ dir
-$texPath = saveTex($tex, 'tmp/');
+$texPath = saveTex($tex, 'tmp'.DIRECTORY_SEPARATOR);
 
 //Gets the user's entered project name in the project creation form
 $projName = $_POST['projName'];
 //Removes non-alphanumeric characters from file name
 $projName = preg_replace('/[^\p{L}\p{N} ]+/', '', $projName);
 //Create the project path in the structure of tmp/$projName
-$projectPath = 'tmp/'.$projName;
+$projectPath = 'tmp'.DIRECTORY_SEPARATOR.$projName;
 
 
 //Gets the index after the last record ID present in the project

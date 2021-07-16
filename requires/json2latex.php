@@ -9,7 +9,6 @@
  * 
  * TODO: Debugging, 
  *       possibly adding more field types if deemed appropriate,
- *       \author should be dynamic if possible (createHeader)
  */
 
 class json2latex {
@@ -47,7 +46,8 @@ class json2latex {
         }
 
         //Determines if the testing mode (ability to put X marks in boxes in PDF editor) is enabled.
-        $testingMode = 1;
+        //1 = on, non-1 = off
+        $testingMode = 0;
         $testingString = '';
         if($testingMode === 1) {
             $testingString = '

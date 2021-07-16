@@ -196,7 +196,7 @@ catch(PhpCapException $exception) {
 
 //Check if path to the project exists, get it in a variable if so
 if(isset($_POST['projectPath']) && !empty($_POST['projectPath'])) {
-    $projectPath = str_ireplace('../', '', $_POST['projectPath']) . '/';
+    $projectPath = str_ireplace('..'.DIRECTORY_SEPARATOR, '', $_POST['projectPath']) . DIRECTORY_SEPARATOR;
     if(!file_exists($projectPath)) {
         echo "Error: Directory does not exist.  Please validate the project name.\r\n";
     }
@@ -210,7 +210,7 @@ $formData = $formData[0];
 //Can't tell whether to check for only data_1.csv or more...
 //The previous data_1 should get replaced when recognizing again,
 //so there should only be a data_1.csv
-$csvFilename = $projectPath.'/data_1.csv';
+$csvFilename = $projectPath.DIRECTORY_SEPARATOR.'data_1.csv';
 $sdapsCsv = fopen($csvFilename, 'r+');
 if(!$sdapsCsv) {
     echo "Error: Failed to open file at " . $csvFilename . "\r\n";

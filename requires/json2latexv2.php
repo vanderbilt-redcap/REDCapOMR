@@ -3,6 +3,8 @@
 /**
  * Created by Cody Johnson.
  * 
+ * *BACKUP OF OLDER VERSION, NO LONGER CURRENT*
+ * 
  * Converts a REDCap data dictionary to a LaTeX file with SDAPS's
  * specific class types.  The string result created from this php file
  * can be saved and used as the template for the SDAPS project in the main program.

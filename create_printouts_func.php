@@ -129,7 +129,7 @@ catch(PhpCapException $exception) {
 
 //Gets the SDAPS project name and parses out the ../
 $projectPath = $_POST['projects'];
-$projectPath = str_replace('../', '', $projectPath);
+$projectPath = str_replace('..'.DIRECTORY_SEPARATOR, '', $projectPath);
 
 
 //Gets the index after the last record ID present in the project

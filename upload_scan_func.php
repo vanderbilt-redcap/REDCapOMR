@@ -6,8 +6,8 @@ use JansenFelipe\SdapsPHP\SdapsPHP;
 
 //Create the path to save the uploaded files to
 $projectPath = $_POST['project'];
-$projectPath = str_replace('../', '', $projectPath);
-$uploadPath = $projectPath . '/uploads/';
+$projectPath = str_replace('..'.DIRECTORY_SEPARATOR, '', $projectPath);
+$uploadPath = $projectPath . DIRECTORY_SEPARATOR .'uploads' . DIRECTORY_SEPARATOR;
 
 //Create file path to upload files to if it doesn't exist
 if(!file_exists($uploadPath)) {
