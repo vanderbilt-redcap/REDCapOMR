@@ -13,32 +13,24 @@
     <p id="loadingText"><br>Recognizing scans with SDAPS...</p>
 
     <form id="formHeader">
-    <?php 
-    // ../tmp/ in Linux file system
-    if(file_exists('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR)) {
-        $directories = glob('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'*' , GLOB_ONLYDIR);
-
-        echo '<p>Select a project:</p>
-                <form id="form">
-                <select name="projects" id="projects">
-                <option id="default" hidden selected>Select a project...</option>';
-
-        foreach($directories as $key => $dir) {
-            $parsedDir = str_replace('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR, '', $dir);
-            echo '<option value="'.$dir.'" name="'.$parsedDir.'" id="'.$parsedDir.'">'.$parsedDir.'</option><br><br>';
-        }
-
-        echo '</select><br><br>
+    <p>Enter your project API token:</p>
+        <input type="text" id="apiToken" name="apiToken">
+        <br>
+        <!-- Retrieve this value from host URL when in module, this is temporary -->
+        <p>Enter REDCap institution name (from redcap.NAME.edu):</p>
+        <input type="text" id="apiUrl" name="apiUrl">
+        <br>
+        <br>
+        <button id="validate" type="button">Validate</button>
+        <br>
+        <p class="hidden" hidden>Select a form with an SDAPS project to run recognition on:</p>
+        <select class="hidden" name="instruments" id="instruments" hidden>
+        </select>
+        <br>
         <div id="runRecognition" class="hidden" hidden>
-        <button id="run" type="button" hidden>Run Recognition</button>
-        <p id="noUploadsText" hidden>No uploads directory found for project.  Upload scanned files <a href="upload_scans.php">here</a>.</p>
-        </div></form>';
-    }
-    else {
-        echo '<p>No project found.  Create one <a href="create_project.php">here</a>.</p>';
-    }
-        
-    ?>
+            <button id="run" type="button" hidden>Run Recognition</button>
+            <p id="noUploadsText" hidden>No uploads directory found for project.  Upload scanned files <a href="upload_scans.php">here</a>.</p>
+        </div>
     </form>
 </body>
 </html>

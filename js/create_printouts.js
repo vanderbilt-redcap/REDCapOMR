@@ -17,32 +17,77 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "../requires/get_instruments.php",
+            url: "../requires/get_pid_projects.php",
             data: {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val()
             },
-            dataType: "JSON",
+            dataType: "text",
             success: function(response) {
-                //Parse the json result from the php file
-                OMR_ProjectCreateVars.instruments = response;
-
-                OMR_ProjectCreateVars.error = document.getElementById('error');
-                if(OMR_ProjectCreateVars.error) {
-                    console.log(OMR_ProjectCreateVars.error);
-                    document.getElementById('error').outerHTML = '';
+                //If we can't trim the response, then it is a blank string (false)
+                if(!$.trim(response)) {
+                    alert('No projects were found for the project ID of the API token you entered.');
+                    console.log('No projects were found for the project ID of the API token you entered.');
                 }
+                else {
+                    //Parse the json result from the php file
+                    OMR_ProjectCreateVars.instruments = response;
 
-                for(let i = 0; i < OMR_ProjectCreateVars.instruments.length; i++) {
-                    OMR_ProjectCreateVars.opt = document.createElement('option');
-                    OMR_ProjectCreateVars.opt.value = OMR_ProjectCreateVars.instruments[i]['instrument_name'];
-                    OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.instruments[i]['instrument_name'];
-                    OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
-                }
+                    OMR_ProjectCreateVars.error = document.getElementById('error');
+                    if(OMR_ProjectCreateVars.error) {
+                        console.log(OMR_ProjectCreateVars.error);
+                        document.getElementById('error').outerHTML = '';
+                    }
 
-                OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
-                    OMR_ProjectCreateVars.elements[i].removeAttribute('hidden');
+                    //Split projects into array ONLY if there are multiple included
+                    if(OMR_ProjectCreateVars.instruments.includes(',')) {
+                        OMR_ProjectCreateVars.instruments = OMR_ProjectCreateVars.instruments.split(',');
+
+                        for(let i = 0; i < OMR_ProjectCreateVars.instruments.length; i++) {
+                            //If we're on the first element, add the default option to the select box
+                            if(i == 0) {
+                                OMR_ProjectCreateVars.opt = document.createElement('option');
+                                OMR_ProjectCreateVars.opt.setAttribute('disabled', '');
+                                OMR_ProjectCreateVars.opt.setAttribute('selected', '');
+                                OMR_ProjectCreateVars.opt.setAttribute('value', '');
+                                OMR_ProjectCreateVars.opt.innerHTML = '-- Select an option --';
+                                OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+                            }
+    
+                            OMR_ProjectCreateVars.opt = document.createElement('option');
+                            OMR_ProjectCreateVars.opt.value = OMR_ProjectCreateVars.instruments[i];
+                            
+                            //Trim the instrument name from the project directory for user readability
+                            OMR_ProjectCreateVars.innerInst = OMR_ProjectCreateVars.instruments[i].split('/');
+                            OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.innerInst[OMR_ProjectCreateVars.innerInst.length-1];
+                            
+                            OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+                        }
+                    }
+                    else {
+                        OMR_ProjectCreateVars.opt = document.createElement('option');
+                        OMR_ProjectCreateVars.opt.setAttribute('disabled', '');
+                        OMR_ProjectCreateVars.opt.setAttribute('selected', '');
+                        OMR_ProjectCreateVars.opt.setAttribute('value', '');
+                        OMR_ProjectCreateVars.opt.innerHTML = '-- Select an option --';
+                        OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+
+                        OMR_ProjectCreateVars.opt = document.createElement('option');
+                        OMR_ProjectCreateVars.opt.value = OMR_ProjectCreateVars.instruments;
+                        
+                        //Trim the instrument name from the project directory for user readability
+                        OMR_ProjectCreateVars.innerInst = OMR_ProjectCreateVars.instruments.split('/');
+                        OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.innerInst[OMR_ProjectCreateVars.innerInst.length-1];
+                        
+                        OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+                    }
+
+                    
+
+                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                        OMR_ProjectCreateVars.elements[i].removeAttribute('hidden');
+                    }
                 }
             },
             error: function() {
@@ -61,18 +106,75 @@ $(document).ready(function() {
                 }
             }
         });
-    })
+    });
+
+    $('#getRecords').on('click', function() {
+        //Trim directories off of instrument name so records for it can be retrieved from REDCap
+        OMR_ProjectCreateVars.projectChosen = $('#instruments').val();
+        OMR_ProjectCreateVars.projectChosen = OMR_ProjectCreateVars.projectChosen.split('/');
+
+        $.ajax({
+            type: "POST",
+            url: "../requires/get_record_ids.php",
+            data: {
+                apiToken: $('#apiToken').val(),
+                apiUrl: $('#apiUrl').val(),
+                instruments: OMR_ProjectCreateVars.projectChosen[OMR_ProjectCreateVars.projectChosen.length-1]
+            },
+            dataType: "JSON",
+            success: function(response) {
+                console.log(response);
+                OMR_ProjectCreateVars.records = response;
+                OMR_ProjectCreateVars.recordsUl = document.getElementById('recordsUl');
+
+                //Deletes the previous records shown on screen if the "Get Records" button is pressed again
+                OMR_ProjectCreateVars.recordsUl.innerHTML = "";
+
+                OMR_ProjectCreateVars.columnAmt = 0;
+
+                OMR_ProjectCreateVars.records.forEach(function(item, index) {
+                    //Adds 1 to a variable to make columns for every 10 elements
+                    if((index+1) % 10 === 0) {
+                        OMR_ProjectCreateVars.columnAmt++;
+                    }
+
+                    if(index !== 0) {
+                        OMR_ProjectCreateVars.br = document.createElement('br');
+                        OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.br);
+                    }
+
+                    OMR_ProjectCreateVars.check = document.createElement('input');
+                    OMR_ProjectCreateVars.check.type = 'checkbox';
+                    OMR_ProjectCreateVars.check.value = item;
+                    OMR_ProjectCreateVars.check.id = item;
+                    OMR_ProjectCreateVars.check.name = 'records[]';
+                    OMR_ProjectCreateVars.check.className = 'records';
+                    OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.check);
+
+                    //OMR_ProjectCreateVars.check.setAttribute('disabled', 'disabled');
+
+                    OMR_ProjectCreateVars.label = document.createElement('label');
+                    OMR_ProjectCreateVars.label.innerHTML = item;
+                    OMR_ProjectCreateVars.recordsUl.appendChild(OMR_ProjectCreateVars.label);
+                });
+
+                //Create a new column for every 10 elements
+                OMR_ProjectCreateVars.recordsUl.style.columnCount = OMR_ProjectCreateVars.columnAmt;
+            },
+            error: function(response) {
+                alert(response);
+                console.log(response);
+            }
+        });
+    });
 
     $('#create').on('click', function() {
         $.ajax({
             type: "POST",
-            url: "../create_func.php",
+            url: "../create_printouts_func.php",
             data: {
-                apiToken: $('#apiToken').val(),
-                apiUrl: $('#apiUrl').val(),
                 instruments: $('#instruments').val(),
-                projName: $('#projects').val(),
-                docNum: $('#docNum').val()
+                records: $('.records:checked').serialize()
             },
             dataType: "text",
             beforeSend: function() {

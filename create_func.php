@@ -84,32 +84,38 @@ try {
     //Pulls metadata and the list of instruments from the project for the given form
     $meta = $project->exportMetadata('json', [], [$formName]);
     $instruments = $project->exportInstruments('json');
+    $projectInfo = $project->exportProjectInfo('php');
 }
 catch(PhpCapException $exception) {
     echo $exception->getMessage();
 }
 
 
+//Pull project ID, create folders from it, include folders for instrument used within PID folder
+$pidPath = 'tmp' . DIRECTORY_SEPARATOR . $projectInfo['project_id'] . DIRECTORY_SEPARATOR;
+//File path of the instrument subfolder (created by sdapsPHP::createProject)
+$instPath = $pidPath . $formName;
+
+if(!file_exists($pidPath)) {
+    //Create the path of the PID project first
+    mkdir($pidPath);
+}
+
 
 //Creates the LaTeX questionnaire of the REDCap data dictionary
 $tex = json2latex::createQuestionnaire($meta, $instruments, $_POST['apiUrl']);
-//Saves the questionnaire to the /tmp/ dir
-$texPath = saveTex($tex, 'tmp'.DIRECTORY_SEPARATOR);
+//Saves the questionnaire to the tmp/PID/ dir
+$texPath = saveTex($tex, $pidPath);
 
-//Gets the user's entered project name in the project creation form
-$projName = $_POST['projName'];
-//Removes non-alphanumeric characters from file name
-$projName = preg_replace('/[^\p{L}\p{N} ]+/', '', $projName);
-//Create the project path in the structure of tmp/$projName
-$projectPath = 'tmp'.DIRECTORY_SEPARATOR.$projName;
+//Just renaming variable for readability, makes more sense
+$projectPath = $instPath;
 
-
-if(($projectPath = SdapsPHP::createProject($projectPath, $texPath)) !== '') {
+if(($result = SdapsPHP::createProject($projectPath, $texPath)) === true) {
 
     //Deletes generated .tex file in tmp/ directory
     unlink($texPath);
 
-    if(sizeof($records) > 0) {
+    if(sizeof($recordIds) > 0) {
         SdapsPHP::stampIDs($projectPath, $recordIds);
     }
     else {
@@ -122,6 +128,9 @@ if(($projectPath = SdapsPHP::createProject($projectPath, $texPath)) !== '') {
     echo $finalOutput;
 }
 else {
-    echo 'Could not create project directory '. $projectPath . ".  \r\nPlease ensure that all form fields were given proper values.\r\n";
+    //Deletes generated .tex file in tmp/ directory
+    unlink($texPath);
+    
+    echo false;
 }
 ?>

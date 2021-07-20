@@ -22,7 +22,7 @@
         <br>
         <button id="validate" type="button">Validate</button>
         <br>
-        <p class="hidden" hidden>Select instrument to convert to a paper survey:</p>
+        <p class="hidden" hidden>Select instrument to convert to a paper survey and make an SDAPS project from:</p>
         <select class="hidden" name="instruments" id="instruments" hidden>
         </select>
         <br>
@@ -31,9 +31,6 @@
             <button id="getRecords" class="hidden" type="button" hidden>Get Records</button>
             <ul id="recordsUl" class="hidden" hidden></ul>
         </div>
-        <br>
-        <p class="hidden" hidden>Enter an SDAPS project name:</p>
-        <input type="text" class="hidden" id="projName" name="projName" hidden>
         <br>
         <br>
         <button id="create" class="hidden" type="button" hidden>Create Form</button>

@@ -17,32 +17,77 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "../requires/get_instruments.php",
+            url: "../requires/get_pid_projects.php",
             data: {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val()
             },
-            dataType: "JSON",
+            dataType: "text",
             success: function(response) {
-                //Parse the json result from the php file
-                OMR_DataExportVars.instruments = response;
-
-                OMR_DataExportVars.error = document.getElementById('error');
-                if(OMR_DataExportVars.error) {
-                    console.log(OMR_DataExportVars.error);
-                    document.getElementById('error').outerHTML = '';
+                //If we can't trim the response, then it is a blank string (false)
+                if(!$.trim(response)) {
+                    alert('No projects were found for the project ID of the API token you entered.');
+                    console.log('No projects were found for the project ID of the API token you entered.');
                 }
+                else {
+                    //Parse the json result from the php file
+                    OMR_DataExportVars.instruments = response;
 
-                for(let i = 0; i < OMR_DataExportVars.instruments.length; i++) {
-                    OMR_DataExportVars.opt = document.createElement('option');
-                    OMR_DataExportVars.opt.value = OMR_DataExportVars.instruments[i]['instrument_name'];
-                    OMR_DataExportVars.opt.innerHTML = OMR_DataExportVars.instruments[i]['instrument_name'];
-                    OMR_DataExportVars.select.appendChild(OMR_DataExportVars.opt);
-                }
+                    OMR_DataExportVars.error = document.getElementById('error');
+                    if(OMR_DataExportVars.error) {
+                        console.log(OMR_DataExportVars.error);
+                        document.getElementById('error').outerHTML = '';
+                    }
 
-                OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                    OMR_DataExportVars.elements[i].removeAttribute('hidden');
+                    //Split projects into array ONLY if there are multiple included
+                    if(OMR_DataExportVars.instruments.includes(',')) {
+                        OMR_DataExportVars.instruments = OMR_DataExportVars.instruments.split(',');
+
+                        for(let i = 0; i < OMR_DataExportVars.instruments.length; i++) {
+                            //If we're on the first element, add the default option to the select box
+                            if(i == 0) {
+                                OMR_DataExportVars.opt = document.createElement('option');
+                                OMR_DataExportVars.opt.setAttribute('disabled', '');
+                                OMR_DataExportVars.opt.setAttribute('selected', '');
+                                OMR_DataExportVars.opt.setAttribute('value', '');
+                                OMR_DataExportVars.opt.innerHTML = '-- Select an option --';
+                                OMR_DataExportVars.select.appendChild(OMR_DataExportVars.opt);
+                            }
+    
+                            OMR_DataExportVars.opt = document.createElement('option');
+                            OMR_DataExportVars.opt.value = OMR_DataExportVars.instruments[i];
+                            
+                            //Trim the instrument name from the project directory for user readability
+                            OMR_DataExportVars.innerInst = OMR_DataExportVars.instruments[i].split('/');
+                            OMR_DataExportVars.opt.innerHTML = OMR_DataExportVars.innerInst[OMR_DataExportVars.innerInst.length-1];
+                            
+                            OMR_DataExportVars.select.appendChild(OMR_DataExportVars.opt);
+                        }
+                    }
+                    else {
+                        OMR_DataExportVars.opt = document.createElement('option');
+                        OMR_DataExportVars.opt.setAttribute('disabled', '');
+                        OMR_DataExportVars.opt.setAttribute('selected', '');
+                        OMR_DataExportVars.opt.setAttribute('value', '');
+                        OMR_DataExportVars.opt.innerHTML = '-- Select an option --';
+                        OMR_DataExportVars.select.appendChild(OMR_DataExportVars.opt);
+
+                        OMR_DataExportVars.opt = document.createElement('option');
+                        OMR_DataExportVars.opt.value = OMR_DataExportVars.instruments;
+                        
+                        //Trim the instrument name from the project directory for user readability
+                        OMR_DataExportVars.innerInst = OMR_DataExportVars.instruments.split('/');
+                        OMR_DataExportVars.opt.innerHTML = OMR_DataExportVars.innerInst[OMR_DataExportVars.innerInst.length-1];
+                        
+                        OMR_DataExportVars.select.appendChild(OMR_DataExportVars.opt);
+                    }
+
+                    
+
+                    OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
+                        OMR_DataExportVars.elements[i].removeAttribute('hidden');
+                    }
                 }
             },
             error: function() {
@@ -63,8 +108,8 @@ $(document).ready(function() {
         });
     });
 
-    $("#projects").change(function(){
-        OMR_DataExportVars.projectPath = document.getElementById('projects').value;
+    $("#instruments").change(function(){
+        OMR_DataExportVars.projectPath = document.getElementById('instruments').value;
 
         $.ajax({
             type: "POST", 
@@ -145,8 +190,7 @@ $(document).ready(function() {
             data: {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val(),
-                instruments: $('#instruments').val(),
-                projectPath: $('#projects').val()
+                instruments: $('#instruments').val()
             },
             dataType: "text",
             beforeSend: function() {

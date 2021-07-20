@@ -2,7 +2,7 @@
 <head>
     <link rel="stylesheet" href="../css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/create_project.js"></script>
+    <script type="text/javascript" src="../js/create_printouts.js"></script>
 </head>
 
 <?php require_once('../templates/navbar.php'); ?>
@@ -22,37 +22,15 @@
         <br>
         <button id="validate" type="button">Validate</button>
         <br>
-        <p class="hidden" hidden>Select instrument to convert to a paper survey:</p>
+        <p class="hidden" hidden>Select a form with an SDAPS project to make printouts from:</p>
         <select class="hidden" name="instruments" id="instruments" hidden>
         </select>
         <br>
-        <?php 
-        // ../tmp/ in the Linux file system
-        if(file_exists('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR)) {
-            $directories = glob('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'*' , GLOB_ONLYDIR);
-
-            echo '<br>
-            <div id="runRecognition" class="hidden" hidden>
-                  <p>Select a project:</p>
-                  <select name="projects" id="projects">
-                  <option id="default" hidden selected>Select a project...</option>';
-
-            foreach($directories as $key => $dir) {
-                $parsedDir = str_replace('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR, '', $dir);
-                echo '<option value="'.$dir.'" name="'.$parsedDir.'" id="'.$parsedDir.'">'.$parsedDir.'</option><br><br>';
-            }
-
-            echo '</select><br><br>
-                  </form>';
-        }
-        else {
-            echo '<p>No project found.  Create one <a href="create_project.php">here</a>.</p>';
-        }
-        ?>
-        <br>
-        <p class="hidden" hidden>Specify number of documents to create (starts from last record ID):</p>
-        <input type="text" class="hidden" id="docNum" name="docNum" hidden>
-        <br>
+        <div id="recordsDiv" class="hidden" hidden>
+            <p class="hidden" hidden>Specify which records you want to make printouts of:</p>
+            <button id="getRecords" class="hidden" type="button" hidden>Get Records</button>
+            <ul id="recordsUl" class="hidden" hidden></ul>
+        </div>
         <br>
         <button id="create" class="hidden" type="button" hidden>Create Printouts</button>
     </form>

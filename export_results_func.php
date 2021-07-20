@@ -194,7 +194,11 @@ try {
     
     if(isset($_POST['instruments']) && !empty($_POST['instruments'])) {
         //Pulls the instrument (project) the user selected from the project creation form (create_form.php)
-        $formName = $_POST['instruments'];    
+        $formName =  $_POST['instruments'];  
+        //Separate the directory by / and save the instrument name (last folder) in the variable
+        $formName = explode(DIRECTORY_SEPARATOR, $formName);
+        //Get the folder at the end of the path
+        $formName = $formName[(sizeof($formName)-1)];  
     }
     else {
         echo 'Could not retrieve list of instruments from project.';
@@ -209,8 +213,8 @@ catch(PhpCapException $exception) {
 
 
 //Check if path to the project exists, get it in a variable if so
-if(isset($_POST['projectPath']) && !empty($_POST['projectPath'])) {
-    $projectPath = str_ireplace('..'.DIRECTORY_SEPARATOR, '', $_POST['projectPath']) . DIRECTORY_SEPARATOR;
+if(isset($_POST['instruments']) && !empty($_POST['instruments'])) {
+    $projectPath = str_ireplace('..'.DIRECTORY_SEPARATOR, '', $_POST['instruments']) . DIRECTORY_SEPARATOR;
     if(!file_exists($projectPath)) {
         echo "Directory does not exist.  Please validate the project name.\r\n";
     }

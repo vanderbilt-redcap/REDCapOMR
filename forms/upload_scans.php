@@ -12,36 +12,28 @@
     <div class="lds-ring"><div></div><div></div><div></div><div></div></div><p id="loadingText"><br>Converting and uploading scans...</p>
 
     <form id="formHeader">
-    <?php 
-    // ../tmp/ in Linux file system
-    if(file_exists('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR)) {
-        $directories = glob('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'*' , GLOB_ONLYDIR);
-
-        echo '<p>Select a project:</p>
-                <form id="form" name="form" enctype="multipart/form-data">
-                <select name="projects" id="projects">
-                <option id="default" hidden selected>Select a project...</option>';
-
-        foreach($directories as $key => $dir) {
-            $parsedDir = str_replace('..'.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR, '', $dir);
-            echo '<option value="'.$dir.'" name="'.$parsedDir.'" id="'.$parsedDir.'">'.$parsedDir.'</option><br><br>';
-        }
-
-        echo '</select><br>
-        <div id="addScans" class="hidden" hidden>
+        <p>Enter your project API token:</p>
+        <input type="text" id="apiToken" name="apiToken">
         <br>
-        <p style="margin-bottom:10px">Add scanned documents:<br>(Hold Ctrl + Click to select multiple)</p>
-        <input name="upload[]" type="file" accept=".pdf, .png, .jpg, .jpeg, .tif, .tiff" multiple></input>
-        <p style="margin-top:10px">(.pdf, .png, .jpg, .jpeg, .tif, .tiff supported)</p>
+        <!-- Retrieve this value from host URL when in module, this is temporary -->
+        <p>Enter REDCap institution name (from redcap.NAME.edu):</p>
+        <input type="text" id="apiUrl" name="apiUrl">
         <br>
-        <button id="upload" type="button">Upload Scans</button>
-        </div></form>';
-    }
-    else {
-        echo '<p>No project found.  Create one <a href="create_form.php">here</a>.</p>';
-    }
-        
-    ?>
+        <br>
+        <button id="validate" type="button">Validate</button>
+        <br>
+        <p class="hidden" hidden>Select a form with an SDAPS project to upload printouts to:</p>
+        <select class="hidden" name="instruments" id="instruments" hidden>
+        </select>
+        <br>
+        <div id="addScans" class="hidden-inst" hidden>
+            <br>
+            <p style="margin-bottom:10px">Add scanned documents:<br>(Hold Ctrl + Click to select multiple)</p>
+            <input name="upload[]" type="file" accept=".pdf, .png, .jpg, .jpeg, .tif, .tiff" multiple></input>
+            <p style="margin-top:10px">(.pdf, .png, .jpg, .jpeg, .tif, .tiff supported)</p>
+            <br>
+            <button id="upload" type="button">Upload Scans</button>
+        </div>
     </form>
 </body>
 </html>

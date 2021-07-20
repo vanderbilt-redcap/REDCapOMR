@@ -5,7 +5,7 @@ require_once('vendor/autoload.php');
 use JansenFelipe\SdapsPHP\SdapsPHP;
 
 //Create the path to save the uploaded files to
-$projectPath = $_POST['project'];
+$projectPath = $_POST['instruments'];
 $projectPath = str_replace('..'.DIRECTORY_SEPARATOR, '', $projectPath);
 $uploadPath = $projectPath . DIRECTORY_SEPARATOR .'uploads' . DIRECTORY_SEPARATOR;
 
