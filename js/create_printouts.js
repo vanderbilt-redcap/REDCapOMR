@@ -188,48 +188,53 @@ $(document).ready(function() {
                 $('#loadingText').css("display", "none");
             },
             success: function(response) {
-                OMR_ProjectCreateVars.newPath = response;
-                alert("Successfully created project directory " + OMR_ProjectCreateVars.newPath + ".  \r\nYou can now leave the page.");
-                console.log("Successfully created project directory " + OMR_ProjectCreateVars.newPath + ".  \r\nYou can now leave the page.");
-
-                //Grab the number of documents specified by the user
-                OMR_ProjectCreateVars.docNum = $('#docNum').val();
-
-                try {
-                    //Remove the download links/display of previous project if it is displayed
-                    document.body.removeChild(OMR_ProjectCreateVars.iframeContainer);
+                OMR_ProjectCreateVars.responseArr = response;
+                if(!OMR_ProjectCreateVars.responseArr.includes(';')) {
+                    console.log(response);
+                    alert(response);
                 }
-                catch(e) {
-                    //Do nothing
-                } 
+                else {
+                    OMR_ProjectCreateVars.responseArr = response.split(';');
 
-                //Create a div holding iframes of the questionnaire and stamped files,
-                //along with download links to both
-                OMR_ProjectCreateVars.iframeContainer = document.createElement('div');
-                OMR_ProjectCreateVars.iframeContainer.class = 'container';
-                OMR_ProjectCreateVars.iframeContainer.id = 'iframeContainer';
-                document.body.appendChild(OMR_ProjectCreateVars.iframeContainer);
+                    //Display the message of which records had printouts made for them to the user
+                    OMR_ProjectCreateVars.message = OMR_ProjectCreateVars.responseArr[0];
+                    console.log(OMR_ProjectCreateVars.message);
+                    alert(OMR_ProjectCreateVars.message);
 
-                //Only show scans if the user specified an amount above 0 
-                if(OMR_ProjectCreateVars.docNum > 0) {
+                    //Parse the filepath of the  
+                    OMR_ProjectCreateVars.stampedPath = OMR_ProjectCreateVars.responseArr[1];
+
+                    try {
+                        //Remove the download links/display of previous project if it is displayed
+                        document.body.removeChild(OMR_ProjectCreateVars.iframeContainer);
+                    }
+                    catch(e) {
+                        //Do nothing
+                    } 
+
+                    //Create a div holding iframes of the questionnaire and stamped files,
+                    //along with download links to both
+                    OMR_ProjectCreateVars.iframeContainer = document.createElement('div');
+                    OMR_ProjectCreateVars.iframeContainer.class = 'container';
+                    OMR_ProjectCreateVars.iframeContainer.id = 'iframeContainer';
+                    document.body.appendChild(OMR_ProjectCreateVars.iframeContainer);
+
                     //Create scans container
                     OMR_ProjectCreateVars.scansContainer = document.createElement('div');
                     OMR_ProjectCreateVars.scansContainer.id = 'scansContainer';
 
                     //Creates scans iframe that holds sdaps scans result
-                    OMR_ProjectCreateVars.scansPath = '../'+OMR_ProjectCreateVars.newPath+'/stamped_1.pdf';
                     OMR_ProjectCreateVars.scans = document.createElement('iframe');
                     OMR_ProjectCreateVars.scans.id = 'scans';
-                    OMR_ProjectCreateVars.scans.src = OMR_ProjectCreateVars.scansPath;
+                    OMR_ProjectCreateVars.scans.src = OMR_ProjectCreateVars.stampedPath;
 
                     //Create the download link for the scans
-                    OMR_ProjectCreateVars.scansContainer.innerHTML += "<p>Download scans <a href="+OMR_ProjectCreateVars.scansPath+" download>here.</a></p>";
+                    OMR_ProjectCreateVars.scansContainer.innerHTML += "<p>Download scans <a href="+OMR_ProjectCreateVars.stampedPath+" download>here.</a></p>";
 
                     //Add scans container to div container, append scans to it
                     OMR_ProjectCreateVars.iframeContainer.appendChild(OMR_ProjectCreateVars.scansContainer);
                     OMR_ProjectCreateVars.scansContainer.appendChild(OMR_ProjectCreateVars.scans);
                 }
-
             },
             error: function(response) {
                 alert(response);
