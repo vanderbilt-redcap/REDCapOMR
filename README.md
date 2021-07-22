@@ -3,7 +3,7 @@ A project aiming to implement OMR and paper survey support into REDCap with the 
 
 (In logical order)
 
-TODO: * Implement the View Printouts page,
-      * Implement a "Project Settings" page to reset or delete projects from,
-      * Upload scans uploaded by the user to their corresponding REDCap records when results are exported,
-      * Create a Dockerfile and have the project capable of running in a Docker instance
+TODO: 
+* Implement the View Printouts page,
+* Upload scans uploaded by the user to their corresponding REDCap records when results are exported,
+* Create a Dockerfile and have the project capable of running in a Docker instance
