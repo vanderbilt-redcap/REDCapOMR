@@ -8,6 +8,18 @@ use IU\PHPCap\PhpCapException;
 
 
 
+    function arrayInsertAfterKey($array, $afterKey, $key, $value){
+        $pos = array_search($afterKey, array_keys($array));
+    
+        return array_merge(
+            array_slice($array, 0, $pos, $preserve_keys = true),
+            array($key=>$value)
+            //array_slice($array, $pos, $preserve_keys = true)
+        );
+    }
+
+
+
     /**
      * Cleans data from SDAPS csv file from csv export and puts it into a
      * REDCap-readable form for the current instrument.
@@ -28,8 +40,8 @@ use IU\PHPCap\PhpCapException;
         foreach($meta as $key => $val) {
             //Don't include descriptive fields lik with empty form creation
             if($val->field_type !== 'descriptive') {
-                //If we have a hidden field, we add it to the index so we can pass over its value later
-                if(strpos($val->field_annotation, '@HIDDEN-SURVEY') !== false || strpos($val->field_annotation, '@HIDDEN') !== false) {
+                //If we have a hidden field or @NOW datetime field, we add it to the index so we can pass over its value later
+                if($val->field_type !== 'file' && (strpos($val->field_annotation, '@HIDDEN-SURVEY') !== false || strpos($val->field_annotation, '@HIDDEN') !== false)) {
                     $hidden[$index] = true;
                 }
                 //If it's not hidden, we populate the two associative arrays with the question's data
@@ -51,7 +63,6 @@ use IU\PHPCap\PhpCapException;
                 }
             }
         }
-
 
         //Create the vars to hold the csv with parsed data without "review" cols
         //AND global_id, empty, valid, recognized, review, verified (index 1-6)
@@ -93,26 +104,34 @@ use IU\PHPCap\PhpCapException;
                 }
                 //Add value of cell to trimmed csv array
                 else {
-                    // 
                     $trimmedCsv[$i][$j][$k] = $val;
                     $k++;
                 }
             }
         }
 
-        
-        //Remove empty subarrays and restructure the 
+        //Remove empty subarrays and restructure the entire imported csv
         for($i = 1; $i < sizeof($trimmedCsv); $i++) {
-            for($j = 0; $j < sizeof($trimmedCsv[$i]); $j++) {
-                if(!isset($trimmedCsv[$i][$j])) {
-                    unset($trimmedCsv[$i][$j]);
-                    $trimmedCsv[$i] = array_values($trimmedCsv[$i]);
+            for($j = 0; $j < sizeof($formFieldTypes); $j++) {
+                //If we have a field that isn't of type file and has no content, we remove it
+                if($formFieldTypes[$j] !== 'file') {
+                    if(!isset($trimmedCsv[$i][$j])) {
+                        unset($trimmedCsv[$i][$j]);
+                        $trimmedCsv[$i] = array_values($trimmedCsv[$i]);
+                    }
+                }
+                //If we have a field of type file, we need to add a placeholder spot for its content (since it's hidden)
+                else {
+                    $trimmedCsv[$i][$j] = arrayInsertAfterKey($trimmedCsv[$i], 0, $j, 'file');
                 }
             }
         }
 
-        //Create our final csv file to be sent to the server
+        //Create the header of our final csv file to be sent to the server
         $csv = $redcapFormData . "\r\n";
+
+        $files = array();
+        $fileEnc = 0;
 
         //We skip the first row with the form headers, we only care about the content
         //i references the rows of the csv, j references the REDCap header field we're on
@@ -124,7 +143,13 @@ use IU\PHPCap\PhpCapException;
                 }
                 //Skip hidden fields and leave their spots empty to ensure that their data is left blank
                 if($hidden[$j]) {
-                    echo "Skipped ".var_dump($trimmedCsv[$i][$j])." with j = $j\r\n";
+                    $csv = $csv . ',';
+                }
+                //Add the file associated with a certain record ID to the file upload field
+                //(NEEDS WORK)
+                else if($formFieldTypes[$j] === 'file') {
+                    //TODO: Do fileImport() call here or after forms are imported
+
                     $csv = $csv . ',';
                 }
                 //We don't have support for OCR, so we enter nothing for those fields
@@ -168,6 +193,7 @@ use IU\PHPCap\PhpCapException;
             $csv = $csv . "1\r\n";
         }
 
+        echo $files;
         return $csv;
     }
 
@@ -242,7 +268,7 @@ fclose($sdapsCsv);
 
 $importedIds = $project->importRecords($finalCsv, 'csv', 'flat', 'overwrite', 'YMD', 'ids', false);
 
-echo 'Imported data for records: ';
+echo 'Imported data for records:';
 foreach($importedIds as $key => $id) {
     if($key === (sizeof($importedIds)-1)) {
         echo ' '.$id.".\r\n";

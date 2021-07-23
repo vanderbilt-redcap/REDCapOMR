@@ -5,16 +5,22 @@
     padding-right: 8px;
 }
   
-    @media (max-width: 768px) {
-  
+@media (max-width: 992px) {
     .border-md-right {
         border-right: none;
+        padding-right: 0;
     }
-  
 }
 
 .border-md-left {
     padding-left: 8px;
+}
+
+@media (max-width: 992px) {
+    .border-md-left {
+        border-right: none;
+        padding-left: 0;
+    }
 }
 
 /* Basic CSS classes for differing forms pages */
@@ -48,7 +54,7 @@
 }
 
 #questionnaire, #scans {
-    width: 100%;
+    width: 99%;
     height: 55em;
 }
 

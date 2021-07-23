@@ -30,6 +30,10 @@ if(SdapsPHP::reset($project)) {
             SdapsPHP::deleteFile($file);
         }
     }
+    //Delete the record_printouts.txt file if it exists
+    if(file_exists($project.DIRECTORY_SEPARATOR.'record_printouts.txt')) {
+        SdapsPHP::deleteFile($project.DIRECTORY_SEPARATOR.'record_printouts.txt');
+    }
 
     echo 'Project ' . $projectDir . ' reset successfully.  All scans, data, and records removed.';
 }

@@ -3,6 +3,17 @@
     <link rel="stylesheet" href="../css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="../js/view_printouts.js"></script>
+    <script type="text/javascript">
+        $('#myTabs').bind('show', function(e) {  
+            paneID = $(e.target).attr('href');
+            src = $(paneID).attr('data-src');
+            // if the iframe hasn't already been loaded once
+            if($(paneID+" iframe").attr("src")=="")
+            {
+                $(paneID+" iframe").attr("src",src);
+            }
+        });
+    </script>
 </head>
 
 <?php require_once('../templates/navbar.php'); ?>
@@ -26,15 +37,17 @@
         <select class="hidden" name="instruments" id="instruments" hidden>
         </select>
         <br>
-        <p class="hidden" hidden>Enter an SDAPS project name:</p>
-        <input type="text" class="hidden" id="projName" name="projName" hidden>
+        <div id="recordsDiv" class="hidden-inst" hidden>
+            <p>Specify which records you want to view printouts of:</p>
+            <button id="getRecords" type="button">Get Printed Records</button>
+            <ul id="recordsUl"></ul>
+        </div>
+        <button id="view" type="button" hidden>View Printouts</button>
         <br>
-        <p class="hidden" hidden>Specify number of documents to create (starts from last record ID):</p>
-        <input type="text" class="hidden" id="docNum" name="docNum" hidden>
-        <br>
-        <br>
-        <button id="create" class="hidden" type="button" hidden>Create Form</button>
+
+        <ul class="nav nav-tabs navbar-light bg-light" id="tabs" hidden>
+        </ul>
+        <div class="tab-content" id="content" hidden>           
+        </div>
     </form>
 </body>
-
-<?php ?>

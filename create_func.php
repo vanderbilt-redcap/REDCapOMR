@@ -122,6 +122,23 @@ if(($result = SdapsPHP::createProject($projectPath, $texPath)) === true) {
         echo "You did not create any printouts with your project.  Go to 'Create Printouts' to add them.\r\n";
     }
 
+    //Returns the list of stamped_x.pdf documents for this project 
+    $stampedDocs = glob($projectPath.DIRECTORY_SEPARATOR.'stamped_*.pdf');
+
+    //Create a file to hold the list of records that have printouts associated with them
+    if(!file_exists($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt')) {
+        $printoutFile = fopen($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt', 'w+');
+    }
+    else {
+        $printoutFile = fopen($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt', 'a+');
+    }
+
+    foreach($recordIds as $key => $id) {
+        //Write the row of record ID and filepath to the file
+        fwrite($printoutFile, $id.';'.$stampedDocs[sizeof($stampedDocs)-1]."\r\n");
+    }
+    fclose($printoutFile);
+
     $finalOutput = $projectPath . ';' . implode(',', $recordIds);
 
     //Returns the path of the project to create_project.js

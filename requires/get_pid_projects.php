@@ -25,11 +25,10 @@ try {
 
     //$sslVerify = true;
     $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
-
     $projectInfo = $project->exportProjectInfo('php');
 }
 catch(PhpCapException $exception) {
-    echo $exception->getMessage();
+    exit($exception->getMessage());
 }
 
 //Pull project ID from REDCap project
