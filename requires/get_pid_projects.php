@@ -6,13 +6,16 @@ use IU\PHPCap\RedCapProject;
 use IU\PHPCap\FileUtil;
 use IU\PHPCap\PhpCapException;
 
+$json = array();
+
 try {
     if(isset($_POST['apiToken']) && !empty($_POST['apiToken'])) {
         //Pulls the API token from the project that the user gave in the project creation form
         $apiToken = $_POST['apiToken'];
     }
     else {
-        echo 'Could not retrieve API token.';
+        $json['error'] = 'Could not retrieve API token.';
+        die(json_encode($json));
     }
 
     if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl'])) {
@@ -20,26 +23,43 @@ try {
         $apiUrl = 'https://redcap.' . strtolower($_POST['apiUrl']) . '.edu/api/';
     }
     else {
-        echo 'Could not retrieve API URL from university REDCap domain.';
+        $json['error'] = 'Could not retrieve API URL from university REDCap domain.';
+        die(json_encode($json));
     }
 
-    //$sslVerify = true;
-    $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
-    $projectInfo = $project->exportProjectInfo('php');
+    if((isset($_POST['apiToken']) && !empty($_POST['apiToken'])) &&
+       (isset($_POST['apiUrl']) && !empty($_POST['apiUrl']))) {
+        //$sslVerify = true;
+        $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
+        $projectInfo = $project->exportProjectInfo('php');
+    }
+    else {
+        $json['error'] = 'Could not create connection to REDCap project.  API token or URL given are incorrect.';
+        die(json_encode($json));
+    }
 }
 catch(PhpCapException $exception) {
-    exit($exception->getMessage());
+    $json['error'] = $exception->getMessage();
+    die(json_encode($json));
 }
 
-//Pull project ID from REDCap project
-$pidPath = '../tmp' . DIRECTORY_SEPARATOR . $projectInfo['project_id'] . DIRECTORY_SEPARATOR;
+if(!empty($projectInfo)) {
+    //Pull project ID from REDCap project
+    $pidPath = '../tmp' . DIRECTORY_SEPARATOR . $projectInfo['project_id'] . DIRECTORY_SEPARATOR;
 
-$directories = glob($pidPath.'*', GLOB_ONLYDIR);
+    //Gets the list of directories inside the PID's filepath
+    $directories = glob($pidPath.'*', GLOB_ONLYDIR);
 
-if($directories !== false) {
-    $directories = implode(',', $directories);
+    if($directories !== false) {
+        $directories = implode(',', $directories);
+    }
+    
+    $json['results'] = $directories;
+    echo json_encode($json);
 }
-
-echo $directories;
+else {
+    $json['error'] = 'Could not create connection to REDCap project.  API token or URL given are incorrect.';
+    die(json_encode($json));
+}
 
 ?>

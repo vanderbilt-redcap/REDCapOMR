@@ -41,13 +41,14 @@
             <p>Specify which records you want to view printouts of:</p>
             <button id="getRecords" type="button">Get Printed Records</button>
             <ul id="recordsUl"></ul>
-        </div>
+        
         <button id="view" type="button" hidden>View Printouts</button>
         <br>
 
         <ul class="nav nav-tabs navbar-light bg-light" id="tabs" hidden>
         </ul>
         <div class="tab-content" id="content" hidden>           
+        </div>
         </div>
     </form>
 </body>
