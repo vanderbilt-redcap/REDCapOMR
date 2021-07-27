@@ -14,7 +14,7 @@ try {
         $apiToken = $_POST['apiToken'];
     }
     else {
-        $json['error'] = 'Could not retrieve API token.';
+        $json['error'] = 'Error: Could not retrieve API token.';
         die(json_encode($json));
     }
 
@@ -23,7 +23,7 @@ try {
         $apiUrl = 'https://redcap.' . strtolower($_POST['apiUrl']) . '.edu/api/';
     }
     else {
-        $json['error'] = 'Could not retrieve API URL from university REDCap domain.';
+        $json['error'] = 'Error: Could not retrieve API URL from university REDCap domain.';
         die(json_encode($json));
     }
 
@@ -34,7 +34,7 @@ try {
         $projectInfo = $project->exportProjectInfo('php');
     }
     else {
-        $json['error'] = 'Could not create connection to REDCap project.  API token or URL given are incorrect.';
+        $json['error'] = 'Error: Could not create connection to REDCap project.  API token or URL given are incorrect.';
         die(json_encode($json));
     }
 }
@@ -58,7 +58,7 @@ if(!empty($projectInfo)) {
     echo json_encode($json);
 }
 else {
-    $json['error'] = 'Could not create connection to REDCap project.  API token or URL given are incorrect.';
+    $json['error'] = 'Error: Could not create connection to REDCap project.  API token or URL given are incorrect.';
     die(json_encode($json));
 }
 

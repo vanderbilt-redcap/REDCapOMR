@@ -4,8 +4,8 @@
  * Created by Jansen Felipe.  
  * Can be found at https://github.com/jansenfelipe/sdaps-php
  * 
- * Edited and repurposed by Cody Johnson.
- * Previous versions can be found on the Github account linked.  
+ * Edited and repurposed by Cody J, @cojohnson1999.
+ * Previous versions can be found on the original branch above.  
  * This class works in SDAPS 1.9.9, SDAPS command line prompts were changed,
  * as their order with (ex: $pathProject . ' setup ') has been deprecated.
  * 

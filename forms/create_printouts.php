@@ -26,13 +26,13 @@
         <select class="hidden" name="instruments" id="instruments" hidden>
         </select>
         <br>
-        <div id="recordsDiv" class="hidden" hidden>
-            <p class="hidden" hidden>Specify which records you want to make printouts of:</p>
-            <button id="getRecords" class="hidden" type="button" hidden>Get Records</button>
-            <ul id="recordsUl" class="hidden" hidden></ul>
-        </div>
+        <div id="recordsDiv" class="hidden-inst" hidden>
+            <p>Specify which records you want to make printouts of:</p>
+            <button id="getRecords"type="button">Get Records</button>
+            <ul id="recordsUl"></ul>
         <br>
-        <button id="create" class="hidden" type="button" hidden>Create Printouts</button>
+        <button id="create" type="button">Create Printouts</button>
+    </div>
     </form>
 </body>
 </html>

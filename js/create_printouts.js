@@ -22,20 +22,44 @@ $(document).ready(function() {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val()
             },
-            dataType: "text",
+            dataType: "JSON",
             success: function(response) {
                 //If we can't trim the response, then it is a blank string (false)
                 if(!$.trim(response)) {
+                    //Hide all elements that shouldn't be visible after getting no response
+                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                    OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
+
+                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                        OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                    }
+
                     alert('No projects were found for the project ID of the API token you entered.');
                     console.log('No projects were found for the project ID of the API token you entered.');
                 }
+                //If the error variable is filled, alert and log it
+                else if($.trim(response.error)) {
+                    //Hide all elements that shouldn't be visible after error is thrown to client
+                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                    OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
+
+                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                        OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                    }
+
+                    alert(response.error);
+                    console.log(response.error);
+                    response.error = '';
+                }
                 else {
                     //Parse the json result from the php file
-                    OMR_ProjectCreateVars.instruments = response;
+                    OMR_ProjectCreateVars.results = response;
+                    OMR_ProjectCreateVars.instruments = OMR_ProjectCreateVars.results.results;
 
                     OMR_ProjectCreateVars.error = document.getElementById('error');
                     if(OMR_ProjectCreateVars.error) {
-                        console.log(OMR_ProjectCreateVars.error);
                         document.getElementById('error').outerHTML = '';
                     }
 
@@ -80,9 +104,7 @@ $(document).ready(function() {
                         OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.innerInst[OMR_ProjectCreateVars.innerInst.length-1];
                         
                         OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
-                    }
-
-                    
+                    } 
 
                     OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
                     for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
@@ -90,13 +112,16 @@ $(document).ready(function() {
                     }
                 }
             },
-            error: function() {
+            error: function(response) {
+                console.log(response);
                 console.log("Could not retrieve project information from API key and URL.");
 
                 OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
                 for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
                     OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
                 }
+                OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                OMR_ProjectCreateVars.recordsDiv.innerHTML = '';
 
                 if(!$('#error').length) {
                     OMR_ProjectCreateVars.error = document.createElement('h4');
@@ -108,9 +133,36 @@ $(document).ready(function() {
         });
     });
 
+    $("#instruments").change(function() {
+    
+        $.ajax({
+            type: 'POST',
+            url: '../requires/check_file.php',
+            data: {
+                uploadPath: $('#instruments').val()
+            },
+            dataType: 'text',
+            success: function(response) {
+                console.log(response);
+                if(response === 'true') {
+                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                    OMR_ProjectCreateVars.recordsDiv.removeAttribute('hidden');
+                }
+                else {
+                    alert('The currently selected instrument could not be validated in the file system.  Please make sure it is correct.');
+                    console.log('The currently selected instrument could not be validated in the file system.  Please make sure it is correct.');
+                }
+            },
+            error: function() {
+                alert('There was an error validating if the project exists.');
+                console.log('There was an error validating if the project exists.');
+            }
+        });
+    });
+
     $('#getRecords').on('click', function() {
         //Trim directories off of instrument name so records for it can be retrieved from REDCap
-        OMR_ProjectCreateVars.projectChosen = $('#instruments').val();
+        OMR_ProjectCreateVars.projectChosen = $('#instruments').val();  
         OMR_ProjectCreateVars.projectChosen = OMR_ProjectCreateVars.projectChosen.split('/');
 
         $.ajax({
@@ -123,8 +175,37 @@ $(document).ready(function() {
             },
             dataType: "JSON",
             success: function(response) {
-                console.log(response);
-                OMR_ProjectCreateVars.records = response;
+                //If we can't trim the response, then it is a blank string (false)
+                if(!$.trim(response)) {
+                    //Hide all elements that shouldn't be visible after getting no response
+                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                    OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
+
+                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                        OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                    }
+
+                    alert('No projects were found for the project ID of the API token you entered.');
+                    console.log('No projects were found for the project ID of the API token you entered.');
+                }
+                //If the error variable is filled, alert and log it
+                else if($.trim(response.error)) {
+                    //Hide all elements that shouldn't be visible after error is thrown to client
+                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                    OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
+
+                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                        OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                    }
+
+                    alert(response.error);
+                    console.log(response.error);
+                    response.error = '';
+                }
+                else {
+                OMR_ProjectCreateVars.records = response.results;
                 OMR_ProjectCreateVars.recordsUl = document.getElementById('recordsUl');
 
                 //Deletes the previous records shown on screen if the "Get Records" button is pressed again
@@ -160,6 +241,7 @@ $(document).ready(function() {
 
                 //Create a new column for every 10 elements
                 OMR_ProjectCreateVars.recordsUl.style.columnCount = OMR_ProjectCreateVars.columnAmt;
+                }
             },
             error: function(response) {
                 alert(response);
