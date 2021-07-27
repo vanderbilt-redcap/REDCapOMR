@@ -22,9 +22,6 @@
  *        deleteFile
  */
 
-//TODO: Add ...array support for tiff files in add, faster than for loop
-//      through one at a time
-
 namespace JansenFelipe\SdapsPHP;
 
 class SdapsPHP {
