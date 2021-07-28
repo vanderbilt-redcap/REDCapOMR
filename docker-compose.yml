@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+	redcap-omr:
+		build:
+			context: .
+			dockerfile: Dockerfile
+		container_name: redcap-omr
+		volumes:
+			- "./vendor:/var/www/"
