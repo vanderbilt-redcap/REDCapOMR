@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 /tmp
+=======
+/.idea
+/tmp
+>>>>>>> 11994b7... initial round of dockerization

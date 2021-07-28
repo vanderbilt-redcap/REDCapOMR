@@ -1,4 +1,6 @@
 {
+    "name": "cojohnson1999/REDCapOMR",
+    "type": "library",
     "require": {
         "iu-redcap/phpcap": "^1.1",
         "jansenfelipe/sdaps-php": "1.0.*@dev",
