@@ -6,5 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: redcap-omr
+    image: vanderbilt/redcap-omr
+    ports:
+    - "8080:80"
     volumes:
       - "./:/var/www/html"
