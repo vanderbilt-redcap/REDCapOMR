@@ -3,16 +3,28 @@ $(document).ready(function() {
 
     $('#validate').on('click', function () {
         //Defines global object holding all variables for this project to prevent conflicts
-        OMR_ProjectCreateVars.select = document.getElementById('instruments');
+        OMR_ProjectCreateVars.instrumentsSelect = document.getElementById('instruments');
+        OMR_ProjectCreateVars.fieldsSelect = document.getElementById('fields');
         OMR_ProjectCreateVars.form = document.getElementById('formHeader');
         OMR_ProjectCreateVars.instruments = 0;
+        OMR_ProjectCreateVars.fields = 0;
         OMR_ProjectCreateVars.error = '';
 
+        //Hide create button if we click validate again
+        OMR_ProjectCreateVars.createBtn = document.getElementById('create');
+        OMR_ProjectCreateVars.createBtn.setAttribute('hidden', '');
+
         //Clean up any instrument options from previous validation attempt
-        for (i = OMR_ProjectCreateVars.select.length - 1; i >= 0; i--) {
-	        OMR_ProjectCreateVars.select.remove(i);
+        for (i = OMR_ProjectCreateVars.instrumentsSelect.length - 1; i >= 0; i--) {
+	        OMR_ProjectCreateVars.instrumentsSelect.remove(i);
         }
-        OMR_ProjectCreateVars.select.length = 0;
+        OMR_ProjectCreateVars.instrumentsSelect.length = 0;
+
+        //Clean up any field name options from previous validation attempt
+        for (i = OMR_ProjectCreateVars.fieldsSelect.length - 1; i >= 0; i--) {
+	        OMR_ProjectCreateVars.fieldsSelect.remove(i);
+        }
+        OMR_ProjectCreateVars.fieldsSelect.length = 0;
 
 
         $.ajax({
@@ -75,7 +87,7 @@ $(document).ready(function() {
                                 OMR_ProjectCreateVars.opt.setAttribute('selected', '');
                                 OMR_ProjectCreateVars.opt.setAttribute('value', '');
                                 OMR_ProjectCreateVars.opt.innerHTML = '-- Select an option --';
-                                OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+                                OMR_ProjectCreateVars.instrumentsSelect.appendChild(OMR_ProjectCreateVars.opt);
                             }
     
                             OMR_ProjectCreateVars.opt = document.createElement('option');
@@ -85,7 +97,7 @@ $(document).ready(function() {
                             OMR_ProjectCreateVars.innerInst = OMR_ProjectCreateVars.instruments[i].split('/');
                             OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.innerInst[OMR_ProjectCreateVars.innerInst.length-1];
                             
-                            OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+                            OMR_ProjectCreateVars.instrumentsSelect.appendChild(OMR_ProjectCreateVars.opt);
                         }
                     }
                     else {
@@ -94,7 +106,7 @@ $(document).ready(function() {
                         OMR_ProjectCreateVars.opt.setAttribute('selected', '');
                         OMR_ProjectCreateVars.opt.setAttribute('value', '');
                         OMR_ProjectCreateVars.opt.innerHTML = '-- Select an option --';
-                        OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+                        OMR_ProjectCreateVars.instrumentsSelect.appendChild(OMR_ProjectCreateVars.opt);
 
                         OMR_ProjectCreateVars.opt = document.createElement('option');
                         OMR_ProjectCreateVars.opt.value = OMR_ProjectCreateVars.instruments;
@@ -103,13 +115,13 @@ $(document).ready(function() {
                         OMR_ProjectCreateVars.innerInst = OMR_ProjectCreateVars.instruments.split('/');
                         OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.innerInst[OMR_ProjectCreateVars.innerInst.length-1];
                         
-                        OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+                        OMR_ProjectCreateVars.instrumentsSelect.appendChild(OMR_ProjectCreateVars.opt);
                     } 
 
-                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    /* OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
                     for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
                         OMR_ProjectCreateVars.elements[i].removeAttribute('hidden');
-                    }
+                    } */
                 }
             },
             error: function(response) {
@@ -122,6 +134,52 @@ $(document).ready(function() {
                 }
                 OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
                 OMR_ProjectCreateVars.recordsDiv.innerHTML = '';
+
+                if(!$('#error').length) {
+                    OMR_ProjectCreateVars.error = document.createElement('h4');
+                    OMR_ProjectCreateVars.error.id = 'error';
+                    OMR_ProjectCreateVars.error.innerHTML = 'API token is incorrect for the given URL.';
+                    OMR_ProjectCreateVars.form.appendChild(OMR_ProjectCreateVars.error);
+                }
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "../requires/get_field_names.php",
+            data: {
+                apiToken: $('#apiToken').val(),
+                apiUrl: $('#apiUrl').val()
+            },
+            dataType: "JSON",
+            success: function(response) {
+                //Parse the json result from the php file
+                OMR_ProjectCreateVars.fields = response;
+
+                OMR_ProjectCreateVars.error = document.getElementById('error');
+                if(OMR_ProjectCreateVars.error) {
+                    document.getElementById('error').outerHTML = '';
+                }
+
+                for(let i = 0; i < OMR_ProjectCreateVars.fields.length; i++) {
+                    OMR_ProjectCreateVars.opt = document.createElement('option');
+                    OMR_ProjectCreateVars.opt.value = OMR_ProjectCreateVars.fields[i]['original_field_name'];
+                    OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.fields[i]['original_field_name'];
+                    OMR_ProjectCreateVars.fieldsSelect.appendChild(OMR_ProjectCreateVars.opt);
+                }
+
+                OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                    OMR_ProjectCreateVars.elements[i].removeAttribute('hidden');
+                }
+            },
+            error: function() {
+                console.log("Could not retrieve project field names from API key and URL.");
+
+                OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                    OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                }
 
                 if(!$('#error').length) {
                     OMR_ProjectCreateVars.error = document.createElement('h4');
@@ -161,6 +219,11 @@ $(document).ready(function() {
     });
 
     $('#getRecords').on('click', function() {
+
+        //Hide create button before records are retrieved in case of error
+        OMR_ProjectCreateVars.createBtn = document.getElementById('create');
+        OMR_ProjectCreateVars.createBtn.setAttribute('hidden', '');
+
         //Trim directories off of instrument name so records for it can be retrieved from REDCap
         OMR_ProjectCreateVars.projectChosen = $('#instruments').val();  
         OMR_ProjectCreateVars.projectChosen = OMR_ProjectCreateVars.projectChosen.split('/');
@@ -171,7 +234,8 @@ $(document).ready(function() {
             data: {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val(),
-                instruments: OMR_ProjectCreateVars.projectChosen[OMR_ProjectCreateVars.projectChosen.length-1]
+                instruments: OMR_ProjectCreateVars.projectChosen[OMR_ProjectCreateVars.projectChosen.length-1],
+                fieldName: $('#fields').val()
             },
             dataType: "JSON",
             success: function(response) {
@@ -242,6 +306,10 @@ $(document).ready(function() {
                 //Create a new column for every 10 elements
                 OMR_ProjectCreateVars.recordsUl.style.columnCount = OMR_ProjectCreateVars.columnAmt;
                 }
+
+                //Unhide create button on success
+                OMR_ProjectCreateVars.createBtn = document.getElementById('create');
+                OMR_ProjectCreateVars.createBtn.removeAttribute('hidden');
             },
             error: function(response) {
                 alert(response);

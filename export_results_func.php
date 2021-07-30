@@ -130,8 +130,6 @@ use IU\PHPCap\PhpCapException;
         //Create the header of our final csv file to be sent to the server
         $csv = $redcapFormData . "\r\n";
 
-        $files = array();
-        $fileEnc = 0;
 
         //We skip the first row with the form headers, we only care about the content
         //i references the rows of the csv, j references the REDCap header field we're on
@@ -193,7 +191,6 @@ use IU\PHPCap\PhpCapException;
             $csv = $csv . "1\r\n";
         }
 
-        echo $files;
         return $csv;
     }
 
@@ -229,9 +226,17 @@ try {
     else {
         echo 'Could not retrieve list of instruments from project.';
     }
+
+    //Get the field name of the record ID field from the user's input
+    if(isset($_POST['fieldName']) && !empty($_POST['fieldName'])) {
+        $idField = $_POST['fieldName'];
+    }
+    else {
+        echo 'Error: The selected instrument name from the project could not be retrieved.';
+    }
     
     //Pulls metadata and the list of instruments from the project for the given form
-    $meta = $project->exportMetadata('json', [], [$formName]);
+    $meta = $project->exportMetadata('json', [$idField], [$formName]);
 }
 catch(PhpCapException $exception) {
     echo $exception->getMessage();
@@ -247,7 +252,7 @@ if(isset($_POST['instruments']) && !empty($_POST['instruments'])) {
 }
 
 //Get the first record of the form and then parse it so we only have the header data
-$formData = $project->exportRecords('csv', 'flat', [1], null, [$formName]);
+$formData = $project->exportRecords('csv', 'flat', [1], [$idField], [$formName]);
 $formData = explode(PHP_EOL, $formData);
 $formData = $formData[0];
 

@@ -32,14 +32,23 @@ try {
         $json['error'] = 'Error: The selected instrument name from the project could not be retrieved.';
         die(json_encode($json));
     }
+    
+    if(isset($_POST['fieldName']) && !empty($_POST['fieldName'])) {
+        $idField = $_POST['fieldName'];
+    }
+    else {
+        $json['error'] = 'Error: The selected instrument name from the project could not be retrieved.';
+        die(json_encode($json));
+    }
 
     if((isset($_POST['apiToken']) && !empty($_POST['apiToken'])) &&
        (isset($_POST['apiUrl']) && !empty($_POST['apiUrl'])) &&
-       (isset($_POST['instruments']) && !empty($_POST['instruments']))) {
+       (isset($_POST['instruments']) && !empty($_POST['instruments'])) &&
+       (isset($_POST['fieldName']) && !empty($_POST['fieldName']))) {
         //$sslVerify = true;
         $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
         //Pull records of the project from REDCap for the given form (instrument)
-        $allRecords = $project->exportRecords('csv', 'flat', null, null, [$instruments]);
+        $allRecords = $project->exportRecords('csv', 'flat', null, [$idField], [$instruments]);
 
         //Separate the rows of the csv file to subarrays
         $rows = explode(PHP_EOL, $allRecords);

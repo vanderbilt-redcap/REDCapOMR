@@ -6,15 +6,7 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit173af7316c8283801d6364ad955e4003
 {
-    public static $files = array (
-        'a9ed0d27b5a698798a89181429f162c5' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/Common/customFunctions.php',
-    );
-
     public static $prefixLengthsPsr4 = array (
-        'Z' => 
-        array (
-            'Zxing\\' => 6,
-        ),
         'I' => 
         array (
             'IU\\PHPCap\\' => 10,
@@ -22,10 +14,6 @@ class ComposerStaticInit173af7316c8283801d6364ad955e4003
     );
 
     public static $prefixDirsPsr4 = array (
-        'Zxing\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib',
-        ),
         'IU\\PHPCap\\' => 
         array (
             0 => __DIR__ . '/..' . '/iu-redcap/phpcap/src',

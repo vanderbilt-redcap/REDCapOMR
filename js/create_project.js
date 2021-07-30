@@ -3,16 +3,24 @@ $(document).ready(function() {
 
     $('#validate').on('click', function () {
         //Defines global object holding all variables for this project to prevent conflicts
-        OMR_ProjectCreateVars.select = document.getElementById('instruments');
+        OMR_ProjectCreateVars.instrumentsSelect = document.getElementById('instruments');
+        OMR_ProjectCreateVars.fieldsSelect = document.getElementById('fields');
         OMR_ProjectCreateVars.form = document.getElementById('formHeader');
         OMR_ProjectCreateVars.instruments = 0;
+        OMR_ProjectCreateVars.fields = 0;
         OMR_ProjectCreateVars.error = '';
 
         //Clean up any instrument options from previous validation attempt
-        for (i = OMR_ProjectCreateVars.select.length - 1; i >= 0; i--) {
-	        OMR_ProjectCreateVars.select.remove(i);
+        for (i = OMR_ProjectCreateVars.instrumentsSelect.length - 1; i >= 0; i--) {
+	        OMR_ProjectCreateVars.instrumentsSelect.remove(i);
         }
-        OMR_ProjectCreateVars.select.length = 0;
+        OMR_ProjectCreateVars.instrumentsSelect.length = 0;
+
+        //Clean up any field name options from previous validation attempt
+        for (i = OMR_ProjectCreateVars.fieldsSelect.length - 1; i >= 0; i--) {
+	        OMR_ProjectCreateVars.fieldsSelect.remove(i);
+        }
+        OMR_ProjectCreateVars.fieldsSelect.length = 0;
 
 
         $.ajax({
@@ -29,7 +37,6 @@ $(document).ready(function() {
 
                 OMR_ProjectCreateVars.error = document.getElementById('error');
                 if(OMR_ProjectCreateVars.error) {
-                    console.log(OMR_ProjectCreateVars.error);
                     document.getElementById('error').outerHTML = '';
                 }
 
@@ -37,13 +44,13 @@ $(document).ready(function() {
                     OMR_ProjectCreateVars.opt = document.createElement('option');
                     OMR_ProjectCreateVars.opt.value = OMR_ProjectCreateVars.instruments[i]['instrument_name'];
                     OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.instruments[i]['instrument_name'];
-                    OMR_ProjectCreateVars.select.appendChild(OMR_ProjectCreateVars.opt);
+                    OMR_ProjectCreateVars.instrumentsSelect.appendChild(OMR_ProjectCreateVars.opt);
                 }
 
-                OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                /* OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
                 for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
                     OMR_ProjectCreateVars.elements[i].removeAttribute('hidden');
-                }
+                } */
             },
             error: function() {
                 console.log("Could not retrieve project information from API key and URL.");
@@ -61,21 +68,102 @@ $(document).ready(function() {
                 }
             }
         });
+
+
+        $.ajax({
+            type: "POST",
+            url: "../requires/get_field_names.php",
+            data: {
+                apiToken: $('#apiToken').val(),
+                apiUrl: $('#apiUrl').val()
+            },
+            dataType: "JSON",
+            success: function(response) {
+                //Parse the json result from the php file
+                OMR_ProjectCreateVars.fields = response;
+
+                OMR_ProjectCreateVars.error = document.getElementById('error');
+                if(OMR_ProjectCreateVars.error) {
+                    document.getElementById('error').outerHTML = '';
+                }
+
+                for(let i = 0; i < OMR_ProjectCreateVars.fields.length; i++) {
+                    OMR_ProjectCreateVars.opt = document.createElement('option');
+                    OMR_ProjectCreateVars.opt.value = OMR_ProjectCreateVars.fields[i]['original_field_name'];
+                    OMR_ProjectCreateVars.opt.innerHTML = OMR_ProjectCreateVars.fields[i]['original_field_name'];
+                    OMR_ProjectCreateVars.fieldsSelect.appendChild(OMR_ProjectCreateVars.opt);
+                }
+
+                OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                    OMR_ProjectCreateVars.elements[i].removeAttribute('hidden');
+                }
+            },
+            error: function() {
+                console.log("Could not retrieve project field names from API key and URL.");
+
+                OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                    OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                }
+
+                if(!$('#error').length) {
+                    OMR_ProjectCreateVars.error = document.createElement('h4');
+                    OMR_ProjectCreateVars.error.id = 'error';
+                    OMR_ProjectCreateVars.error.innerHTML = 'API token is incorrect for the given URL.';
+                    OMR_ProjectCreateVars.form.appendChild(OMR_ProjectCreateVars.error);
+                }
+            }
+        });
     });
 
     $('#getRecords').on('click', function() {
+        //Trim directories off of instrument name so records for it can be retrieved from REDCap
+        OMR_ProjectCreateVars.projectChosen = $('#instruments').val();  
+        OMR_ProjectCreateVars.projectChosen = OMR_ProjectCreateVars.projectChosen.split('/');
+
         $.ajax({
             type: "POST",
             url: "../requires/get_record_ids.php",
             data: {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val(),
-                instruments: $('#instruments').val()
+                instruments: OMR_ProjectCreateVars.projectChosen[OMR_ProjectCreateVars.projectChosen.length-1],
+                fieldName: $('#fields').val()
             },
             dataType: "JSON",
             success: function(response) {
-                console.log(response);
-                OMR_ProjectCreateVars.records = response;
+                //If we can't trim the response, then it is a blank string (false)
+                if(!$.trim(response)) {
+                    //Hide all elements that shouldn't be visible after getting no response
+                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                    OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
+
+                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                        OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                    }
+
+                    alert('No projects were found for the project ID of the API token you entered.');
+                    console.log('No projects were found for the project ID of the API token you entered.');
+                }
+                //If the error variable is filled, alert and log it
+                else if($.trim(response.error)) {
+                    //Hide all elements that shouldn't be visible after error is thrown to client
+                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                    OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
+
+                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                        OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                    }
+
+                    alert(response.error);
+                    console.log(response.error);
+                    response.error = '';
+                }
+                else {
+                OMR_ProjectCreateVars.records = response.results;
                 OMR_ProjectCreateVars.recordsUl = document.getElementById('recordsUl');
 
                 //Deletes the previous records shown on screen if the "Get Records" button is pressed again
@@ -84,7 +172,7 @@ $(document).ready(function() {
                 OMR_ProjectCreateVars.columnAmt = 0;
 
                 OMR_ProjectCreateVars.records.forEach(function(item, index) {
-                    //Adds 1 to a variable to make columns for every 10 elements
+                    //Checks if index is divisible by 10 to make columns for every 10 elements
                     if((index+1) % 10 === 0) {
                         OMR_ProjectCreateVars.columnAmt++;
                     }
@@ -111,6 +199,7 @@ $(document).ready(function() {
 
                 //Create a new column for every 10 elements
                 OMR_ProjectCreateVars.recordsUl.style.columnCount = OMR_ProjectCreateVars.columnAmt;
+                }
             },
             error: function(response) {
                 alert(response);

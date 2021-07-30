@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <html>
 <head>
     <link rel="stylesheet" href="../css/styles.css">
@@ -12,12 +14,12 @@
     <div class="lds-ring"><div></div><div></div><div></div><div></div></div><p id="loadingText"><br>Converting and uploading scans...</p>
 
     <form id="formHeader">
-        <p>Enter your project API token:</p>
-        <input type="text" id="apiToken" name="apiToken">
+    <p>Enter your project API token:</p>
+        <input type="text" id="apiToken" name="apiToken" value="<?php if(isset($_SESSION['apiToken']) && !empty($_SESSION['apiToken'])) echo $_SESSION['apiToken']; else echo ''; ?>">
         <br>
         <!-- Retrieve this value from host URL when in module, this is temporary -->
         <p>Enter REDCap institution name (from redcap.NAME.edu):</p>
-        <input type="text" id="apiUrl" name="apiUrl">
+        <input type="text" id="apiUrl" name="apiUrl" value="<?php if(isset($_SESSION['apiUrl']) && !empty($_SESSION['apiUrl'])) echo $_SESSION['apiUrl']; else echo ''; ?>">
         <br>
         <br>
         <button id="validate" type="button">Validate</button>

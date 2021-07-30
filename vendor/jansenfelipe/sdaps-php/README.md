@@ -24,8 +24,24 @@ Add autoload.php
 
 Call
 
-    use JansenFelipe\SdapsPHP\SdapsPHP;
-    $boolean = SdapsPHP::createProject('/path/you/want/to/create/the/project/sdaps');
+```php
+<?php
+
+use JansenFelipe\SdapsPHP\SdapsPHP;
+
+$pathProject = '/path/you/want/to/create/the/project/sdaps';
+$pathLaTeX = '/path/format.tex';
+
+if(SdapsPHP::createProject($pathProject, $pathLaTeX))
+{
+    SdapsPHP::add($pathProject, '/images/image01.tiff');
+    SdapsPHP::recognize($pathProject);
     
+    $pathCSV = SdapsPHP::recognize($pathProject);
+    
+    //handle .csv
+}
+```
+
 See
     https://github.com/sdaps/sdaps

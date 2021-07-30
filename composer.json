@@ -3,7 +3,12 @@
     "type": "library",
     "require": {
         "iu-redcap/phpcap": "^1.1",
-        "jansenfelipe/sdaps-php": "1.0.*@dev",
-        "khanamiryan/qrcode-detector-decoder": "1.0.5.1"
-    }
+        "jansenfelipe/sdaps-php": "dev-bugfix-update as 1.0.x-dev"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/cojohnson1999/sdaps-php"
+        }
+    ]
 }

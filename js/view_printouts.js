@@ -24,22 +24,9 @@ $(document).ready(function() {
             },
             dataType: "JSON",
             success: function(response) {
-                //If we can't trim the response, then it is a blank string (false)
-                if(!$.trim(response)) {
-                    //Hide all elements that shouldn't be visible after getting no response
-                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
-                    OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
-
-                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
-                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
-                        OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
-                    }
-
-                    alert('No projects were found for the project ID of the API token you entered.');
-                    console.log('No projects were found for the project ID of the API token you entered.');
-                }
+                
                 //If the error variable is filled, alert and log it
-                else if($.trim(response.error)) {
+                if($.trim(response.error)) {
                     //Hide all elements that shouldn't be visible after error is thrown to client
                     OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
                     OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
@@ -53,10 +40,25 @@ $(document).ready(function() {
                     console.log(response.error);
                     response.error = '';
                 }
+                //If we can't trim the response, then it is a blank string (false)
+                if(!$.trim(response.results)) {
+                    //Hide all elements that shouldn't be visible after getting no response
+                    OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
+                    OMR_ProjectCreateVars.recordsDiv.setAttribute('hidden', '');
+
+                    OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
+                        OMR_ProjectCreateVars.elements[i].setAttribute('hidden', '');
+                    }
+
+                    alert('No projects were found for the project ID of the API token you entered.');
+                    console.log('No projects were found for the project ID of the API token you entered.');
+                }
                 else {
                     //Parse the json result from the php file
-                    OMR_ProjectCreateVars.results = response;
-                    OMR_ProjectCreateVars.instruments = OMR_ProjectCreateVars.results.results;
+                    OMR_ProjectCreateVars.instruments = response.results;
+
+                    console.log(OMR_ProjectCreateVars.results);
 
                     OMR_ProjectCreateVars.error = document.getElementById('error');
                     if(OMR_ProjectCreateVars.error) {

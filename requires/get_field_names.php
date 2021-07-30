@@ -23,13 +23,13 @@ try {
 
     //$sslVerify = true;
     $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
-    //Pull instrument names of project from REDCap
-    $instruments = $project->exportInstruments('json');
+    //Pull field names of the project from REDCap
+    $fields = $project->exportFieldNames('json');
 } 
 catch(PhpCapException $exception) {
     echo $exception->getMessage();
 }
 
-echo $instruments;
+echo $fields;
 
 ?>

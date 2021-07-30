@@ -22,20 +22,46 @@ $(document).ready(function() {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val()
             },
-            dataType: "text",
+            dataType: "JSON",
             success: function(response) {
+                
+                //If the error variable is filled, alert and log it
+                if($.trim(response.error)) {
+                    //Hide all elements that shouldn't be visible after error is thrown to client
+                    OMR_ProjectAnalyzeVars.runRecognition = document.getElementById('runRecognition');
+                    OMR_ProjectAnalyzeVars.runRecognition.setAttribute('hidden', '');
+
+                    OMR_ProjectAnalyzeVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectAnalyzeVars.elements.length; i++) {
+                        OMR_ProjectAnalyzeVars.elements[i].setAttribute('hidden', '');
+                    }
+
+                    alert(response.error);
+                    console.log(response.error);
+                    response.error = '';
+                }
                 //If we can't trim the response, then it is a blank string (false)
-                if(!$.trim(response)) {
+                if(!$.trim(response.results)) {
+                    //Hide all elements that shouldn't be visible after getting no response
+                    OMR_ProjectAnalyzeVars.runRecognition = document.getElementById('runRecognition');
+                    OMR_ProjectAnalyzeVars.runRecognition.setAttribute('hidden', '');
+
+                    OMR_ProjectAnalyzeVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectAnalyzeVars.elements.length; i++) {
+                        OMR_ProjectAnalyzeVars.elements[i].setAttribute('hidden', '');
+                    }
+
                     alert('No projects were found for the project ID of the API token you entered.');
                     console.log('No projects were found for the project ID of the API token you entered.');
                 }
                 else {
                     //Parse the json result from the php file
-                    OMR_ProjectAnalyzeVars.instruments = response;
+                    OMR_ProjectAnalyzeVars.instruments = response.results;
+
+                    console.log(OMR_ProjectAnalyzeVars.results);
 
                     OMR_ProjectAnalyzeVars.error = document.getElementById('error');
                     if(OMR_ProjectAnalyzeVars.error) {
-                        console.log(OMR_ProjectAnalyzeVars.error);
                         document.getElementById('error').outerHTML = '';
                     }
 
@@ -90,13 +116,16 @@ $(document).ready(function() {
                     }
                 }
             },
-            error: function() {
+            error: function(response) {
+                console.log(response);
                 console.log("Could not retrieve project information from API key and URL.");
 
                 OMR_ProjectAnalyzeVars.elements = document.getElementsByClassName('hidden');
                 for(let i = 0; i < OMR_ProjectAnalyzeVars.elements.length; i++) {
                     OMR_ProjectAnalyzeVars.elements[i].setAttribute('hidden', '');
                 }
+                OMR_ProjectAnalyzeVars.runRecognition = document.getElementById('runRecognition');
+                OMR_ProjectAnalyzeVars.runRecognition.innerHTML = '';
 
                 if(!$('#error').length) {
                     OMR_ProjectAnalyzeVars.error = document.createElement('h4');

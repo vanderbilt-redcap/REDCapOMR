@@ -23,6 +23,8 @@
     }
 }
 
+
+
 /* Basic CSS classes for differing forms pages */
 
 .background {
@@ -56,6 +58,20 @@
 #questionnaire, #scans {
     width: 99%;
     height: 55em;
+}
+
+#recordsDiv {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+#recordsDiv {
+    flex: 0 0 auto;
+}
+
+#recordsDiv label {
+    margin-right: 50px;
 }
 
 
