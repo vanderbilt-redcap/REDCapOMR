@@ -1,0 +1,114 @@
+------------------------------------------------------------------------------
+- SDAPS -- setup
+------------------------------------------------------------------------------
+Running pdflatex now multiple times to generate the questionnaire.
+Running pdflatex now multiple imes to generate the questionnaire.
+Research Participant Perception Survey - SP (Spanish) | ID: \qid
+Author: Vanderbilt
+------------------------------------------------------------------------------
+- SDAPS -- stamp
+------------------------------------------------------------------------------
+Running pdflatex now multiple times to generate the stamped questionnaire.
+------------------------------------------------------------------------------
+- SDAPS -- stamp
+------------------------------------------------------------------------------
+Running pdflatex now multiple times to generate the stamped questionnaire.
+------------------------------------------------------------------------------
+- SDAPS -- stamp
+------------------------------------------------------------------------------
+Running pdflatex now multiple times to generate the stamped questionnaire.
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Error: 'NoneType' object has no attribute 'shape'
+Error: Running the conversion failed.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/__init__.py", line 67, in main
+    return cmdline['_func'](cmdline)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/script.py", line 126, in decorated_function
+    result = function(cmdline)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/cmdline/add.py", line 112, in add
+    convert_images(cmdline['images'], tmp, survey.defs.paper_width, survey.defs.paper_height, cmdline['transform'])
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/convert/__init__.py", line 30, in convert_images
+    img = opencv.ensure_orientation(img, portrait)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/utils/opencv.py", line 189, in ensure_orientation
+    img_portrait = img.shape[1] <= img.shape[0]
+AttributeError: 'NoneType' object has no attribute 'shape'
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+0 sheets
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+Error: The survey does not have any images! Please add images (and run recognize) before using the GUI.
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- stamp
+------------------------------------------------------------------------------
+Running pdflatex now multiple times to generate the stamped questionnaire.
+------------------------------------------------------------------------------
+- SDAPS -- stamp
+------------------------------------------------------------------------------
+Running pdflatex now multiple times to generate the stamped questionnaire.
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Error: 'NoneType' object has no attribute 'shape'
+Error: Running the conversion failed.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/__init__.py", line 67, in main
+    return cmdline['_func'](cmdline)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/script.py", line 126, in decorated_function
+    result = function(cmdline)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/cmdline/add.py", line 112, in add
+    convert_images(cmdline['images'], tmp, survey.defs.paper_width, survey.defs.paper_height, cmdline['transform'])
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/convert/__init__.py", line 30, in convert_images
+    img = opencv.ensure_orientation(img, portrait)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/utils/opencv.py", line 189, in ensure_orientation
+    img_portrait = img.shape[1] <= img.shape[0]
+AttributeError: 'NoneType' object has no attribute 'shape'
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+0 sheets
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+Error: The survey does not have any images! Please add images (and run recognize) before using the GUI.
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+- SDAPS -- add
+------------------------------------------------------------------------------
+Converting input files into a single temporary file.
+Error: 'NoneType' object has no attribute 'shape'
+Error: Running the conversion failed.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/__init__.py", line 67, in main
+    return cmdline['_func'](cmdline)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/script.py", line 126, in decorated_function
+    result = function(cmdline)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/cmdline/add.py", line 112, in add
+    convert_images(cmdline['images'], tmp, survey.defs.paper_width, survey.defs.paper_height, cmdline['transform'])
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/convert/__init__.py", line 30, in convert_images
+    img = opencv.ensure_orientation(img, portrait)
+  File "/usr/local/lib/python3.8/dist-packages/sdaps/utils/opencv.py", line 189, in ensure_orientation
+    img_portrait = img.shape[1] <= img.shape[0]
+AttributeError: 'NoneType' object has no attribute 'shape'
+------------------------------------------------------------------------------
+- SDAPS -- recognize
+------------------------------------------------------------------------------
+0 sheets
+------------------------------------------------------------------------------
+- SDAPS -- gui
+------------------------------------------------------------------------------
+Error: The survey does not have any images! Please add images (and run recognize) before using the GUI.
+------------------------------------------------------------------------------
+- SDAPS -- csvdata_export
+------------------------------------------------------------------------------
