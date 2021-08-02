@@ -1,5 +1,0 @@
-1;../../src/tmp/134344/research_participant_perception_survey_sp_spanish/stamped_1.pdf
-1;../../src/tmp/134344/research_participant_perception_survey_sp_spanish/stamped_2.pdf
-2;../../src/tmp/134344/research_participant_perception_survey_sp_spanish/stamped_3.pdf
-2;../../src/tmp/134344/research_participant_perception_survey_sp_spanish/stamped_4.pdf
-1;../tmp/134344/research_participant_perception_survey_sp_spanish/stamped_5.pdf
