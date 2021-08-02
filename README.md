@@ -3,7 +3,7 @@ A project aiming to implement OMR and paper survey support into REDCap with the 
 
 TODO:
 * Add router function and function classes
-* Change file structure -> public files to /public, private files to /src, and vendor files to /vendor all in root directory
+* Change location of Docker files(?)
 * Fix bugs with PHP "error" echo messages being captured in the success Ajax method.  Will likely need to encode a JSON field called "error" to catch these in success. (partially implemented)
 * Upload scans uploaded by the user to their corresponding REDCap records when results are exported,
 * NOTE: Above point is only partially implemented.  It MAY have to be implemented based on the user's filenames for the scanned pdf files.
