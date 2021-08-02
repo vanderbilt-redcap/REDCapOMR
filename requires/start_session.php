@@ -28,7 +28,7 @@ if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl']) &&
     }
 }
 else {
-    echo 'The API token or institution name was no entered.  Please try again.';
+    echo 'The API token or institution name was not entered.  Please try again.';
 }
 
 ?>

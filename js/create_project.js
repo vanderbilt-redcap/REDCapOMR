@@ -1,7 +1,10 @@
 $(document).ready(function() {
     let OMR_ProjectCreateVars = {};
 
-    $('#validate').on('click', function () {
+
+    
+    //Validate the credentials entered in the API token/URL fields
+    function validateCreds() {
         //Defines global object holding all variables for this project to prevent conflicts
         OMR_ProjectCreateVars.instrumentsSelect = document.getElementById('instruments');
         OMR_ProjectCreateVars.fieldsSelect = document.getElementById('fields');
@@ -47,10 +50,6 @@ $(document).ready(function() {
                     OMR_ProjectCreateVars.instrumentsSelect.appendChild(OMR_ProjectCreateVars.opt);
                 }
 
-                /* OMR_ProjectCreateVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_ProjectCreateVars.elements.length; i++) {
-                    OMR_ProjectCreateVars.elements[i].removeAttribute('hidden');
-                } */
             },
             error: function() {
                 console.log("Could not retrieve project information from API key and URL.");
@@ -115,6 +114,20 @@ $(document).ready(function() {
                 }
             }
         });
+    }
+
+
+
+    //Our session vars filled the two boxes to start, so we automatically validate it
+    if($('#apiToken').val() !== '' && $('#apiUrl').val() !== '') {
+        $('#validateDiv').attr('hidden', '');
+        validateCreds();
+    }
+
+
+
+    $('#validate').on('click', function () {
+        validateCreds();
     });
 
     $('#getRecords').on('click', function() {

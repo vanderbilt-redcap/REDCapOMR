@@ -1,7 +1,9 @@
 $(document).ready(function() {
     let OMR_ProjectCreateVars = {};
 
-    $('#validate').on('click', function () {
+
+
+    function validateCreds() {
         //Defines global object holding all variables for this project to prevent conflicts
         OMR_ProjectCreateVars.instrumentsSelect = document.getElementById('instruments');
         OMR_ProjectCreateVars.fieldsSelect = document.getElementById('fields');
@@ -189,6 +191,20 @@ $(document).ready(function() {
                 }
             }
         });
+    }
+
+
+
+    //Our session vars filled the two boxes to start, so we automatically validate it
+    if($('#apiToken').val() !== '' && $('#apiUrl').val() !== '') {
+        $('#validateDiv').attr('hidden', '');
+        validateCreds();
+    }
+
+
+
+    $('#validate').on('click', function () {
+        validateCreds();
     });
 
     $("#instruments").change(function() {
@@ -201,7 +217,6 @@ $(document).ready(function() {
             },
             dataType: 'text',
             success: function(response) {
-                console.log(response);
                 if(response === 'true') {
                     OMR_ProjectCreateVars.recordsDiv = document.getElementById('recordsDiv');
                     OMR_ProjectCreateVars.recordsDiv.removeAttribute('hidden');

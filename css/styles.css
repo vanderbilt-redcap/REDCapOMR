@@ -38,6 +38,11 @@
     z-index: 998;
 }
 
+#formHeader {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
 #iframeContainer {
     display: flex;
     flex-wrap: wrap;
@@ -58,20 +63,6 @@
 #questionnaire, #scans {
     width: 99%;
     height: 55em;
-}
-
-#recordsDiv {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-
-#recordsDiv {
-    flex: 0 0 auto;
-}
-
-#recordsDiv label {
-    margin-right: 50px;
 }
 
 

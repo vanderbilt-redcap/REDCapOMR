@@ -1,7 +1,10 @@
 $(document).ready(function() {
     let OMR_ProjectSettingsVars = {};
 
-    $('#validate').on('click', function () {
+
+
+    //Validate the credentials entered in the API token/URL fields
+    function validateCreds() {
         //Defines global object holding all variables for this project to prevent conflicts
         OMR_ProjectSettingsVars.select = document.getElementById('instruments');
         OMR_ProjectSettingsVars.form = document.getElementById('formHeader');
@@ -57,8 +60,6 @@ $(document).ready(function() {
                 else {
                     //Parse the json result from the php file
                     OMR_ProjectSettingsVars.instruments = response.results;
-
-                    console.log(OMR_ProjectSettingsVars.results);
 
                     OMR_ProjectSettingsVars.error = document.getElementById('error');
                     if(OMR_ProjectSettingsVars.error) {
@@ -135,6 +136,20 @@ $(document).ready(function() {
                 }
             }
         });
+    }
+
+
+
+    //Our session vars filled the two boxes to start, so we automatically validate it
+    if($('#apiToken').val() !== '' && $('#apiUrl').val() !== '') {
+        $('#validateDiv').attr('hidden', '');
+        validateCreds();
+    }
+
+
+
+    $('#validate').on('click', function () {
+        validateCreds();
     });
 
     $("#instruments").change(function() {

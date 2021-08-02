@@ -17,7 +17,7 @@
 
 <body>
     <div class="form-group" id="formHeader">
-        <h1>RPPS OMR Application</h1>
+        <h1>REDCap OMR Application</h1>
         <p>Enter your project API token:</p>
         <input type="text" id="apiToken" name="apiToken" value="<?php if(isset($_SESSION['apiToken']) && !empty($_SESSION['apiToken'])) echo $_SESSION['apiToken']; else echo ''; ?>">
         <br>

@@ -27,10 +27,13 @@
       </li>
       <div class="dropdown-divider"></div>
       <li class="nav-item border-md-left">
-        <a class="nav-link" href="../forms/project_settings.php">Project Settings</a>
+        <a class="nav-link" href="../forms/view_printouts.php">View Printouts</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../forms/view_printouts.php">View Printouts</a>
+        <a class="nav-link" href="../forms/project_settings.php">Settings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../../index.php">Select Project</a>
       </li>
     </ul>
   </div>

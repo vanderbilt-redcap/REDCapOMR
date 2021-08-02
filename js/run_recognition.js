@@ -1,7 +1,10 @@
 $(document).ready(function() {
     let OMR_ProjectAnalyzeVars = {};
 
-    $('#validate').on('click', function () {
+
+
+    //Validate the credentials entered in the API token/URL fields
+    function validateCreds() {
         //Defines global object holding all variables for this project to prevent conflicts
         OMR_ProjectAnalyzeVars.select = document.getElementById('instruments');
         OMR_ProjectAnalyzeVars.form = document.getElementById('formHeader');
@@ -57,8 +60,6 @@ $(document).ready(function() {
                 else {
                     //Parse the json result from the php file
                     OMR_ProjectAnalyzeVars.instruments = response.results;
-
-                    console.log(OMR_ProjectAnalyzeVars.results);
 
                     OMR_ProjectAnalyzeVars.error = document.getElementById('error');
                     if(OMR_ProjectAnalyzeVars.error) {
@@ -135,13 +136,26 @@ $(document).ready(function() {
                 }
             }
         });
+    }
+
+
+
+    //Our session vars filled the two boxes to start, so we automatically validate it
+    if($('#apiToken').val() !== '' && $('#apiUrl').val() !== '') {
+        $('#validateDiv').attr('hidden', '');
+        validateCreds();
+    }
+
+
+
+    $('#validate').on('click', function () {
+        validateCreds();
     });
 
     $("#instruments").change(function(){
         OMR_ProjectAnalyzeVars.projectPath = document.getElementById('instruments').value;
         OMR_ProjectAnalyzeVars.uploadPath = OMR_ProjectAnalyzeVars.projectPath + '/uploads';
 
-        console.log(OMR_ProjectAnalyzeVars.uploadPath + ', ' + OMR_ProjectAnalyzeVars.projectPath);
         $.ajax({
             type: "POST", 
             url: "../requires/check_file.php",

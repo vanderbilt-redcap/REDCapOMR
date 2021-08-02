@@ -1,7 +1,9 @@
 $(document).ready(function() {
     let OMR_UploadScansVars = {};
 
-    $('#validate').on('click', function () {
+
+
+    function validateCreds() {
         //Defines global object holding all variables for this project to prevent conflicts
         OMR_UploadScansVars.select = document.getElementById('instruments');
         OMR_UploadScansVars.form = document.getElementById('formHeader');
@@ -57,8 +59,6 @@ $(document).ready(function() {
                 else {
                     //Parse the json result from the php file
                     OMR_UploadScansVars.instruments = response.results;
-
-                    console.log(OMR_UploadScansVars.results);
 
                     OMR_UploadScansVars.error = document.getElementById('error');
                     if(OMR_UploadScansVars.error) {
@@ -135,6 +135,20 @@ $(document).ready(function() {
                 }
             }
         });
+    }
+
+
+
+    //Our session vars filled the two boxes to start, so we automatically validate it
+    if($('#apiToken').val() !== '' && $('#apiUrl').val() !== '') {
+        $('#validateDiv').attr('hidden', '');
+        validateCreds();
+    }
+
+
+
+    $('#validate').on('click', function () {
+        validateCreds();
     });
 
     $("#instruments").change(function() {
@@ -163,10 +177,6 @@ $(document).ready(function() {
         });
         //Add the selected instrument to the form data
         OMR_UploadScansVars.ajaxData.append('instruments', document.getElementById('instruments').value);
-
-        for(let i of OMR_UploadScansVars.ajaxData) {
-            console.log(i);
-        }
 
         $.ajax({
             type: "POST",
