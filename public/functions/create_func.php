@@ -92,6 +92,13 @@ catch(PhpCapException $exception) {
 }
 
 
+$tmpPath = '..' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
+//Create the /tmp directory if it doesn't exist
+if(!file_exists($tmpPath)) {
+    //Create the dir
+    mkdir($tmpPath);
+}
+
 //Pull project ID, create folders from it, include folders for instrument used within PID folder
 $pidPath = '..' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . $projectInfo['project_id'] . DIRECTORY_SEPARATOR;
 //File path of the instrument subfolder (created by sdapsPHP::createProject)
