@@ -4,7 +4,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: '../requires/start_session.php',
+            url: 'public/../requires/start_session.php',
             data: {
                 apiToken: $('#apiToken').val(),
                 apiUrl: $('#apiUrl').val()
