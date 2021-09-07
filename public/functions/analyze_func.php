@@ -28,6 +28,9 @@ SdapsPHP::addConvertMult($projectPath, $uploads);
 //Run SDAPS's recognition function on the generated tif file
 SdapsPHP::recognize($projectPath);
 
+//Call the GUI, commented out since it doesn't work in Docker currently
+//SdapsPHP::gui($projectPath);
+
 //Export the CSV results to the project directory
 $pathCSV = SdapsPHP::csvExport($projectPath);
 
