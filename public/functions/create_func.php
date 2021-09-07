@@ -141,9 +141,11 @@ if(($result = SdapsPHP::createProject($projectPath, $texPath)) === true) {
         $printoutFile = fopen($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt', 'a+');
     }
 
-    foreach($recordIds as $key => $id) {
-        //Write the row of record ID and filepath to the file
-        fwrite($printoutFile, $id.';'.$stampedDocs[sizeof($stampedDocs)-1]."\r\n");
+    if(sizeof($stampedDocs) > 0) {
+        foreach($recordIds as $key => $id) {
+            //Write the row of record ID and filepath to the file
+            fwrite($printoutFile, $id.';'.$stampedDocs[sizeof($stampedDocs)-1]."\r\n");
+        }
     }
     fclose($printoutFile);
 
