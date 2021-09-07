@@ -351,6 +351,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
                 OMR_ProjectCreateVars.responseArr = response;
+                
                 if(!OMR_ProjectCreateVars.responseArr.includes(';')) {
                     console.log(response);
                     alert(response);
