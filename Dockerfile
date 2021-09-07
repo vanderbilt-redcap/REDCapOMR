@@ -6,6 +6,7 @@ ARG SDAPS_VERSION="${SDAPS_VERSION:-1.9.9}"
 RUN apt update \
 	&& apt upgrade -y \
 	&& apt install -y \
+		gir1.2-poppler-0.18 \
 		libcairo-dev \
 		libpgf-dev \
 		libtiff-dev \
@@ -18,14 +19,15 @@ RUN apt update \
 		python3-dev \
 		python3-distutils \
 		python3-distutils-extra \
+		python3-gi-cairo \
 		python3-opencv \
 		texlive \
 		texlive-latex-extra \
 		texlive-latex-recommended \
 		tzdata \
 		unzip \
-		wget
-
+		wget \
+		zbar-tools
 
 RUN cd / \
 	&& wget "https://github.com/sdaps/sdaps/archive/refs/tags/${SDAPS_VERSION}.zip" \
@@ -48,7 +50,21 @@ COPY docker/conf/apache2/ports.conf "${APACHE_CONFDIR}/ports.conf"
 # copy in php config
 COPY "docker/conf/php/php.ini" "${PHP_INI_DIR}/conf.d/redcap.ini"
 
+RUN apt update \
+	&& apt upgrade -y \
+	&& apt install -y \
+		dbus \
+		dbus-x11 \
+		python3-dbus \
+		libc6 \
+		libdbus-1-3 \
+		libglib2.0.0
+
+#RUN mkdir -p /var/run/dbus
+
 # container cleanup and enable site
 RUN  rm "${APACHE_CONFDIR}/sites-enabled/000-default.conf" \
      && ln -sf "${APACHE_CONFDIR}/sites-available/000-redcap.conf" "${APACHE_CONFDIR}/sites-enabled/000-redcap.conf" \
      && mv "${PHP_INI_DIR}/php.ini-development" "${PHP_INI_DIR}/php.ini"
+
+# CMD [ "./docker/bin/entrypoint.sh" ]
