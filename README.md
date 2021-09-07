@@ -4,7 +4,8 @@ A project aiming to implement OMR and paper survey support into REDCap with the 
 TODO:
 * Add router function and function classes
 * Change location of Docker files(?)
-* Fix bugs with PHP "error" echo messages being captured in the success Ajax method.  Will likely need to encode a JSON field called "error" to catch these in success. (partially implemented)
 * Upload scans uploaded by the user to their corresponding REDCap records when results are exported,
-* NOTE: Above point is only partially implemented.  It MAY have to be implemented based on the user's filenames for the scanned pdf files.
-* Create a Dockerfile and have the project capable of running in a Docker instance (needs testing, clearing up other issues first)
+* NOTE: Above point is not implemented.  It MAY have to be implemented based on the user's filenames for the scanned pdf files, which would require more specific user actions
+* Have the project capable of running in a Docker instance, fix the Dockerfile/dependencies so it can support the recognize step.
+NOTE: All other steps work.  It seems to be an issue with SDAPS requiring the D-Bus for this to function properly, which could mean that Ubuntu or another Linux OS would have to be partially installed for this app to work in a container.
+* WE NEED D-BUS COMMUNICATION!!!
