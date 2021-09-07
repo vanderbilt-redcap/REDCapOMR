@@ -28,9 +28,6 @@ SdapsPHP::addConvertMult($projectPath, $uploads);
 //Run SDAPS's recognition function on the generated tif file
 SdapsPHP::recognize($projectPath);
 
-//Can't tell how/if this will work on non-Linux systems
-SdapsPHP::gui($projectPath);
-
 //Export the CSV results to the project directory
 $pathCSV = SdapsPHP::csvExport($projectPath);
 
