@@ -58,10 +58,12 @@ class json2latex {
         }
 
         //Creates header of questionnaire with title and author pulled dynamically from REDCap
+        //NOTE: \usepackage[T1]{fontenc} caused projects to never be created in Docker dist, switched to 
+        //      \usepackage{lmodern} and it worked perfectly
         $tex = '
             \documentclass['.$language.',pagemark,stamp,oneside,print_questionnaire_id]{sdapsclassic}
             \usepackage[utf8]{inputenc}
-            \usepackage[T1]{fontenc}
+            \usepackage{lmodern}
             \usepackage{multicol}
 
             \renewcommand{\familydefault}{\sfdefault}
