@@ -13,7 +13,7 @@ if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl']) &&
    isset($_POST['apiToken']) && !empty($_POST['apiToken'])) {
 
     $_SESSION['apiToken'] = $_POST['apiToken'];
-    $_SESSION['apiUrl'] = strtolower($_POST['apiUrl']);
+    $_SESSION['apiUrl'] = $_POST['apiUrl'];
 
     try {
         //Try to create a connection to the REDCap project to prompt a success or error
