@@ -57,8 +57,8 @@ RUN apt update \
 		dbus-x11 \
 		python3-dbus \
 		libc6 \
-		libdbus-1-3 \
-		libglib2.0.0
+		libdbus-1-3
+		#libglib2.0.0
 
 #RUN mkdir -p /var/run/dbus
 
