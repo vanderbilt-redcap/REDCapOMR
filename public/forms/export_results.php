@@ -23,7 +23,7 @@
             <input type="text" id="apiUrl" name="apiUrl" value="<?php if(isset($_SESSION['apiUrl']) && !empty($_SESSION['apiUrl'])) echo $_SESSION['apiUrl']; else echo ''; ?>">
             <br>
             <br>
-            <button id="validate" type="button">Validate</button>
+            <button id="validate" class="btn btn-light" type="button">Validate</button>
             <br>
         </div>
         <div id="exportDiv" class="hidden" hidden>
@@ -35,7 +35,7 @@
             <select class="hidden" name="fields" id="fields" hidden>
             </select>
             <br>
-            <button id="run" type="button" hidden>Export Results to REDCap</button>
+            <button id="run" type="button" class="btn btn-light" hidden>Export Results to REDCap</button>
             <br>
             <p id="noUploadsText" hidden>No csv data has been generated from recognition for this project.  Do so <a href="run_recognition.php">here</a>.</p>
             <br>

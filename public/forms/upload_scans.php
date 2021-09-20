@@ -23,7 +23,7 @@
             <input type="text" id="apiUrl" name="apiUrl" value="<?php if(isset($_SESSION['apiUrl']) && !empty($_SESSION['apiUrl'])) echo $_SESSION['apiUrl']; else echo ''; ?>">
             <br>
             <br>
-            <button id="validate" type="button">Validate</button>
+            <button id="validate" type="button" class="btn btn-light">Validate</button>
             <br>
         </div>
         <p class="hidden" hidden>Select a form with an SDAPS project to upload printouts to:</p>
@@ -36,7 +36,7 @@
             <input name="upload[]" type="file" accept=".pdf, .png, .jpg, .jpeg, .tif, .tiff" multiple></input>
             <p style="margin-top:10px">(.pdf, .png, .jpg, .jpeg, .tif, .tiff supported)</p>
             <br>
-            <button id="upload" type="button">Upload Scans</button>
+            <button id="upload" type="button" class="btn btn-light">Upload Scans</button>
         </div>
     </form>
 </body>

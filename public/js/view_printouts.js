@@ -298,7 +298,7 @@ $(document).ready(function() {
                 //Creates scans iframe that holds sdaps scans result
                 OMR_ProjectCreateVars.scans = document.createElement('iframe');
                 OMR_ProjectCreateVars.scans.id = OMR_ProjectCreateVars.recordNums[i];
-                OMR_ProjectCreateVars.scans.src = '../' + OMR_ProjectCreateVars.recordList[i];
+                OMR_ProjectCreateVars.scans.src = OMR_ProjectCreateVars.recordList[i];
 
                 //Create the download link for the scans
                 OMR_ProjectCreateVars.scansContainer.innerHTML += "<p>Download scans <a href="+OMR_ProjectCreateVars.scans.src+" download>here.</a></p>";

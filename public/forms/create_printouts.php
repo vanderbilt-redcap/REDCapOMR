@@ -23,7 +23,7 @@
             <input type="text" id="apiUrl" name="apiUrl" value="<?php if(isset($_SESSION['apiUrl']) && !empty($_SESSION['apiUrl'])) echo $_SESSION['apiUrl']; else echo ''; ?>">
             <br>
             <br>
-            <button id="validate" type="button">Validate</button>
+            <button id="validate" type="button" class="btn btn-light">Validate</button>
             <br>
         </div>
         <p class="hidden" hidden>Select a form with an SDAPS project to make printouts from:</p>
@@ -34,12 +34,12 @@
         </select>
         <br>
         <p class="hidden" hidden>Specify which records you want to make printouts of:</p>
-        <button id="getRecords" class="hidden" type="button" hidden>Get Records</button>
+        <button id="getRecords" class="hidden btn btn-light" type="button" hidden>Get Records</button>
         <div id="recordsDiv" class="hidden-inst" hidden>
             <ul id="recordsUl"></ul>
         <br>
     </div>
-    <button id="create" type="button" hidden>Create Printouts</button>
+    <button id="create" type="button" class="btn btn-light" hidden>Create Printouts</button>
     </form>
 </body>
 </html>

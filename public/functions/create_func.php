@@ -25,11 +25,6 @@ use IU\PHPCap\PhpCapException;
             }
             file_put_contents($filePath.'questionnaire.tex', $tex);
         }
-    
-        //Not quite sure why I put this here and it worked without it in my tests, commenting in case deleting it causes problems somehow
-        /* if($filePath != '') {
-            file_put_contents('questionnaire.tex', $tex);
-        } */
 
         //Return the path to the questionnaire
         return $filePath.'questionnaire.tex';
@@ -84,6 +79,7 @@ try {
 
     //Pulls metadata and the list of instruments from the project for the given form
     $meta = $project->exportMetadata('json', [], [$formName]);
+    //NOTE: This should probably be removed and replaced everywhere with $formName
     $instruments = $project->exportInstruments('json');
     $projectInfo = $project->exportProjectInfo('php');
 }
@@ -102,7 +98,7 @@ if(!file_exists($tmpPath)) {
 //Pull project ID, create folders from it, include folders for instrument used within PID folder
 $pidPath = '..' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . $projectInfo['project_id'] . DIRECTORY_SEPARATOR;
 //File path of the instrument subfolder (created by sdapsPHP::createProject)
-$instPath = $pidPath . $formName;
+$projectPath = $pidPath . $formName;
 
 if(!file_exists($pidPath)) {
     //Create the path of the PID project first
@@ -110,14 +106,15 @@ if(!file_exists($pidPath)) {
 }
 
 
+
 //Creates the LaTeX questionnaire of the REDCap data dictionary
 $tex = json2latex::createQuestionnaire($meta, $instruments, $_POST['apiUrl']);
 //Saves the questionnaire to the tmp/PID/ dir
 $texPath = saveTex($tex, $pidPath);
 
-//Just renaming variable for readability, makes more sense
-$projectPath = $instPath;
 
+
+//Only execute the rest of the code IF the project was successfully created (returned true)
 if(($result = SdapsPHP::createProject($projectPath, $texPath)) === true) {
 
     //Deletes generated .tex file in tmp/ directory
@@ -149,11 +146,35 @@ if(($result = SdapsPHP::createProject($projectPath, $texPath)) === true) {
     }
     fclose($printoutFile);
 
+
+
+    //Creates the projects.json file that stores the data for the project
+    if(file_exists('..'.DIRECTORY_SEPARATOR.'projects.json')) {
+        $projectsJSON = file_get_contents('..'.DIRECTORY_SEPARATOR.'projects.json');
+        $json = json_decode($projectsJSON, true);
+    }
+    
+    //Create the data for the project's entry in the JSON file
+    $json[] = [
+        'projId' => strval($projectInfo['project_id']),
+        'projName' => $formName,
+        'path' => 'tmp' . DIRECTORY_SEPARATOR . $projectInfo['project_id'] . DIRECTORY_SEPARATOR . $formName,
+        'key' => $apiToken,
+        'url' => $apiUrl
+    ];
+
+    //Convert the data back to JSON and write it to the file
+    $newJSON = json_encode($json, JSON_PRETTY_PRINT);
+    file_put_contents('..'.DIRECTORY_SEPARATOR.'projects.json', $newJSON);
+
+
+
     $finalOutput = $projectPath . ';' . implode(',', $recordIds);
 
     //Returns the path of the project to create_project.js
     echo $finalOutput;
 }
+//Could not create the project, most likely because it already exists
 else {
     //Deletes generated .tex file in tmp/ directory
     unlink($texPath);

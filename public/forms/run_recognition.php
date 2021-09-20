@@ -24,7 +24,7 @@
             <input type="text" id="apiUrl" name="apiUrl" value="<?php if(isset($_SESSION['apiUrl']) && !empty($_SESSION['apiUrl'])) echo $_SESSION['apiUrl']; else echo ''; ?>">
             <br>
             <br>
-            <button id="validate" type="button">Validate</button>
+            <button id="validate" type="button" class="btn btn-light">Validate</button>
             <br>
         </div>
         <p class="hidden" hidden>Select a form with an SDAPS project to run recognition on:</p>
@@ -32,7 +32,7 @@
         </select>
         <br>
         <div id="runRecognition" class="hidden" hidden>
-            <button id="run" type="button" hidden>Run Recognition</button>
+            <button id="run" type="button" class="btn btn-light" hidden>Run Recognition</button>
             <p id="noUploadsText" hidden>No uploads directory found for project.  Upload scanned files <a href="upload_scans.php">here</a>.</p>
         </div>
     </form>
