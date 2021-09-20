@@ -33,7 +33,7 @@
         <a class="nav-link" href="../forms/project_settings.php">Settings</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="../../index.php">Select Project</a>
+        <a class="nav-link" href="../index.php">Select Project</a>
       </li>
     </ul>
   </div>

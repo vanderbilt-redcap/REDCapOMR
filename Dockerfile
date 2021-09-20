@@ -50,6 +50,7 @@ COPY docker/conf/apache2/ports.conf "${APACHE_CONFDIR}/ports.conf"
 # copy in php config
 COPY "docker/conf/php/php.ini" "${PHP_INI_DIR}/conf.d/redcap.ini"
 
+#Adding libraries for potential D-Bus fixes
 RUN apt update \
 	&& apt upgrade -y \
 	&& apt install -y \
