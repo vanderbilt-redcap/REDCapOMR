@@ -51,17 +51,14 @@ COPY docker/conf/apache2/ports.conf "${APACHE_CONFDIR}/ports.conf"
 COPY "docker/conf/php/php.ini" "${PHP_INI_DIR}/conf.d/redcap.ini"
 
 #Adding libraries for potential D-Bus fixes
-RUN apt update \
-	&& apt upgrade -y \
-	&& apt install -y \
-		dbus \
-		dbus-x11 \
-		python3-dbus \
-		libc6 \
-		libdbus-1-3
-		#libglib2.0.0
-
-#RUN mkdir -p /var/run/dbus
+#RUN apt update \
+#	&& apt upgrade -y \
+#	&& apt install -y \
+#		dbus \
+#		dbus-x11 \
+#		python3-dbus \
+#		libc6 \
+#		libdbus-1-3
 
 # container cleanup and enable site
 RUN  rm "${APACHE_CONFDIR}/sites-enabled/000-default.conf" \
