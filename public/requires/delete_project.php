@@ -21,10 +21,11 @@ $projectDir = $projectDir[sizeof($projectDir)-1];
 $projectsJSON = file_get_contents('..'.DIRECTORY_SEPARATOR.'projects.json');
 $projectsJSON = json_decode($projectsJSON, true);
 
-$i=0;
+$i = 0;
 foreach($projectsJSON as $proj) {
-    //check the property of every element
+    //Check if the project ID and name are the same as the one being removed
     if($projectId == $proj['projId'] && $projectDir == $proj['projName']){
+        //Remove the project from the JSON file
         unset($projectsJSON[$i]);
    }
    $i++;

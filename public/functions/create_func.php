@@ -171,7 +171,7 @@ if(($result = SdapsPHP::createProject($projectPath, $texPath)) === true) {
 
     $finalOutput = $projectPath . ';' . implode(',', $recordIds);
 
-    //Returns the path of the project to create_project.js
+    //Returns the path of the project with the indexes to any printouts made to create_project.js
     echo $finalOutput;
 }
 //Could not create the project, most likely because it already exists
