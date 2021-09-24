@@ -40,6 +40,10 @@ RUN cd / \
 	&& rm -rf class \
 	&& mv sdaps-class-master class
 
+RUN groupadd --gid 1000 redcapomr
+RUN adduser --uid 1000 --gid 1000 --no-create-home redcapomr
+RUN usermod -aG www-data redcapomr
+
 RUN cd "/sdaps-${SDAPS_VERSION}" \
 	&& ./setup.py install --install-tex
 
@@ -62,7 +66,9 @@ COPY "docker/conf/php/php.ini" "${PHP_INI_DIR}/conf.d/redcap.ini"
 
 # container cleanup and enable site
 RUN  rm "${APACHE_CONFDIR}/sites-enabled/000-default.conf" \
-     && ln -sf "${APACHE_CONFDIR}/sites-available/000-redcap.conf" "${APACHE_CONFDIR}/sites-enabled/000-redcap.conf" \
+     && ln -sf "${APACHE_CONFDIR}/sites-available/000-redcap-omr.conf" "${APACHE_CONFDIR}/sites-enabled/000-redcap-omr.conf" \
      && mv "${PHP_INI_DIR}/php.ini-development" "${PHP_INI_DIR}/php.ini"
+
+RUN mkdir /var/www/html/redcap-omr && chown -R www-data /var/www/html/redcap-omr
 
 # CMD [ "./docker/bin/entrypoint.sh" ]
