@@ -13,15 +13,15 @@ try {
         $apiToken = $_POST['apiToken'];
     }
     else {
-        $json['error'] = 'Error: API token for given institution name is invalid.';
+        $json['error'] = 'Error: API token for given URL is invalid.';
         die(json_encode($json));
     }
 
     if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl'])) {
-        $apiUrl = 'https://redcap.' . strtolower($_POST['apiUrl']) . '.edu/api/';
+        $apiUrl = $_POST['apiUrl'];
     }
     else {
-        $json['error'] = 'Error: Institution name for given API token in invalid.';
+        $json['error'] = 'Error: URL for given API token in invalid.';
         die(json_encode($json));
     }
 
@@ -45,8 +45,7 @@ try {
        (isset($_POST['apiUrl']) && !empty($_POST['apiUrl'])) &&
        (isset($_POST['instruments']) && !empty($_POST['instruments'])) &&
        (isset($_POST['fieldName']) && !empty($_POST['fieldName']))) {
-        //$sslVerify = true;
-        $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
+        $project = new RedCapProject($apiUrl, $apiToken, true);
         //Pull records of the project from REDCap for the given form (instrument)
         $allRecords = $project->exportRecords('csv', 'flat', null, [$idField], [$instruments]);
 

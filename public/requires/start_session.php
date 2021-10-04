@@ -12,12 +12,12 @@ use IU\PHPCap\PhpCapException;
 if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl']) &&
    isset($_POST['apiToken']) && !empty($_POST['apiToken'])) {
 
-    $_SESSION['apiToken'] = $_POST['apiToken'];
-    $_SESSION['apiUrl'] = $_POST['apiUrl'];
+    $_SESSION['apiToken'] = strtoupper($_POST['apiToken']);
+    $_SESSION['apiUrl'] = strtolower($_POST['apiUrl']);
 
     try {
         //Try to create a connection to the REDCap project to prompt a success or error
-        $project = new RedCapProject('https://redcap.' . strtolower($_POST['apiUrl']) . '.edu/api/', $_SESSION['apiToken']);
+        $project = new RedCapProject($_SESSION['apiUrl'], $_SESSION['apiToken']);
 
         if(isset($project)) {
             echo 'true';

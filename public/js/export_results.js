@@ -1,28 +1,28 @@
 $(document).ready(function() {
-    let OMR_DataExportVars = {};
+    let OMR_ProjectVars = {};
 
 
-
+    
     function validateCreds() {
         //Defines global object holding all variables for this project to prevent conflicts
-        OMR_DataExportVars.instrumentsSelect = document.getElementById('instruments');
-        OMR_DataExportVars.fieldsSelect = document.getElementById('fields');
-        OMR_DataExportVars.form = document.getElementById('formHeader');
-        OMR_DataExportVars.instruments = 0;
-        OMR_DataExportVars.fields = 0;
-        OMR_DataExportVars.error = '';
+        OMR_ProjectVars.instrumentsSelect = document.getElementById('instruments');
+        OMR_ProjectVars.fieldsSelect = document.getElementById('fields');
+        OMR_ProjectVars.form = document.getElementById('formHeader');
+        OMR_ProjectVars.instruments = 0;
+        OMR_ProjectVars.fields = 0;
+        OMR_ProjectVars.error = '';
 
         //Clean up any instrument options from previous validation attempt
-        for (i = OMR_DataExportVars.instrumentsSelect.length - 1; i >= 0; i--) {
-	        OMR_DataExportVars.instrumentsSelect.remove(i);
+        for (i = OMR_ProjectVars.instrumentsSelect.length - 1; i >= 0; i--) {
+	        OMR_ProjectVars.instrumentsSelect.remove(i);
         }
-        OMR_DataExportVars.instrumentsSelect.length = 0;
+        OMR_ProjectVars.instrumentsSelect.length = 0;
 
         //Clean up any field name options from previous validation attempt
-        for (i = OMR_DataExportVars.fieldsSelect.length - 1; i >= 0; i--) {
-	        OMR_DataExportVars.fieldsSelect.remove(i);
+        for (i = OMR_ProjectVars.fieldsSelect.length - 1; i >= 0; i--) {
+	        OMR_ProjectVars.fieldsSelect.remove(i);
         }
-        OMR_DataExportVars.fieldsSelect.length = 0;
+        OMR_ProjectVars.fieldsSelect.length = 0;
 
 
         $.ajax({
@@ -38,12 +38,12 @@ $(document).ready(function() {
                 //If the error variable is filled, alert and log it
                 if($.trim(response.error)) {
                     //Hide all elements that shouldn't be visible after error is thrown to client
-                    OMR_DataExportVars.exportDiv = document.getElementById('exportDiv');
-                    OMR_DataExportVars.exportDiv.setAttribute('hidden', '');
+                    OMR_ProjectVars.exportDiv = document.getElementById('exportDiv');
+                    OMR_ProjectVars.exportDiv.setAttribute('hidden', '');
 
-                    OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                    for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                        OMR_DataExportVars.elements[i].setAttribute('hidden', '');
+                    OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                        OMR_ProjectVars.elements[i].setAttribute('hidden', '');
                     }
 
                     alert(response.error);
@@ -53,12 +53,12 @@ $(document).ready(function() {
                 //If we can't trim the response, then it is a blank string (false)
                 if(!$.trim(response.results)) {
                     //Hide all elements that shouldn't be visible after getting no response
-                    OMR_DataExportVars.exportDiv = document.getElementById('exportDiv');
-                    OMR_DataExportVars.exportDiv.setAttribute('hidden', '');
+                    OMR_ProjectVars.exportDiv = document.getElementById('exportDiv');
+                    OMR_ProjectVars.exportDiv.setAttribute('hidden', '');
 
-                    OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                    for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                        OMR_DataExportVars.elements[i].setAttribute('hidden', '');
+                    OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                        OMR_ProjectVars.elements[i].setAttribute('hidden', '');
                     }
 
                     alert('No projects were found for the project ID of the API token you entered.');
@@ -66,61 +66,61 @@ $(document).ready(function() {
                 }
                 else {
                     //Parse the json result from the php file
-                    OMR_DataExportVars.instruments = response.results;
+                    OMR_ProjectVars.instruments = response.results;
 
-                    OMR_DataExportVars.error = document.getElementById('error');
-                    if(OMR_DataExportVars.error) {
+                    OMR_ProjectVars.error = document.getElementById('error');
+                    if(OMR_ProjectVars.error) {
                         document.getElementById('error').outerHTML = '';
                     }
 
                     //Split projects into array ONLY if there are multiple included
-                    if(OMR_DataExportVars.instruments.includes(',')) {
-                        OMR_DataExportVars.instruments = OMR_DataExportVars.instruments.split(',');
+                    if(OMR_ProjectVars.instruments.includes(',')) {
+                        OMR_ProjectVars.instruments = OMR_ProjectVars.instruments.split(',');
 
-                        for(let i = 0; i < OMR_DataExportVars.instruments.length; i++) {
+                        for(let i = 0; i < OMR_ProjectVars.instruments.length; i++) {
                             //If we're on the first element, add the default option to the select box
                             if(i == 0) {
-                                OMR_DataExportVars.opt = document.createElement('option');
-                                OMR_DataExportVars.opt.setAttribute('disabled', '');
-                                OMR_DataExportVars.opt.setAttribute('selected', '');
-                                OMR_DataExportVars.opt.setAttribute('value', '');
-                                OMR_DataExportVars.opt.innerHTML = '-- Select an option --';
-                                OMR_DataExportVars.instrumentsSelect.appendChild(OMR_DataExportVars.opt);
+                                OMR_ProjectVars.opt = document.createElement('option');
+                                OMR_ProjectVars.opt.setAttribute('disabled', '');
+                                OMR_ProjectVars.opt.setAttribute('selected', '');
+                                OMR_ProjectVars.opt.setAttribute('value', '');
+                                OMR_ProjectVars.opt.innerHTML = '-- Select an option --';
+                                OMR_ProjectVars.instrumentsSelect.appendChild(OMR_ProjectVars.opt);
                             }
     
-                            OMR_DataExportVars.opt = document.createElement('option');
-                            OMR_DataExportVars.opt.value = OMR_DataExportVars.instruments[i];
+                            OMR_ProjectVars.opt = document.createElement('option');
+                            OMR_ProjectVars.opt.value = OMR_ProjectVars.instruments[i];
                             
                             //Trim the instrument name from the project directory for user readability
-                            OMR_DataExportVars.innerInst = OMR_DataExportVars.instruments[i].split('/');
-                            OMR_DataExportVars.opt.innerHTML = OMR_DataExportVars.innerInst[OMR_DataExportVars.innerInst.length-1];
+                            OMR_ProjectVars.innerInst = OMR_ProjectVars.instruments[i].split('/');
+                            OMR_ProjectVars.opt.innerHTML = OMR_ProjectVars.innerInst[OMR_ProjectVars.innerInst.length-1];
                             
-                            OMR_DataExportVars.instrumentsSelect.appendChild(OMR_DataExportVars.opt);
+                            OMR_ProjectVars.instrumentsSelect.appendChild(OMR_ProjectVars.opt);
                         }
                     }
                     else {
-                        OMR_DataExportVars.opt = document.createElement('option');
-                        OMR_DataExportVars.opt.setAttribute('disabled', '');
-                        OMR_DataExportVars.opt.setAttribute('selected', '');
-                        OMR_DataExportVars.opt.setAttribute('value', '');
-                        OMR_DataExportVars.opt.innerHTML = '-- Select an option --';
-                        OMR_DataExportVars.instrumentsSelect.appendChild(OMR_DataExportVars.opt);
+                        OMR_ProjectVars.opt = document.createElement('option');
+                        OMR_ProjectVars.opt.setAttribute('disabled', '');
+                        OMR_ProjectVars.opt.setAttribute('selected', '');
+                        OMR_ProjectVars.opt.setAttribute('value', '');
+                        OMR_ProjectVars.opt.innerHTML = '-- Select an option --';
+                        OMR_ProjectVars.instrumentsSelect.appendChild(OMR_ProjectVars.opt);
 
-                        OMR_DataExportVars.opt = document.createElement('option');
-                        OMR_DataExportVars.opt.value = OMR_DataExportVars.instruments;
+                        OMR_ProjectVars.opt = document.createElement('option');
+                        OMR_ProjectVars.opt.value = OMR_ProjectVars.instruments;
                         
                         //Trim the instrument name from the project directory for user readability
-                        OMR_DataExportVars.innerInst = OMR_DataExportVars.instruments.split('/');
-                        OMR_DataExportVars.opt.innerHTML = OMR_DataExportVars.innerInst[OMR_DataExportVars.innerInst.length-1];
+                        OMR_ProjectVars.innerInst = OMR_ProjectVars.instruments.split('/');
+                        OMR_ProjectVars.opt.innerHTML = OMR_ProjectVars.innerInst[OMR_ProjectVars.innerInst.length-1];
                         
-                        OMR_DataExportVars.instrumentsSelect.appendChild(OMR_DataExportVars.opt);
+                        OMR_ProjectVars.instrumentsSelect.appendChild(OMR_ProjectVars.opt);
                     }
 
                     
 
-                    OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                    for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                        OMR_DataExportVars.elements[i].removeAttribute('hidden');
+                    OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                        OMR_ProjectVars.elements[i].removeAttribute('hidden');
                     }
                 }
             },
@@ -128,18 +128,18 @@ $(document).ready(function() {
                 console.log(response);
                 console.log("Could not retrieve project information from API key and URL.");
 
-                OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                    OMR_DataExportVars.elements[i].setAttribute('hidden', '');
+                OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                    OMR_ProjectVars.elements[i].setAttribute('hidden', '');
                 }
-                OMR_DataExportVars.exportDiv = document.getElementById('exportDiv');
-                OMR_DataExportVars.exportDiv.innerHTML = '';
+                OMR_ProjectVars.exportDiv = document.getElementById('exportDiv');
+                OMR_ProjectVars.exportDiv.innerHTML = '';
 
                 if(!$('#error').length) {
-                    OMR_DataExportVars.error = document.createElement('h4');
-                    OMR_DataExportVars.error.id = 'error';
-                    OMR_DataExportVars.error.innerHTML = 'API token is incorrect for the given URL.';
-                    OMR_DataExportVars.form.appendChild(OMR_DataExportVars.error);
+                    OMR_ProjectVars.error = document.createElement('h4');
+                    OMR_ProjectVars.error.id = 'error';
+                    OMR_ProjectVars.error.innerHTML = 'API token is incorrect for the given URL.';
+                    OMR_ProjectVars.form.appendChild(OMR_ProjectVars.error);
                 }
             }
         });
@@ -154,38 +154,38 @@ $(document).ready(function() {
             dataType: "JSON",
             success: function(response) {
                 //Parse the json result from the php file
-                OMR_DataExportVars.fields = response;
+                OMR_ProjectVars.fields = response;
 
-                OMR_DataExportVars.error = document.getElementById('error');
-                if(OMR_DataExportVars.error) {
+                OMR_ProjectVars.error = document.getElementById('error');
+                if(OMR_ProjectVars.error) {
                     document.getElementById('error').outerHTML = '';
                 }
 
-                for(let i = 0; i < OMR_DataExportVars.fields.length; i++) {
-                    OMR_DataExportVars.opt = document.createElement('option');
-                    OMR_DataExportVars.opt.value = OMR_DataExportVars.fields[i]['original_field_name'];
-                    OMR_DataExportVars.opt.innerHTML = OMR_DataExportVars.fields[i]['original_field_name'];
-                    OMR_DataExportVars.fieldsSelect.appendChild(OMR_DataExportVars.opt);
+                for(let i = 0; i < OMR_ProjectVars.fields.length; i++) {
+                    OMR_ProjectVars.opt = document.createElement('option');
+                    OMR_ProjectVars.opt.value = OMR_ProjectVars.fields[i]['original_field_name'];
+                    OMR_ProjectVars.opt.innerHTML = OMR_ProjectVars.fields[i]['original_field_name'];
+                    OMR_ProjectVars.fieldsSelect.appendChild(OMR_ProjectVars.opt);
                 }
 
-                OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                    OMR_DataExportVars.elements[i].removeAttribute('hidden');
+                OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                    OMR_ProjectVars.elements[i].removeAttribute('hidden');
                 }
             },
             error: function() {
                 console.log("Could not retrieve project field names from API key and URL.");
 
-                OMR_DataExportVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_DataExportVars.elements.length; i++) {
-                    OMR_DataExportVars.elements[i].setAttribute('hidden', '');
+                OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                    OMR_ProjectVars.elements[i].setAttribute('hidden', '');
                 }
 
                 if(!$('#error').length) {
-                    OMR_DataExportVars.error = document.createElement('h4');
-                    OMR_DataExportVars.error.id = 'error';
-                    OMR_DataExportVars.error.innerHTML = 'API token is incorrect for the given URL.';
-                    OMR_DataExportVars.form.appendChild(OMR_DataExportVars.error);
+                    OMR_ProjectVars.error = document.createElement('h4');
+                    OMR_ProjectVars.error.id = 'error';
+                    OMR_ProjectVars.error.innerHTML = 'API token is incorrect for the given URL.';
+                    OMR_ProjectVars.form.appendChild(OMR_ProjectVars.error);
                 }
             }
         });
@@ -205,77 +205,79 @@ $(document).ready(function() {
         validateCreds();
     });
 
+
+    
     $("#instruments").change(function(){
-        OMR_DataExportVars.projectPath = document.getElementById('instruments').value;
+        OMR_ProjectVars.projectPath = document.getElementById('instruments').value;
 
         $.ajax({
             type: "POST", 
             url: "../requires/check_csv.php",
             data: {
-                projectPath: OMR_DataExportVars.projectPath
+                projectPath: OMR_ProjectVars.projectPath
             },
             dataType: "text",
             success: function(response) {
-                OMR_DataExportVars.exportDiv = document.getElementById('exportDiv');
-                OMR_DataExportVars.runButton = document.getElementById('run');
-                OMR_DataExportVars.sdapsTable = document.getElementById('sdapsTable');
-                OMR_DataExportVars.noUploads = document.getElementById('noUploadsText');
-                OMR_DataExportVars.optionId = $(this).find("option:selected").attr("id");
+                OMR_ProjectVars.exportDiv = document.getElementById('exportDiv');
+                OMR_ProjectVars.runButton = document.getElementById('run');
+                OMR_ProjectVars.sdapsTable = document.getElementById('sdapsTable');
+                OMR_ProjectVars.noUploads = document.getElementById('noUploadsText');
+                OMR_ProjectVars.optionId = $(this).find("option:selected").attr("id");
                 
-                 if(!OMR_DataExportVars.optionId == document.getElementById('default')) {
-                    OMR_DataExportVars.exportDiv.setAttribute('hidden', '');
+                 if(!OMR_ProjectVars.optionId == document.getElementById('default')) {
+                    OMR_ProjectVars.exportDiv.setAttribute('hidden', '');
                 }
                 else {
-                    OMR_DataExportVars.exportDiv.removeAttribute('hidden');
+                    OMR_ProjectVars.exportDiv.removeAttribute('hidden');
                     if(response == 'true') {
-                        OMR_DataExportVars.runButton.removeAttribute('hidden');
-                        OMR_DataExportVars.sdapsTable.removeAttribute('hidden');
-                        OMR_DataExportVars.noUploads.setAttribute('hidden', '');
+                        OMR_ProjectVars.runButton.removeAttribute('hidden');
+                        OMR_ProjectVars.sdapsTable.removeAttribute('hidden');
+                        OMR_ProjectVars.noUploads.setAttribute('hidden', '');
                     }
                     else {
-                        OMR_DataExportVars.noUploads.removeAttribute('hidden');
-                        OMR_DataExportVars.sdapsTable.setAttribute('hidden', '');
-                        OMR_DataExportVars.runButton.setAttribute('hidden', '');
+                        OMR_ProjectVars.noUploads.removeAttribute('hidden');
+                        OMR_ProjectVars.sdapsTable.setAttribute('hidden', '');
+                        OMR_ProjectVars.runButton.setAttribute('hidden', '');
                     }
                 }
 
                 //Creates function to send ajax call to our csv file and print its contents
-                OMR_DataExportVars.createTable = function() {
+                OMR_ProjectVars.createTable = function() {
                     $.ajax({
-                        url: OMR_DataExportVars.projectPath + '/data_1.csv',
+                        url: OMR_ProjectVars.projectPath + '/data_1.csv',
                         dataType: 'text',
                         success: function(data) {
-                            OMR_DataExportVars.sdapsData = data.split(/\r?\n|\r/);
-                            OMR_DataExportVars.tableData = '<table class="table table-bordered table-striped">';
+                            OMR_ProjectVars.sdapsData = data.split(/\r?\n|\r/);
+                            OMR_ProjectVars.tableData = '<table class="table table-bordered table-striped">';
             
-                            for(OMR_DataExportVars.count = 0; OMR_DataExportVars.count < OMR_DataExportVars.sdapsData.length-1; OMR_DataExportVars.count++) {
-                                OMR_DataExportVars.cellData = OMR_DataExportVars.sdapsData[OMR_DataExportVars.count].split(",");
-                                OMR_DataExportVars.tableData += '<tr>';
+                            for(OMR_ProjectVars.count = 0; OMR_ProjectVars.count < OMR_ProjectVars.sdapsData.length-1; OMR_ProjectVars.count++) {
+                                OMR_ProjectVars.cellData = OMR_ProjectVars.sdapsData[OMR_ProjectVars.count].split(",");
+                                OMR_ProjectVars.tableData += '<tr>';
              
-                                for(OMR_DataExportVars.cellCount = 0; OMR_DataExportVars.cellCount<OMR_DataExportVars.cellData.length; OMR_DataExportVars.cellCount++) {
-                                    if(OMR_DataExportVars.count === 0) {
-                                        OMR_DataExportVars.tableData += '<th>'+OMR_DataExportVars.cellData[OMR_DataExportVars.cellCount]+'</th>';
+                                for(OMR_ProjectVars.cellCount = 0; OMR_ProjectVars.cellCount<OMR_ProjectVars.cellData.length; OMR_ProjectVars.cellCount++) {
+                                    if(OMR_ProjectVars.count === 0) {
+                                        OMR_ProjectVars.tableData += '<th>'+OMR_ProjectVars.cellData[OMR_ProjectVars.cellCount]+'</th>';
                                     }
                                     else {
-                                        OMR_DataExportVars.tableData += '<td>'+OMR_DataExportVars.cellData[OMR_DataExportVars.cellCount]+'</td>';
+                                        OMR_ProjectVars.tableData += '<td>'+OMR_ProjectVars.cellData[OMR_ProjectVars.cellCount]+'</td>';
                                     }
                                 }
-                                OMR_DataExportVars.tableData += '</tr>';
+                                OMR_ProjectVars.tableData += '</tr>';
                             }
-                            OMR_DataExportVars.tableData += '</table></div>';
-                            $('#sdapsTable').html(OMR_DataExportVars.tableData);
+                            OMR_ProjectVars.tableData += '</table></div>';
+                            $('#sdapsTable').html(OMR_ProjectVars.tableData);
                         },
                         error: function(response) {
-                            console.log('Could not find file ' + OMR_DataExportVars.projectPath + '/data_1.csv');
+                            console.log('Could not find file ' + OMR_ProjectVars.projectPath + '/data_1.csv');
                         }
                     });
                 };
 
                 //Call our function to create the table and its data
-                OMR_DataExportVars.createTable();
+                OMR_ProjectVars.createTable();
             },
             error: function() {
-                alert('Failed to find csv data in project: ' + OMR_DataExportVars.projectPath);
+                alert('Failed to find csv data in project: ' + OMR_ProjectVars.projectPath);
             }
         });
     });

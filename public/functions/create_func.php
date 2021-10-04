@@ -43,14 +43,16 @@ try {
 
     if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl'])) {
         //Concats the API url of the user's distribution of REDCap given in the project creation form
-        $apiUrl = 'https://redcap.' . strtolower($_POST['apiUrl']) . '.edu/api/';
+        $apiUrl = $_POST['apiUrl'];
     }
     else {
         echo 'Could not retrieve API URL from university REDCap domain.';
     }
 
-    //$sslVerify = true;
-    $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
+    $project = new RedCapProject($apiUrl, $apiToken, true);
+    if(!isset($project)) {
+        echo 'Could not create connection to REDCap API.  Please check your API token or entered URL and try again.';
+    }
 
     if(isset($_POST['instruments']) && !empty($_POST['instruments'])) {
         //Pulls the instrument (project) the user selected from the project creation form (create_form.php)
@@ -108,71 +110,83 @@ if(!file_exists($pidPath)) {
 
 
 //Creates the LaTeX questionnaire of the REDCap data dictionary
-$tex = json2latex::createQuestionnaire($meta, $instruments, $_POST['apiUrl']);
-//Saves the questionnaire to the tmp/PID/ dir
-$texPath = saveTex($tex, $pidPath);
+if(($tex = json2latex::createQuestionnaire($meta, $instruments, $_POST['apiUrl'])) !== false) {
+  //Saves the questionnaire to the tmp/PID/ dir
+  $texPath = saveTex($tex, $pidPath);
+}
+else {
+    echo "File src/requires/json2latex.php failed to create a questionnaire for this project.";
+}
 
 
 
-//Only execute the rest of the code IF the project was successfully created (returned true)
-if(($result = SdapsPHP::createProject($projectPath, $texPath)) === true) {
 
-    //Deletes generated .tex file in tmp/ directory
-    unlink($texPath);
+//Creates the LaTeX questionnaire of the REDCap data dictionary
+if(($tex = json2latex::createQuestionnaire($meta, $instruments, $_POST['apiUrl'])) !== false) {
+    //Saves the questionnaire to the tmp/PID/ dir
+    $texPath = saveTex($tex, $pidPath);
 
-    if(sizeof($recordIds) > 0) {
-        SdapsPHP::stampIDs($projectPath, $recordIds);
-    }
-    else {
-        echo "You did not create any printouts with your project.  Go to 'Create Printouts' to add them.\r\n";
-    }
+    //Only execute the rest of the code IF the project was successfully created (returned true)
+    if(($result = SdapsPHP::createProject($projectPath, $texPath)) === true) {
 
-    //Returns the list of stamped_x.pdf documents for this project 
-    $stampedDocs = glob($projectPath.DIRECTORY_SEPARATOR.'stamped_*.pdf');
+        //Deletes generated .tex file in tmp/ directory
+        unlink($texPath);
 
-    //Create a file to hold the list of records that have printouts associated with them
-    if(!file_exists($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt')) {
-        $printoutFile = fopen($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt', 'w+');
-    }
-    else {
-        $printoutFile = fopen($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt', 'a+');
-    }
-
-    if(sizeof($stampedDocs) > 0) {
-        foreach($recordIds as $key => $id) {
-            //Write the row of record ID and filepath to the file
-            fwrite($printoutFile, $id.';'.$stampedDocs[sizeof($stampedDocs)-1]."\r\n");
+        if(sizeof($recordIds) > 0) {
+            SdapsPHP::stampIDs($projectPath, $recordIds);
         }
-    }
-    fclose($printoutFile);
+        else {
+            echo "You did not create any printouts with your project.  Go to 'Create Printouts' to add them.\r\n";
+        }
+
+        //Returns the list of stamped_x.pdf documents for this project 
+        $stampedDocs = glob($projectPath.DIRECTORY_SEPARATOR.'stamped_*.pdf');
+
+        //Create a file to hold the list of records that have printouts associated with them
+        if(!file_exists($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt')) {
+            $printoutFile = fopen($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt', 'w+');
+        }
+        else {
+            $printoutFile = fopen($projectPath.DIRECTORY_SEPARATOR.'record_printouts.txt', 'a+');
+        }
+
+        if(sizeof($stampedDocs) > 0) {
+            foreach($recordIds as $key => $id) {
+                //Write the row of record ID and filepath to the file
+                fwrite($printoutFile, $id.';'.$stampedDocs[sizeof($stampedDocs)-1]."\r\n");
+            }
+        }
+        fclose($printoutFile);
 
 
 
-    //Creates the projects.json file that stores the data for the project
-    if(file_exists('..'.DIRECTORY_SEPARATOR.'projects.json')) {
-        $projectsJSON = file_get_contents('..'.DIRECTORY_SEPARATOR.'projects.json');
-        $json = json_decode($projectsJSON, true);
-    }
+        //Creates the projects.json file that stores the data for the project
+        if(file_exists('..'.DIRECTORY_SEPARATOR.'projects.json')) {
+            $projectsJSON = file_get_contents('..'.DIRECTORY_SEPARATOR.'projects.json');
+            $json = json_decode($projectsJSON);
+        }
     
-    //Create the data for the project's entry in the JSON file
-    $json[] = [
-        'projId' => strval($projectInfo['project_id']),
-        'projName' => $formName,
-        'path' => 'tmp' . DIRECTORY_SEPARATOR . $projectInfo['project_id'] . DIRECTORY_SEPARATOR . $formName,
-        'key' => $apiToken,
-        'url' => $apiUrl
-    ];
+        //Create the data for the project's entry in the JSON file
+        $json[] = [
+            'projId' => strval($projectInfo['project_id']),
+            'projName' => $formName,
+            'path' => 'tmp' . DIRECTORY_SEPARATOR . $projectInfo['project_id'] . DIRECTORY_SEPARATOR . $formName,
+            'key' => $apiToken,
+            'url' => $_POST['apiUrl'],
+            'rcProjTitle' => $projectInfo['project_title']
+        ];
 
-    //Convert the data back to JSON and write it to the file
-    $newJSON = json_encode($json, JSON_PRETTY_PRINT);
-    file_put_contents('..'.DIRECTORY_SEPARATOR.'projects.json', $newJSON);
+        //Convert the data back to JSON and write it to the file
+        $newJSON = json_encode($json, JSON_PRETTY_PRINT);
+        file_put_contents('..'.DIRECTORY_SEPARATOR.'projects.json', $newJSON);
 
 
 
-    $finalOutput = $projectPath . ';' . implode(',', $recordIds);
+        $finalOutput = $projectPath . ';' . implode(',', $recordIds);
 
-    //Returns the path of the project with the indexes to any printouts made to create_project.js
-    echo $finalOutput;
+        //Returns the path of the project with the indexes to any printouts made to create_project.js
+        echo $finalOutput;
+    }
 }
 //Could not create the project, most likely because it already exists
 else {

@@ -1,21 +1,21 @@
 $(document).ready(function() {
-    let OMR_ProjectAnalyzeVars = {};
+    let OMR_ProjectVars = {};
 
 
 
     //Validate the credentials entered in the API token/URL fields
     function validateCreds() {
         //Defines global object holding all variables for this project to prevent conflicts
-        OMR_ProjectAnalyzeVars.select = document.getElementById('instruments');
-        OMR_ProjectAnalyzeVars.form = document.getElementById('formHeader');
-        OMR_ProjectAnalyzeVars.instruments = 0;
-        OMR_ProjectAnalyzeVars.error = '';
+        OMR_ProjectVars.select = document.getElementById('instruments');
+        OMR_ProjectVars.form = document.getElementById('formHeader');
+        OMR_ProjectVars.instruments = 0;
+        OMR_ProjectVars.error = '';
 
         //Clean up any instrument options from previous validation attempt
-        for (i = OMR_ProjectAnalyzeVars.select.length - 1; i >= 0; i--) {
-	        OMR_ProjectAnalyzeVars.select.remove(i);
+        for (i = OMR_ProjectVars.select.length - 1; i >= 0; i--) {
+	        OMR_ProjectVars.select.remove(i);
         }
-        OMR_ProjectAnalyzeVars.select.length = 0;
+        OMR_ProjectVars.select.length = 0;
 
 
         $.ajax({
@@ -31,12 +31,12 @@ $(document).ready(function() {
                 //If the error variable is filled, alert and log it
                 if($.trim(response.error)) {
                     //Hide all elements that shouldn't be visible after error is thrown to client
-                    OMR_ProjectAnalyzeVars.runRecognition = document.getElementById('runRecognition');
-                    OMR_ProjectAnalyzeVars.runRecognition.setAttribute('hidden', '');
+                    OMR_ProjectVars.runRecognition = document.getElementById('runRecognition');
+                    OMR_ProjectVars.runRecognition.setAttribute('hidden', '');
 
-                    OMR_ProjectAnalyzeVars.elements = document.getElementsByClassName('hidden');
-                    for(let i = 0; i < OMR_ProjectAnalyzeVars.elements.length; i++) {
-                        OMR_ProjectAnalyzeVars.elements[i].setAttribute('hidden', '');
+                    OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                        OMR_ProjectVars.elements[i].setAttribute('hidden', '');
                     }
 
                     alert(response.error);
@@ -46,12 +46,12 @@ $(document).ready(function() {
                 //If we can't trim the response, then it is a blank string (false)
                 if(!$.trim(response.results)) {
                     //Hide all elements that shouldn't be visible after getting no response
-                    OMR_ProjectAnalyzeVars.runRecognition = document.getElementById('runRecognition');
-                    OMR_ProjectAnalyzeVars.runRecognition.setAttribute('hidden', '');
+                    OMR_ProjectVars.runRecognition = document.getElementById('runRecognition');
+                    OMR_ProjectVars.runRecognition.setAttribute('hidden', '');
 
-                    OMR_ProjectAnalyzeVars.elements = document.getElementsByClassName('hidden');
-                    for(let i = 0; i < OMR_ProjectAnalyzeVars.elements.length; i++) {
-                        OMR_ProjectAnalyzeVars.elements[i].setAttribute('hidden', '');
+                    OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                        OMR_ProjectVars.elements[i].setAttribute('hidden', '');
                     }
 
                     alert('No projects were found for the project ID of the API token you entered.');
@@ -59,61 +59,61 @@ $(document).ready(function() {
                 }
                 else {
                     //Parse the json result from the php file
-                    OMR_ProjectAnalyzeVars.instruments = response.results;
+                    OMR_ProjectVars.instruments = response.results;
 
-                    OMR_ProjectAnalyzeVars.error = document.getElementById('error');
-                    if(OMR_ProjectAnalyzeVars.error) {
+                    OMR_ProjectVars.error = document.getElementById('error');
+                    if(OMR_ProjectVars.error) {
                         document.getElementById('error').outerHTML = '';
                     }
 
                     //Split projects into array ONLY if there are multiple included
-                    if(OMR_ProjectAnalyzeVars.instruments.includes(',')) {
-                        OMR_ProjectAnalyzeVars.instruments = OMR_ProjectAnalyzeVars.instruments.split(',');
+                    if(OMR_ProjectVars.instruments.includes(',')) {
+                        OMR_ProjectVars.instruments = OMR_ProjectVars.instruments.split(',');
 
-                        for(let i = 0; i < OMR_ProjectAnalyzeVars.instruments.length; i++) {
+                        for(let i = 0; i < OMR_ProjectVars.instruments.length; i++) {
                             //If we're on the first element, add the default option to the select box
                             if(i == 0) {
-                                OMR_ProjectAnalyzeVars.opt = document.createElement('option');
-                                OMR_ProjectAnalyzeVars.opt.setAttribute('disabled', '');
-                                OMR_ProjectAnalyzeVars.opt.setAttribute('selected', '');
-                                OMR_ProjectAnalyzeVars.opt.setAttribute('value', '');
-                                OMR_ProjectAnalyzeVars.opt.innerHTML = '-- Select an option --';
-                                OMR_ProjectAnalyzeVars.select.appendChild(OMR_ProjectAnalyzeVars.opt);
+                                OMR_ProjectVars.opt = document.createElement('option');
+                                OMR_ProjectVars.opt.setAttribute('disabled', '');
+                                OMR_ProjectVars.opt.setAttribute('selected', '');
+                                OMR_ProjectVars.opt.setAttribute('value', '');
+                                OMR_ProjectVars.opt.innerHTML = '-- Select an option --';
+                                OMR_ProjectVars.select.appendChild(OMR_ProjectVars.opt);
                             }
     
-                            OMR_ProjectAnalyzeVars.opt = document.createElement('option');
-                            OMR_ProjectAnalyzeVars.opt.value = OMR_ProjectAnalyzeVars.instruments[i];
+                            OMR_ProjectVars.opt = document.createElement('option');
+                            OMR_ProjectVars.opt.value = OMR_ProjectVars.instruments[i];
                             
                             //Trim the instrument name from the project directory for user readability
-                            OMR_ProjectAnalyzeVars.innerInst = OMR_ProjectAnalyzeVars.instruments[i].split('/');
-                            OMR_ProjectAnalyzeVars.opt.innerHTML = OMR_ProjectAnalyzeVars.innerInst[OMR_ProjectAnalyzeVars.innerInst.length-1];
+                            OMR_ProjectVars.innerInst = OMR_ProjectVars.instruments[i].split('/');
+                            OMR_ProjectVars.opt.innerHTML = OMR_ProjectVars.innerInst[OMR_ProjectVars.innerInst.length-1];
                             
-                            OMR_ProjectAnalyzeVars.select.appendChild(OMR_ProjectAnalyzeVars.opt);
+                            OMR_ProjectVars.select.appendChild(OMR_ProjectVars.opt);
                         }
                     }
                     else {
-                        OMR_ProjectAnalyzeVars.opt = document.createElement('option');
-                        OMR_ProjectAnalyzeVars.opt.setAttribute('disabled', '');
-                        OMR_ProjectAnalyzeVars.opt.setAttribute('selected', '');
-                        OMR_ProjectAnalyzeVars.opt.setAttribute('value', '');
-                        OMR_ProjectAnalyzeVars.opt.innerHTML = '-- Select an option --';
-                        OMR_ProjectAnalyzeVars.select.appendChild(OMR_ProjectAnalyzeVars.opt);
+                        OMR_ProjectVars.opt = document.createElement('option');
+                        OMR_ProjectVars.opt.setAttribute('disabled', '');
+                        OMR_ProjectVars.opt.setAttribute('selected', '');
+                        OMR_ProjectVars.opt.setAttribute('value', '');
+                        OMR_ProjectVars.opt.innerHTML = '-- Select an option --';
+                        OMR_ProjectVars.select.appendChild(OMR_ProjectVars.opt);
 
-                        OMR_ProjectAnalyzeVars.opt = document.createElement('option');
-                        OMR_ProjectAnalyzeVars.opt.value = OMR_ProjectAnalyzeVars.instruments;
+                        OMR_ProjectVars.opt = document.createElement('option');
+                        OMR_ProjectVars.opt.value = OMR_ProjectVars.instruments;
                         
                         //Trim the instrument name from the project directory for user readability
-                        OMR_ProjectAnalyzeVars.innerInst = OMR_ProjectAnalyzeVars.instruments.split('/');
-                        OMR_ProjectAnalyzeVars.opt.innerHTML = OMR_ProjectAnalyzeVars.innerInst[OMR_ProjectAnalyzeVars.innerInst.length-1];
+                        OMR_ProjectVars.innerInst = OMR_ProjectVars.instruments.split('/');
+                        OMR_ProjectVars.opt.innerHTML = OMR_ProjectVars.innerInst[OMR_ProjectVars.innerInst.length-1];
                         
-                        OMR_ProjectAnalyzeVars.select.appendChild(OMR_ProjectAnalyzeVars.opt);
+                        OMR_ProjectVars.select.appendChild(OMR_ProjectVars.opt);
                     }
 
                     
 
-                    OMR_ProjectAnalyzeVars.elements = document.getElementsByClassName('hidden');
-                    for(let i = 0; i < OMR_ProjectAnalyzeVars.elements.length; i++) {
-                        OMR_ProjectAnalyzeVars.elements[i].removeAttribute('hidden');
+                    OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                    for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                        OMR_ProjectVars.elements[i].removeAttribute('hidden');
                     }
                 }
             },
@@ -121,18 +121,18 @@ $(document).ready(function() {
                 console.log(response);
                 console.log("Could not retrieve project information from API key and URL.");
 
-                OMR_ProjectAnalyzeVars.elements = document.getElementsByClassName('hidden');
-                for(let i = 0; i < OMR_ProjectAnalyzeVars.elements.length; i++) {
-                    OMR_ProjectAnalyzeVars.elements[i].setAttribute('hidden', '');
+                OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
+                for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                    OMR_ProjectVars.elements[i].setAttribute('hidden', '');
                 }
-                OMR_ProjectAnalyzeVars.runRecognition = document.getElementById('runRecognition');
-                OMR_ProjectAnalyzeVars.runRecognition.innerHTML = '';
+                OMR_ProjectVars.runRecognition = document.getElementById('runRecognition');
+                OMR_ProjectVars.runRecognition.innerHTML = '';
 
                 if(!$('#error').length) {
-                    OMR_ProjectAnalyzeVars.error = document.createElement('h4');
-                    OMR_ProjectAnalyzeVars.error.id = 'error';
-                    OMR_ProjectAnalyzeVars.error.innerHTML = 'API token is incorrect for the given URL.';
-                    OMR_ProjectAnalyzeVars.form.appendChild(OMR_ProjectAnalyzeVars.error);
+                    OMR_ProjectVars.error = document.createElement('h4');
+                    OMR_ProjectVars.error.id = 'error';
+                    OMR_ProjectVars.error.innerHTML = 'API token is incorrect for the given URL.';
+                    OMR_ProjectVars.form.appendChild(OMR_ProjectVars.error);
                 }
             }
         });
@@ -153,53 +153,53 @@ $(document).ready(function() {
     });
 
     $("#instruments").change(function(){
-        OMR_ProjectAnalyzeVars.projectPath = document.getElementById('instruments').value;
-        OMR_ProjectAnalyzeVars.uploadPath = OMR_ProjectAnalyzeVars.projectPath + '/uploads';
+        OMR_ProjectVars.projectPath = document.getElementById('instruments').value;
+        OMR_ProjectVars.uploadPath = OMR_ProjectVars.projectPath + '/uploads';
 
         $.ajax({
             type: "POST", 
             url: "../requires/check_file.php",
             data: {
-                uploadPath: OMR_ProjectAnalyzeVars.uploadPath
+                uploadPath: OMR_ProjectVars.uploadPath
             },
             dataType: "text",
             success: function(response) {
-                OMR_ProjectAnalyzeVars.runRecognition = document.getElementById('runRecognition');
-                OMR_ProjectAnalyzeVars.runButton = document.getElementById('run');
-                OMR_ProjectAnalyzeVars.noUploads = document.getElementById('noUploadsText');
-                OMR_ProjectAnalyzeVars.optionId = $(this).find("option:selected").attr("id");
+                OMR_ProjectVars.runRecognition = document.getElementById('runRecognition');
+                OMR_ProjectVars.runButton = document.getElementById('run');
+                OMR_ProjectVars.noUploads = document.getElementById('noUploadsText');
+                OMR_ProjectVars.optionId = $(this).find("option:selected").attr("id");
       
-                 if(!OMR_ProjectAnalyzeVars.optionId == document.getElementById('default')) {
-                    OMR_ProjectAnalyzeVars.runRecognition.setAttribute('hidden', '');
+                 if(!OMR_ProjectVars.optionId == document.getElementById('default')) {
+                    OMR_ProjectVars.runRecognition.setAttribute('hidden', '');
                 }
                 else {
-                    OMR_ProjectAnalyzeVars.runRecognition.removeAttribute('hidden');
+                    OMR_ProjectVars.runRecognition.removeAttribute('hidden');
                     if(response == 'true') {
-                        OMR_ProjectAnalyzeVars.runButton.removeAttribute('hidden');
-                        OMR_ProjectAnalyzeVars.noUploads.setAttribute('hidden', '');
+                        OMR_ProjectVars.runButton.removeAttribute('hidden');
+                        OMR_ProjectVars.noUploads.setAttribute('hidden', '');
                     }
                     else {
-                        OMR_ProjectAnalyzeVars.noUploads.removeAttribute('hidden');
-                        OMR_ProjectAnalyzeVars.runButton.setAttribute('hidden', '');
+                        OMR_ProjectVars.noUploads.removeAttribute('hidden');
+                        OMR_ProjectVars.runButton.setAttribute('hidden', '');
                     }
                 }
             },
             error: function() {
-                alert('Failed to verify path of uploads folder for project: ' + OMR_ProjectAnalyzeVars.projectPath);
+                alert('Failed to verify path of uploads folder for project: ' + OMR_ProjectVars.projectPath);
             }
         });
     });
 
     $('#run').on('click', function() {
-        OMR_ProjectAnalyzeVars.projectPath = document.getElementById('instruments').value;
-        OMR_ProjectAnalyzeVars.uploadPath = OMR_ProjectAnalyzeVars.projectPath + '/uploads';
+        OMR_ProjectVars.projectPath = document.getElementById('instruments').value;
+        OMR_ProjectVars.uploadPath = OMR_ProjectVars.projectPath + '/uploads';
 
         $.ajax({
             type: "POST",
             url: "../functions/analyze_func.php",
             data: {
-                projectPath: OMR_ProjectAnalyzeVars.projectPath,
-                uploadPath: OMR_ProjectAnalyzeVars.uploadPath
+                projectPath: OMR_ProjectVars.projectPath,
+                uploadPath: OMR_ProjectVars.uploadPath
             },
             dataType: "text",
             beforeSend: function() {

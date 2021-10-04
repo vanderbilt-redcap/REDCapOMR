@@ -16,8 +16,11 @@
 </head>
 
 <body>
+    <div class="background"></div>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div><p id="loadingText"><br>Generating SDAPS project...</p>
+
     <div class="formHeader" id="header">
-        <h1>REDCap OMR Application</h1>
+        <h1 class="container-fluid bg-light pt-3 pb-3">REDCap OMR Application</h1>
         <br>
         <div id="buttons">
             <button type="button" id="createBtn" class="btn btn-light">Create New Project</button>
@@ -28,17 +31,45 @@
             <p>Enter your project API token:</p>
             <input type="text" id="apiToken" name="apiToken" value="<?php if(isset($_SESSION['apiToken']) && !empty($_SESSION['apiToken'])) echo $_SESSION['apiToken']; else echo ''; ?>">
             <br>
-            <!-- Retrieve this value from host URL when/if in external module, this is for Docker app -->
-            <p>Enter REDCap institution name (from redcap.NAME.edu):</p>
+            <!-- Retrieve this value from host URL when in module, this is temporary -->
+            <p>Enter entire REDCap API URL (Ex: https://redcap.vanderbilt.edu/api/):</p>
             <input type="text" id="apiUrl" name="apiUrl" value="<?php if(isset($_SESSION['apiUrl']) && !empty($_SESSION['apiUrl'])) echo $_SESSION['apiUrl']; else echo ''; ?>">
             <br>
             <br>
-            <button type="button" id="validate" class="btn btn-light">Validate</button>
+            <button id="validate" class="btn btn-light" type="button">Validate</button>
+            <br>
+            <br>
+
+            <p class="hidden" hidden>Select instrument to convert to a paper survey and make an SDAPS project from:</p>
+            <select class="hidden" name="instruments" id="instruments" hidden>
+            </select>
+            <br>
+            <br>
+            <button id="createProject" class="hidden btn btn-light" type="button" hidden>Create Project</button>
         </div>
 
         <div class="formHeader" id="selectForm" hidden>
-            <p>Select a project to continue with:</p>
-            <select name="instruments" id="instruments"></select>
+            <p>Select an REDCap project to continue with:</p>
+            <select name="instrumentsSelect" id="instrumentsSelect">
+                <?php
+                    $projects = file_get_contents('projects.json');
+                    $projects = json_decode($projects, true);
+
+                    //Returns only unique REDCap projects from original JSON file
+                    foreach($projects as $k => $v) {
+                        foreach($projects as $key => $value) {
+                            if($k != $key && $v['projId'] == $value['projId']) {
+                                unset($projects[$k]);
+                            }
+                        }
+                    }
+
+                    //Check for length, ignore select if no projects available (maybe in JS?, or create <select> in PHP)
+                    foreach($projects as $key => $val) {
+                        echo('<option value="'.$val['key'].';'.$val['url'].'">'.'Project: '.$val['rcProjTitle'].', PID: '.$val['projId'].'</option>');
+                    }
+                ?>
+            </select>
             <br>
             <br>
             <button type="button" id="continue" class="btn btn-light">Continue</button>

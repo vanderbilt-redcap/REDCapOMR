@@ -206,14 +206,16 @@ try {
     
     if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl'])) {
         //Concats the API url of the user's distribution of REDCap given in the project creation form
-        $apiUrl = 'https://redcap.' . strtolower($_POST['apiUrl']) . '.edu/api/';
+        $apiUrl = $_POST['apiUrl'];
     }
     else {
-        echo 'Could not retrieve API URL from university REDCap domain.';
+        echo 'Could not retrieve API URL.';
     }
     
-    //$sslVerify = true;
-    $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
+    $project = new RedCapProject($apiUrl, $apiToken, true);
+    if(!isset($project)) {
+        echo 'Could not create connection to REDCap API.  Please check your API token or entered URL and try again.';
+    }
     
     if(isset($_POST['instruments']) && !empty($_POST['instruments'])) {
         //Pulls the instrument (project) the user selected from the project creation form (create_form.php)

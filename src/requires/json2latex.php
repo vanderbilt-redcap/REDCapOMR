@@ -24,8 +24,12 @@ class json2latex {
     private static function createHeader($meta, $instruments, $author) {
         //Get the list of project instruments into a readable format
         $instruments = json_decode($instruments);
+        
+        $title = "";
         //Parse info about the data dict to determine the survey name
-        $title = $meta[0]->form_name;
+        if(!empty($meta)) {
+            $title = $meta[0]->form_name;
+        }
 
         //Checks all project instruments for the project label associated with the form name
         foreach($instruments as $instrument) {

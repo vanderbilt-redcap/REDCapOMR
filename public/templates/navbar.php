@@ -9,9 +9,6 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="../forms/create_project.php">Create Project<span class="sr-only">(current)</span></a>
-      </li>
       <li class="nav-item border-md-right">
         <a class="nav-link" href="../forms/create_printouts.php">Create Printouts</a>
       </li>

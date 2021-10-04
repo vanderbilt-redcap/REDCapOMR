@@ -20,17 +20,16 @@ try {
 
     if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl'])) {
         //Concats the API url of the user's distribution of REDCap given in the project creation form
-        $apiUrl = 'https://redcap.' . strtolower($_POST['apiUrl']) . '.edu/api/';
+        $apiUrl = $_POST['apiUrl'];
     }
     else {
-        $json['error'] = 'Error: Could not retrieve API URL from university REDCap domain.';
+        $json['error'] = 'Error: Could not retrieve API URL REDCap domain.';
         die(json_encode($json));
     }
 
     if((isset($_POST['apiToken']) && !empty($_POST['apiToken'])) &&
        (isset($_POST['apiUrl']) && !empty($_POST['apiUrl']))) {
-        //$sslVerify = true;
-        $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
+        $project = new RedCapProject($apiUrl, $apiToken, true);
         $projectInfo = $project->exportProjectInfo('php');
     }
     else {

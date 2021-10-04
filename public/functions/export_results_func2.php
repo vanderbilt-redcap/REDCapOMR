@@ -175,8 +175,7 @@ try {
         echo 'Error: Could not retrieve API URL from university REDCap domain.';
     }
     
-    //$sslVerify = true;
-    $project = new RedCapProject($apiUrl, $apiToken/*, $sslVerify*/);
+    $project = new RedCapProject($apiUrl, $apiToken, true);
     
     if(isset($_POST['instruments']) && !empty($_POST['instruments'])) {
         //Pulls the instrument (project) the user selected from the project creation form (create_form.php)
