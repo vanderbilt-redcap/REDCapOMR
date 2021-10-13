@@ -6,6 +6,7 @@ ARG SDAPS_VERSION="${SDAPS_VERSION:-1.9.9}"
 RUN apt update \
 	&& apt upgrade -y \
 	&& apt install -y \
+        dumb-init \
 		gir1.2-poppler-0.18 \
 		libcairo-dev \
 		libpgf-dev \
@@ -29,8 +30,12 @@ RUN apt update \
 		wget \
 		zbar-tools
 
+# Enable dbus
+RUN dbus-uuidgen > /var/lib/dbus/machine-id \
+    && mkdir -p /var/run/dbus
+
 RUN cd / \
-	&& wget "https://github.com/sdaps/sdaps/archive/refs/tags/${SDAPS_VERSION}.zip" \
+    && wget "https://github.com/sdaps/sdaps/archive/refs/tags/${SDAPS_VERSION}.zip" \
 	&& unzip "${SDAPS_VERSION}.zip" \
 	&& rm "${SDAPS_VERSION}.zip" \
 	&& cd "sdaps-${SDAPS_VERSION}/tex" \
@@ -39,10 +44,6 @@ RUN cd / \
 	&& rm "master.zip" \
 	&& rm -rf class \
 	&& mv sdaps-class-master class
-
-RUN groupadd --gid 1000 redcapomr
-RUN adduser --uid 1000 --gid 1000 --no-create-home redcapomr
-RUN usermod -aG www-data redcapomr
 
 RUN cd "/sdaps-${SDAPS_VERSION}" \
 	&& ./setup.py install --install-tex
@@ -54,16 +55,6 @@ COPY docker/conf/apache2/ports.conf "${APACHE_CONFDIR}/ports.conf"
 # copy in php config
 COPY "docker/conf/php/php.ini" "${PHP_INI_DIR}/conf.d/redcap.ini"
 
-#Adding libraries for potential D-Bus fixes
-#RUN apt update \
-#	&& apt upgrade -y \
-#	&& apt install -y \
-#		dbus \
-#		dbus-x11 \
-#		python3-dbus \
-#		libc6 \
-#		libdbus-1-3
-
 # container cleanup and enable site
 RUN  rm "${APACHE_CONFDIR}/sites-enabled/000-default.conf" \
      && ln -sf "${APACHE_CONFDIR}/sites-available/000-redcap-omr.conf" "${APACHE_CONFDIR}/sites-enabled/000-redcap-omr.conf" \
@@ -71,4 +62,30 @@ RUN  rm "${APACHE_CONFDIR}/sites-enabled/000-default.conf" \
 
 RUN mkdir /var/www/html/redcap-omr && chown -R www-data /var/www/html/redcap-omr
 
-# CMD [ "./docker/bin/entrypoint.sh" ]
+ARG UID
+ARG GID
+ARG USERNAME="redcapomr"
+
+# create runtime user group
+RUN if ! find . | grep -q ":${GID}:" /etc/group; then \
+    addgroup --gid "${GID}" "${USERNAME}"; \
+    fi;
+
+# create runtime user
+RUN adduser \
+    --shell /usr/bin/bash \
+    --uid "${UID}" \
+    --gid "${GID}" \
+    --gecos "" \
+    --disabled-login \
+    --no-create-home \
+    "${USERNAME}"
+
+# add user to www-data group
+RUN usermod -aG www-data "${USERNAME}"
+
+COPY --chmod=555 docker/bin/entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT [ "/usr/bin/dumb-init", "--" ]
+
+CMD [ "/entrypoint.sh" ]
