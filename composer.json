@@ -1,5 +1,5 @@
 {
-    "name": "cojohnson1999/REDCapOMR",
+    "name": "cojohnson1999/redcap-omr",
     "type": "library",
     "require": {
         "iu-redcap/phpcap": "^1.1",

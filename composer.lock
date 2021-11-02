@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e77e14b01be26788b59d9681c588612d",
+    "content-hash": "d578a94bd799c96060ed89b8685542a3",
     "packages": [
         {
             "name": "iu-redcap/phpcap",
-            "version": "1.1.2",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/IUREDCap/phpcap.git",
-                "reference": "31ef095b3ef3ecb14b384d1a12829440b2045beb"
+                "reference": "e6d8369fdbc82d08629590f01217f8b37c728d8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/IUREDCap/phpcap/zipball/31ef095b3ef3ecb14b384d1a12829440b2045beb",
-                "reference": "31ef095b3ef3ecb14b384d1a12829440b2045beb",
+                "url": "https://api.github.com/repos/IUREDCap/phpcap/zipball/e6d8369fdbc82d08629590f01217f8b37c728d8a",
+                "reference": "e6d8369fdbc82d08629590f01217f8b37c728d8a",
                 "shasum": ""
             },
             "require": {
@@ -28,7 +28,7 @@
             "require-dev": {
                 "erusev/parsedown": "1.7.4",
                 "kzykhys/php-csv-parser": "1.4.1",
-                "phpunit/phpunit": "9.5.7",
+                "phpunit/phpunit": "9.5.8",
                 "squizlabs/php_codesniffer": "3.6.0"
             },
             "type": "library",
@@ -45,7 +45,11 @@
             "keywords": [
                 "redcap"
             ],
-            "time": "2021-07-30T13:58:52+00:00"
+            "support": {
+                "issues": "https://github.com/IUREDCap/phpcap/issues",
+                "source": "https://github.com/IUREDCap/phpcap/tree/1.2.0"
+            },
+            "time": "2021-08-24T19:54:10+00:00"
         },
         {
             "name": "jansenfelipe/sdaps-php",
@@ -64,6 +68,7 @@
             "require": {
                 "php": ">=5.3.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -90,13 +95,20 @@
                 "sdaps"
             ],
             "support": {
-                "source": "https://github.com/cojohnson1999/sdaps-php/tree/1.0"
+                "source": "https://github.com/cojohnson1999/sdaps-php/tree/bugfix-update"
             },
             "time": "2021-07-28T15:31:48+00:00"
         }
     ],
     "packages-dev": [],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "jansenfelipe/sdaps-php",
+            "version": "dev-bugfix-update",
+            "alias": "1.0.x-dev",
+            "alias_normalized": "1.0.9999999.9999999-dev"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "jansenfelipe/sdaps-php": 20
@@ -105,5 +117,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }
