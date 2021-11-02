@@ -14,8 +14,9 @@ $build_args=@(
 
 $run_args=@(
     'compose',
-    'up',
+    'run',
     '-v', """${pwd}:/var/www/html/redcap-omr""",
+    '-p', '8080:80',
     'redcap-omr'
 )
 
