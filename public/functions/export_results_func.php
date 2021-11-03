@@ -156,8 +156,16 @@ use IU\PHPCap\PhpCapException;
                 }
                 //Add support for radio buttons
                 else if($formFieldTypes[$j] === 'radio') {
+                    /*
+                     * IMPORTANT: This checks for bad values.  In previous versions, -1 was a string "NA" and -2 was a string "error-multi-select"
+                     *            I am checking for all of these possibilities in the case that the terminology somehow changes on different platforms.
+                     */
                     //If multiple fields or no fields are checked, we don't add an answer to be safe
-                    if($trimmedCsv[$i][$j][0] === 'error-multi-select' || $trimmedCsv[$i][$j][0] === 'NA') {
+                    if($trimmedCsv[$i][$j][0] == -1 || 
+                       $trimmedCsv[$i][$j][0] == -2 ||
+                       $trimmedCsv[$i][$j][0] === 'NA' ||
+                       $trimmedCsv[$i][$j][0] == 'error-multi-select'
+                       ) {
                         $csv = $csv . ',';
                     }
                     else {

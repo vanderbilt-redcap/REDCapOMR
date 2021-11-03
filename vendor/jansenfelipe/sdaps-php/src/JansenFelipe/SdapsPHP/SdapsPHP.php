@@ -234,6 +234,8 @@ class SdapsPHP {
         self::sdapsExists();
         self::rmExists();
 
+        //TODO: Check if data_*.csv exists before doing rm on all of those files
+
         exec(escapeshellcmd('rm ' . $pathProject /* . DIRECTORY_SEPARATOR  */. 'data_1.csv'));
 
         $command = escapeshellcmd('sdaps export csv ' . $pathProject);

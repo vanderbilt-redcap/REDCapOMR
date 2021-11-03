@@ -26,7 +26,7 @@
             <button id="validate" type="button" class="btn btn-light">Validate</button>
             <br>
         </div>
-        <p class="hidden" hidden>Select instrument to convert to a paper survey:</p>
+        <p class="hidden" hidden>Select SDAPS project to change settings on:</p>
         <select class="hidden" name="instruments" id="instruments" hidden>
         </select>
         <br>

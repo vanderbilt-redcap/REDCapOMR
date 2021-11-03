@@ -16,8 +16,6 @@ if(!file_exists($uploadPath)) {
 //Declare extensions allowed to upload to server
 $allowedExts = array('pdf', 'png', 'jpg', 'jpeg', 'tif', 'tiff');
 
-//Array that holds all new files in /uploads directory
-$newUploads = array();
 //Used with newUploads to add to array
 $i = 0;
 
@@ -54,8 +52,6 @@ foreach($_FILES['upload']['name'] as $key => $name) {
                 //Adds the new upload to the /uploads directory
                 move_uploaded_file($_FILES['upload']['tmp_name'][$key], $uploadPath . $uploadUnspaced);
                 
-                //Adds that file to the array to be used SDAPS add --convert
-                $newUploads[$i] = $uploadPath . $uploadUnspaced;
                 $i++;
 
                 echo "Stored in: " . $uploadPath . $uploadUnspaced . "\r\n";
