@@ -17,9 +17,13 @@ if(isset($_POST['apiUrl']) && !empty($_POST['apiUrl']) &&
 
     try {
         //Try to create a connection to the REDCap project to prompt a success or error
-        $project = new RedCapProject($_SESSION['apiUrl'], $_SESSION['apiToken']);
+        $project = new RedCapProject($_SESSION['apiUrl'], $_SESSION['apiToken'], true);
 
         if(isset($project)) {
+            //Set a session variable for the REDCap project's ID if the project exists
+            $projectInfo = $project->exportProjectInfo('php');
+            $_SESSION['projId'] = $projectInfo['project_id'];
+
             echo 'true';
         }
     }

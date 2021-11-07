@@ -19,7 +19,7 @@
             <input type="text" id="apiToken" name="apiToken" value="<?php if(isset($_SESSION['apiToken']) && !empty($_SESSION['apiToken'])) echo $_SESSION['apiToken']; else echo ''; ?>">
             <br>
             <!-- Retrieve this value from host URL when in module, this is temporary -->
-            <p>Enter REDCap institution name (from redcap.NAME.edu):</p>
+            <p>Enter entire REDCap API URL (Ex: https://redcap.vanderbilt.edu/api/):</p>
             <input type="text" id="apiUrl" name="apiUrl" value="<?php if(isset($_SESSION['apiUrl']) && !empty($_SESSION['apiUrl'])) echo $_SESSION['apiUrl']; else echo ''; ?>">
             <br>
             <br>

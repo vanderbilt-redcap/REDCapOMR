@@ -160,7 +160,7 @@ if(($tex = json2latex::createQuestionnaire($meta, $instruments, $_POST['apiUrl']
 
 
 
-        //Creates the projects.json file that stores the data for the project
+        //Grabs the content from the projects.json file that stores content about created projects
         if(file_exists('..'.DIRECTORY_SEPARATOR.'projects.json')) {
             $projectsJSON = file_get_contents('..'.DIRECTORY_SEPARATOR.'projects.json');
             $json = json_decode($projectsJSON);
@@ -177,6 +177,7 @@ if(($tex = json2latex::createQuestionnaire($meta, $instruments, $_POST['apiUrl']
         ];
 
         //Convert the data back to JSON and write it to the file
+        //OR create and write the content to the file if it didn't exist
         $newJSON = json_encode($json, JSON_PRETTY_PRINT);
         file_put_contents('..'.DIRECTORY_SEPARATOR.'projects.json', $newJSON);
 

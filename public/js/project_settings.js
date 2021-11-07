@@ -157,7 +157,11 @@ $(document).ready(function() {
         OMR_ProjectVars.addScans = document.getElementById('settingsDiv');
         //Find the option selected from the instrument list
         OMR_ProjectVars.optionId = $(this).find("option:selected").attr("id");
-      
+        
+        //Rehide API token/URL change div if it was unhidden
+        OMR_ProjectVars.changeInfo = document.getElementById('changeInfo');
+        OMR_ProjectVars.changeInfo.setAttribute('hidden', '');
+
         //If the option ID isn't the default...
         if(!OMR_ProjectVars.optionId == document.getElementById('default')) {
             OMR_ProjectVars.addScans.setAttribute('hidden', '');
@@ -166,6 +170,68 @@ $(document).ready(function() {
             OMR_ProjectVars.addScans.removeAttribute('hidden');
         }
     });
+
+    
+    $('#change').on('click', function() {
+        //Display the div to change the project's API token/URL
+        OMR_ProjectVars.changeInfo = document.getElementById('changeInfo');
+        OMR_ProjectVars.changeInfo.removeAttribute('hidden');
+    });
+
+    $('#saveChanges').on('click', function() {
+
+        $.ajax({
+            type: "POST",
+            url: "../requires/get_session_pid.php",
+            success: function(response) {
+                if(response != null) {
+                    OMR_ProjectVars.projId = response;
+
+                    OMR_ProjectVars.projPath = $('#instruments').val().split("/");
+                    OMR_ProjectVars.projName = OMR_ProjectVars.projPath.pop();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "../requires/update_project_info.php",
+                        data: {
+                            projName: OMR_ProjectVars.projName,
+                            projId: OMR_ProjectVars.projId,
+                            newToken: $('#changeToken').val(),
+                            newUrl: $('#changeUrl').val()
+                        },
+                        dataType: "text",
+                        beforeSend: function() {
+                            $('.lds-ring').css("display", "flex");
+                            $('.background').css("display", "flex");
+                            $('#loadingText').css("display", "flex");
+                        },
+                        complete: function() {
+                            $('.lds-ring').css("display", "none");
+                            $('.background').css("display", "none");
+                            $('#loadingText').css("display", "none");
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            alert(response);
+                        },
+                        error: function(response) {
+                            console.log(response);
+                            alert(response);
+                        }
+                    });
+                }
+                else {
+                    console.log('Could not retrieve project\'s REDCap ID from session.  Reselect your project from \"Select Project\" to fix this.');
+                    alert('Could not retrieve project\'s REDCap ID from session.  Reselect your project from \"Select Project\" to fix this.');
+                }
+            },
+            error: function(response) {
+                console.log(response);
+                alert(response);
+            }
+        });
+    });
+
 
     $('#reset').on('click', function() {
 
@@ -196,6 +262,7 @@ $(document).ready(function() {
             }
         });
     });
+
 
     $('#delete').on('click', function() {
 
