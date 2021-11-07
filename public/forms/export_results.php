@@ -35,7 +35,8 @@
             <select class="hidden" name="fields" id="fields" hidden>
             </select>
             <br>
-            <button id="run" type="button" class="btn btn-light" hidden>Export Results to REDCap</button>
+            <br>
+            <button id="run" type="button" class="btn btn-primary" hidden>Export Results to REDCap</button>
             <br>
             <p id="noUploadsText" hidden>No csv data has been generated from recognition for this project.  Do so <a href="run_recognition.php">here</a>.</p>
             <br>

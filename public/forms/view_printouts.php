@@ -46,7 +46,7 @@
             <button id="getRecords" type="button" class="btn btn-light">Get Printed Records</button>
             <ul id="recordsUl"></ul>
         
-            <button id="view" type="button" class="btn btn-light" hidden>View Printouts</button>
+            <button id="view" type="button" class="btn btn-primary" hidden>View Printouts</button>
             <br>
 
             <ul class="nav nav-tabs navbar-light bg-light" id="tabs" hidden>

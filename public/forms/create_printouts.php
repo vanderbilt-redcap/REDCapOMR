@@ -34,12 +34,14 @@
         </select>
         <br>
         <p class="hidden" hidden>Specify which records you want to make printouts of:</p>
-        <button id="getRecords" class="hidden btn btn-light" type="button" hidden>Get Records</button>
+        <button id="getRecords" type="button" class="hidden btn btn-light" hidden>Get Records</button>
         <div id="recordsDiv" class="hidden-inst" hidden>
             <ul id="recordsUl"></ul>
-        <br>
+        <input id="checkAll" type="button" class="btn btn-light" value="Check All" hidden/>
     </div>
-    <button id="create" type="button" class="btn btn-light" hidden>Create Printouts</button>
+    <br>
+    <br>
+    <button id="create" type="button" class="btn btn-primary" hidden>Create Printouts</button>
     </form>
 </body>
 </html>

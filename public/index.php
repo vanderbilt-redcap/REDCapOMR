@@ -45,7 +45,7 @@
             </select>
             <br>
             <br>
-            <button id="createProject" class="hidden btn btn-light" type="button" hidden>Create Project</button>
+            <button id="createProject" class="hidden btn btn-primary" type="button" hidden>Create Project</button>
         </div>
 
         <div class="formHeader" id="selectForm" hidden>
@@ -72,7 +72,7 @@
             </select>
             <br>
             <br>
-            <button type="button" id="continue" class="btn btn-light">Continue</button>
+            <button type="button" id="continue" class="btn btn-primary">Continue</button>
         </select>
         </div>
     </div>

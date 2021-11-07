@@ -36,7 +36,7 @@
             <input name="upload[]" type="file" accept=".pdf, .png, .jpg, .jpeg, .tif, .tiff" multiple></input>
             <p style="margin-top:10px">(.pdf, .png, .jpg, .jpeg, .tif, .tiff supported)</p>
             <br>
-            <button id="upload" type="button" class="btn btn-light">Upload Scans</button>
+            <button id="upload" type="button" class="btn btn-primary">Upload Scans</button>
         </div>
     </form>
 </body>

@@ -12,9 +12,13 @@ $(document).ready(function() {
         OMR_ProjectVars.fields = 0;
         OMR_ProjectVars.error = '';
 
-        //Hide create button if we click validate again
+        //Hide check all, uncheck all, and create buttons if we click validate again
         OMR_ProjectVars.createBtn = document.getElementById('create');
         OMR_ProjectVars.createBtn.setAttribute('hidden', '');
+
+        OMR_ProjectVars.checkAll = document.getElementById('checkAll');
+        OMR_ProjectVars.checkAll.setAttribute('hidden', '');
+
 
         //Clean up any instrument options from previous validation attempt
         for (i = OMR_ProjectVars.instrumentsSelect.length - 1; i >= 0; i--) {
@@ -231,11 +235,16 @@ $(document).ready(function() {
         });
     });
 
+
     $('#getRecords').on('click', function() {
 
-        //Hide create button before records are retrieved in case of error
+        //Hide check all, uncheck all, and create button before records are retrieved in case of error
         OMR_ProjectVars.createBtn = document.getElementById('create');
         OMR_ProjectVars.createBtn.setAttribute('hidden', '');
+
+        OMR_ProjectVars.checkAll = document.getElementById('checkAll');
+        OMR_ProjectVars.checkAll.setAttribute('hidden', '');
+
 
         //Trim directories off of instrument name so records for it can be retrieved from REDCap
         OMR_ProjectVars.projectChosen = $('#instruments').val();  
@@ -320,9 +329,12 @@ $(document).ready(function() {
                 OMR_ProjectVars.recordsUl.style.columnCount = OMR_ProjectVars.columnAmt;
                 }
 
-                //Unhide create button on success
+                //Unhide check all, uncheck all, and create buttons on success
                 OMR_ProjectVars.createBtn = document.getElementById('create');
                 OMR_ProjectVars.createBtn.removeAttribute('hidden');
+
+                OMR_ProjectVars.checkAll = document.getElementById('checkAll');
+                OMR_ProjectVars.checkAll.removeAttribute('hidden');
             },
             error: function(response) {
                 alert(response);
@@ -330,6 +342,16 @@ $(document).ready(function() {
             }
         });
     });
+
+
+    //Checks/unchecks all records
+    $('#checkAll:button').click(function(){
+        OMR_ProjectVars.checked = !$(this).data('checked');
+        $('input:checkbox').prop('checked', OMR_ProjectVars.checked);
+        $(this).val(OMR_ProjectVars.checked ? 'Uncheck All' : 'Check All' )
+        $(this).data('checked', OMR_ProjectVars.checked);
+    });
+
 
     $('#create').on('click', function() {
         $.ajax({

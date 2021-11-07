@@ -31,8 +31,9 @@
         <select class="hidden" name="instruments" id="instruments" hidden>
         </select>
         <br>
+        <br>
         <div id="runRecognition" class="hidden" hidden>
-            <button id="run" type="button" class="btn btn-light" hidden>Run Recognition</button>
+            <button id="run" type="button" class="btn btn-primary" hidden>Run Recognition</button>
             <p id="noUploadsText" hidden>No uploads directory found for project.  Upload scanned files <a href="upload_scans.php">here</a>.</p>
         </div>
     </form>

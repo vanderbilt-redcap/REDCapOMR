@@ -32,8 +32,8 @@
         <br>
         <div class="hidden-inst" id="settingsDiv" hidden>
             <p>Select an option for the project:</p>
-            <button id="reset" type="button" class="btn btn-light">Reset</button>
-            <button id="delete" type="button" class="btn btn-light">Delete</button>
+            <button id="reset" type="button" class="btn btn-warning">Reset</button>
+            <button id="delete" type="button" class="btn btn-danger">Delete</button>
         </div>  
     </form>
 </body>
