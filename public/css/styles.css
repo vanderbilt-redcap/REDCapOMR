@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
 /* CSS Classes for Navbar */
 
 .border-md-right {
@@ -44,20 +51,29 @@
 }
 
 #iframeContainer {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
     height: 55em;
 }
 
 #questionnaireContainer {
-    flex: 1;
-    flex-wrap: wrap;
+    -webkit-box-flex: 1;
+            -ms-flex: 1;
+                flex: 1;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
     margin-right: 20px;
 }
 
 #scansContainer {
-    flex-wrap: wrap;
-    flex: 1;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -webkit-box-flex: 1;
+            -ms-flex: 1;
+                flex: 1;
 }
 
 #questionnaire, #scans {
@@ -90,7 +106,8 @@
     z-index: 999;
 }
 .lds-ring div {
-    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
     display: block;
     position: absolute;
     width: 64px;
@@ -98,23 +115,39 @@
     margin: 8px;
     border: 8px solid rgb(0, 0, 0);
     border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    -webkit-animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: rgb(255, 75, 69) transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
-    animation-delay: -0.45s;
+    -webkit-animation-delay: -0.45s;
+            animation-delay: -0.45s;
 }
 .lds-ring div:nth-child(2) {
-    animation-delay: -0.3s;
+    -webkit-animation-delay: -0.3s;
+            animation-delay: -0.3s;
 }
 .lds-ring div:nth-child(3) {
-    animation-delay: -0.15s;
+    -webkit-animation-delay: -0.15s;
+            animation-delay: -0.15s;
+}
+@-webkit-keyframes lds-ring {
+    0% {
+        -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+    }
 }
 @keyframes lds-ring {
     0% {
-        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
     }
     100% {
-        transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
     }
 }
