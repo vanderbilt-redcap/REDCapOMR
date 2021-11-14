@@ -235,62 +235,78 @@ $(document).ready(function() {
 
     $('#reset').on('click', function() {
 
-        $.ajax({
-            type: "POST",
-            url: "../requires/reset_project.php",
-            data: {
-                instruments: $('#instruments').val()
-            },
-            dataType: "text",
-            beforeSend: function() {
-                $('.lds-ring').css("display", "flex");
-                $('.background').css("display", "flex");
-                $('#loadingText').css("display", "flex");
-            },
-            complete: function() {
-                $('.lds-ring').css("display", "none");
-                $('.background').css("display", "none");
-                $('#loadingText').css("display", "none");
-            },
-            success: function(response) {
-                console.log(response);
-                alert(response);
-            },
-            error: function(response) {
-                console.log(response);
-                alert(response);
-            }
-        });
+        //Give the user the option to confirm or cancel their request
+        if(confirm('Are you sure you want to reset your project?\nDoing so will remove all uploaded files, generated forms, and scanned results from the project.')) {
+            $.ajax({
+                type: "POST",
+                url: "../requires/reset_project.php",
+                data: {
+                    instruments: $('#instruments').val()
+                },
+                dataType: "text",
+                beforeSend: function() {
+                    $('.lds-ring').css("display", "flex");
+                    $('.background').css("display", "flex");
+                    $('#loadingText').css("display", "flex");
+                },
+                complete: function() {
+                    $('.lds-ring').css("display", "none");
+                    $('.background').css("display", "none");
+                    $('#loadingText').css("display", "none");
+                },
+                success: function(response) {
+                    console.log(response);
+                    alert(response);
+                },
+                error: function(response) {
+                    console.log(response);
+                    alert(response);
+                }
+            });
+        }
+
+        else {
+            alert('Reset request cancelled.');
+            console.log('Reset request cancelled.');
+        }
     });
+    
 
 
     $('#delete').on('click', function() {
 
-        $.ajax({
-            type: "POST",
-            url: "../requires/delete_project.php",
-            data: {
-                instruments: $('#instruments').val()
-            },
-            dataType: "text",
-            beforeSend: function() {
-                $('.lds-ring').css("display", "flex");
-                $('.background').css("display", "flex");
-                $('#loadingText').css("display", "flex");
-            },
-            complete: function() {
-                $('.lds-ring').css("display", "none");
-                $('.background').css("display", "none");
-                $('#loadingText').css("display", "none");
-            },
-            success: function(response) {
-                console.log(response);
-                alert(response);
-            },
-            error: function(response) {
-                console.log(response);
-                alert(response);
-            }
-        });
+        //Give the user the option to confirm or cancel their request
+        if(confirm('Are you sure you want to delete your project?\nDoing so will completely remove it and any related data from the REDCap OMR application.')) {
+            $.ajax({
+                type: "POST",
+                url: "../requires/delete_project.php",
+                data: {
+                    instruments: $('#instruments').val()
+                },
+                dataType: "text",
+                beforeSend: function() {
+                    $('.lds-ring').css("display", "flex");
+                    $('.background').css("display", "flex");
+                    $('#loadingText').css("display", "flex");
+                },
+                complete: function() {
+                    $('.lds-ring').css("display", "none");
+                    $('.background').css("display", "none");
+                    $('#loadingText').css("display", "none");
+                },
+                success: function(response) {
+                    console.log(response);
+                    alert(response);
+                },
+                error: function(response) {
+                    console.log(response);
+                    alert(response);
+                }
+            });
+        }
+        else {
+            alert('Delete request cancelled.');
+            console.log('Delete request cancelled.');
+        }
     });
 }); 
