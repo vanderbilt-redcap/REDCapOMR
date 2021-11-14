@@ -8,3 +8,5 @@ TODO:
 * Clean up Export Results page and possibly add ability for users to check the record rows they want exported (in case some have bad values)
 
 Note: I had a weird bug during development where my PC crashed (Windows) when loading the container.  When I restarted, Docker couldn't start the container because an old service was holding port 8080 captive in a sense.  I restarted the Docker service then restarted my computer and it worked fine again.  It's an issue that could stand to be monitored more.
+
+Gave error: "error response from daemon: driver failed programming external connectivity on endpoint ...: bind for 0.0.0.0:8080 failed: port is already allocated"
