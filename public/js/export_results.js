@@ -143,7 +143,12 @@ $(document).ready(function() {
                 }
             }
         });
+    }
 
+
+
+    //Gets and returns the field names for the REDCap project queried with the API token and URL
+    function getFieldNames() {
         $.ajax({
             type: "POST",
             url: "../requires/get_field_names.php",
@@ -208,6 +213,15 @@ $(document).ready(function() {
 
     
     $("#instruments").change(function(){
+        //Get the names of the fields of the REDCap form the user selected
+        getFieldNames();
+
+        //Unhides the select box and its text
+        OMR_ProjectVars.elements = document.getElementsByClassName('hidden-inst');
+        for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+            OMR_ProjectVars.elements[i].removeAttribute('hidden');
+        }
+        
         OMR_ProjectVars.projectPath = document.getElementById('instruments').value;
 
         $.ajax({

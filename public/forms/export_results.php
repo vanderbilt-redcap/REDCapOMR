@@ -31,8 +31,8 @@
             <select class="hidden" name="instruments" id="instruments" hidden>
             </select>
             <br>
-            <p class="hidden" hidden>Select field name of REDCap project's ID field:</p>
-            <select class="hidden" name="fields" id="fields" hidden>
+            <p class="hidden-inst" hidden>Select field name of REDCap project's ID field:</p>
+            <select class="hidden-inst" name="fields" id="fields" hidden>
             </select>
             <br>
             <br>
