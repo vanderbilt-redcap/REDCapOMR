@@ -5,7 +5,6 @@ TODO:
 * Add router function and function classes
 * Change location of Docker files(?)
 * Upload scans uploaded by the user to their corresponding REDCap records when results are exported,
-* NOTE: Above point is not implemented.  It MAY have to be implemented based on the user's filenames for the scanned pdf files, which would require more specific user actions
-* Have the project capable of running in a Docker instance, fix the Dockerfile/dependencies so it can support the recognize step.
-NOTE: All other steps work.  It seems to be an issue with SDAPS requiring the D-Bus for this to function properly, which could mean that Ubuntu or another Linux OS would have to be partially installed for this app to work in a container.
-* WE NEED D-BUS COMMUNICATION!!!
+* Clean up Export Results page and possibly add ability for users to check the record rows they want exported (in case some have bad values)
+
+Note: I had a weird bug during development where my PC crashed (Windows) when loading the container.  When I restarted, Docker couldn't start the container because an old service was holding port 8080 captive in a sense.  I restarted the Docker service then restarted my computer and it worked fine again.  It's an issue that could stand to be monitored more.
