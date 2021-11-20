@@ -49,7 +49,7 @@
         </div>
 
         <div class="formHeader" id="selectForm" hidden>
-            <p>Select an REDCap project to continue with:</p>
+            <p>Select a REDCap project to continue with:</p>
             <select name="instrumentsSelect" id="instrumentsSelect">
                 <?php
                     $projects = file_get_contents('projects.json');
