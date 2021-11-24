@@ -3,7 +3,8 @@
     "type": "library",
     "require": {
         "iu-redcap/phpcap": "^1.1",
-        "jansenfelipe/sdaps-php": "dev-bugfix-update as 1.0.x-dev"
+        "jansenfelipe/sdaps-php": "dev-bugfix-update as 1.0.x-dev",
+        "thiagoalessio/tesseract_ocr": "^2.12"
     },
     "repositories": [
         {

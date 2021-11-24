@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInit173af7316c8283801d6364ad955e4003
 {
     public static $prefixLengthsPsr4 = array (
+        't' => 
+        array (
+            'thiagoalessio\\TesseractOCR\\' => 27,
+        ),
         'I' => 
         array (
             'IU\\PHPCap\\' => 10,
@@ -14,6 +18,10 @@ class ComposerStaticInit173af7316c8283801d6364ad955e4003
     );
 
     public static $prefixDirsPsr4 = array (
+        'thiagoalessio\\TesseractOCR\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/thiagoalessio/tesseract_ocr/src',
+        ),
         'IU\\PHPCap\\' => 
         array (
             0 => __DIR__ . '/..' . '/iu-redcap/phpcap/src',

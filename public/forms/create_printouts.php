@@ -29,16 +29,18 @@
         <p class="hidden" hidden>Select a form with an SDAPS project to make printouts from:</p>
         <select class="hidden" name="instruments" id="instruments" hidden>
         </select>
-        <p class="hidden" hidden>Select field name of REDCap project's ID field:</p>
-        <select class="hidden" name="fields" id="fields" hidden>
-        </select>
-        <br>
-        <p class="hidden" hidden>Specify which records you want to make printouts of:</p>
-        <button id="getRecords" type="button" class="hidden btn btn-light" hidden>Get Records</button>
-        <div id="recordsDiv" class="hidden-inst" hidden>
-            <ul id="recordsUl"></ul>
-        <input id="checkAll" type="button" class="btn btn-light" value="Check All" hidden/>
-    </div>
+        <div class="hidden-inst" hidden>
+            <p>Select field name of REDCap project's ID field:</p>
+            <select name="fields" id="fields">
+            </select>
+            <br>
+            <p>Specify which records you want to make printouts of:</p>
+            <button id="getRecords" type="button" class="btn btn-light">Get Records</button>
+        </div>
+        <div id="recordsDiv" hidden>
+            <table id="recordsTable" class="table table-bordered table-striped table-responsive"></table>
+            <input id="checkAll" type="button" class="btn btn-light" value="Check All"/>
+        </div>
     <br>
     <br>
     <button id="create" type="button" class="btn btn-primary" hidden>Create Printouts</button>

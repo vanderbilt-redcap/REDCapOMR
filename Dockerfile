@@ -22,6 +22,7 @@ RUN apt update \
 		python3-distutils-extra \
 		python3-gi-cairo \
 		python3-opencv \
+		tesseract-ocr \
 		texlive \
 		texlive-latex-extra \
 		texlive-latex-recommended \

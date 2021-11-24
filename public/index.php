@@ -24,7 +24,11 @@
         <br>
         <div id="buttons">
             <button type="button" id="createBtn" class="btn btn-light">Create New Project</button>
-            <button type="button" id="selectBtn" class="btn btn-light">Select Existing Project</button>
+            <?php
+                if(file_exists('projects.json')) {
+                    echo '<button type="button" id="selectBtn" class="btn btn-light">Select Existing Project</button>';
+                }
+            ?>
         </div>
 
         <div class="formHeader" id="createForm" hidden>
@@ -52,21 +56,23 @@
             <p>Select a REDCap project to continue with:</p>
             <select name="instrumentsSelect" id="instrumentsSelect">
                 <?php
-                    $projects = file_get_contents('projects.json');
-                    $projects = json_decode($projects, true);
+                    if(file_exists('projects.json')) {
+                        $projects = file_get_contents('projects.json');
+                        $projects = json_decode($projects, true);
 
-                    //Returns only unique REDCap projects from original JSON file
-                    foreach($projects as $k => $v) {
-                        foreach($projects as $key => $value) {
-                            if($k != $key && $v['projId'] == $value['projId']) {
-                                unset($projects[$k]);
+                        //Returns only unique REDCap projects from original JSON file
+                        foreach($projects as $k => $v) {
+                            foreach($projects as $key => $value) {
+                                if($k != $key && $v['projId'] == $value['projId']) {
+                                    unset($projects[$k]);
+                                }
                             }
                         }
-                    }
 
-                    //Check for length, ignore select if no projects available (maybe in JS?, or create <select> in PHP)
-                    foreach($projects as $key => $val) {
-                        echo('<option value="'.$val['key'].';'.$val['url'].'">'.'Project: '.$val['rcProjTitle'].', PID: '.$val['projId'].'</option>');
+                        //Check for length, ignore select if no projects available (maybe in JS?, or create <select> in PHP)
+                        foreach($projects as $key => $val) {
+                            echo('<option value="'.$val['key'].';'.$val['url'].'">'.'Project: '.$val['rcProjTitle'].', PID: '.$val['projId'].'</option>');
+                        }
                     }
                 ?>
             </select>

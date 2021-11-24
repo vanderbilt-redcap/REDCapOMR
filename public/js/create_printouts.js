@@ -220,17 +220,30 @@ $(document).ready(function() {
             dataType: 'text',
             success: function(response) {
                 if(response === 'true') {
-                    OMR_ProjectVars.recordsDiv = document.getElementById('recordsDiv');
-                    OMR_ProjectVars.recordsDiv.removeAttribute('hidden');
+                    //Unhides all content that must come after a valid
+                    OMR_ProjectVars.elements = document.getElementsByClassName('hidden-inst');
+                    for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                        OMR_ProjectVars.elements[i].removeAttribute('hidden');
+                    }
                 }
                 else {
                     alert('The currently selected instrument could not be validated in the file system.  Please make sure it is correct.');
                     console.log('The currently selected instrument could not be validated in the file system.  Please make sure it is correct.');
+
+                    OMR_ProjectVars.elements = document.getElementsByClassName('hidden-inst');
+                    for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                        OMR_ProjectVars.elements[i].setAttribute('hidden', '');
+                    }
                 }
             },
             error: function() {
                 alert('There was an error validating if the project exists.');
                 console.log('There was an error validating if the project exists.');
+            
+                OMR_ProjectVars.elements = document.getElementsByClassName('hidden-inst');
+                for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
+                    OMR_ProjectVars.elements[i].setAttribute('hidden', '');
+                }
             }
         });
     });
@@ -242,8 +255,8 @@ $(document).ready(function() {
         OMR_ProjectVars.createBtn = document.getElementById('create');
         OMR_ProjectVars.createBtn.setAttribute('hidden', '');
 
-        OMR_ProjectVars.checkAll = document.getElementById('checkAll');
-        OMR_ProjectVars.checkAll.setAttribute('hidden', '');
+        OMR_ProjectVars.recordsDiv = document.getElementById('recordsDiv');
+        OMR_ProjectVars.recordsDiv.setAttribute('hidden', '');
 
 
         //Trim directories off of instrument name so records for it can be retrieved from REDCap
@@ -267,6 +280,7 @@ $(document).ready(function() {
                     OMR_ProjectVars.recordsDiv = document.getElementById('recordsDiv');
                     OMR_ProjectVars.recordsDiv.setAttribute('hidden', '');
 
+                    //Hide all elements with hidden class
                     OMR_ProjectVars.elements = document.getElementsByClassName('hidden');
                     for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
                         OMR_ProjectVars.elements[i].setAttribute('hidden', '');
@@ -291,47 +305,62 @@ $(document).ready(function() {
                     response.error = '';
                 }
                 else {
-                OMR_ProjectVars.records = response.results;
-                OMR_ProjectVars.recordsUl = document.getElementById('recordsUl');
+                    OMR_ProjectVars.records = response.results;
 
-                //Deletes the previous records shown on screen if the "Get Records" button is pressed again
-                OMR_ProjectVars.recordsUl.innerHTML = "";
+                    OMR_ProjectVars.recordsTable = document.getElementById('recordsTable');
 
-                OMR_ProjectVars.columnAmt = 0;
+                    //Deletes the previous records shown on screen if the "Get Records" button is pressed again
+                    OMR_ProjectVars.recordsTable.innerHTML = "";
 
-                OMR_ProjectVars.records.forEach(function(item, index) {
-                    //Adds 1 to a variable to make columns for every 10 elements
-                    if((index+1) % 10 === 0) {
-                        OMR_ProjectVars.columnAmt++;
-                    }
+                    //Create value to hold current index in ROW for elements
+                    OMR_ProjectVars.rowIndex = 0;
+                    
+                    //Add all records to table in rows of 100
+                    OMR_ProjectVars.records.forEach(function(item, recordNum) {
+                        OMR_ProjectVars.currRow;
+                        
+                        //Add new row if we reach 100 records in the current row or if we're starting to build the table
+                        if(recordNum % 100 === 0) {
+                            OMR_ProjectVars.currRow = OMR_ProjectVars.recordsTable.insertRow();
+                            OMR_ProjectVars.rowIndex = 0;
+                        }
 
-                    if(index !== 0) {
-                        OMR_ProjectVars.br = document.createElement('br');
-                        OMR_ProjectVars.recordsUl.appendChild(OMR_ProjectVars.br);
-                    }
+                        //Create the table cell for the current item, iterate index
+                        OMR_ProjectVars.currCell = OMR_ProjectVars.currRow.insertCell(OMR_ProjectVars.rowIndex);
+                        OMR_ProjectVars.rowIndex++;
 
-                    OMR_ProjectVars.check = document.createElement('input');
-                    OMR_ProjectVars.check.type = 'checkbox';
-                    OMR_ProjectVars.check.value = item;
-                    OMR_ProjectVars.check.id = item;
-                    OMR_ProjectVars.check.name = 'records[]';
-                    OMR_ProjectVars.check.className = 'records';
-                    OMR_ProjectVars.recordsUl.appendChild(OMR_ProjectVars.check);
 
-                    //OMR_ProjectVars.check.setAttribute('disabled', 'disabled');
+                        //Create label for checkbox
+                        OMR_ProjectVars.label = document.createElement('label');
+                        OMR_ProjectVars.label.innerHTML = item;
 
-                    OMR_ProjectVars.label = document.createElement('label');
-                    OMR_ProjectVars.label.innerHTML = item;
-                    OMR_ProjectVars.recordsUl.appendChild(OMR_ProjectVars.label);
-                });
+                        //Append label table cell here
+                        OMR_ProjectVars.currCell.appendChild(OMR_ProjectVars.label);
 
-                //Create a new column for every 10 elements
-                OMR_ProjectVars.recordsUl.style.columnCount = OMR_ProjectVars.columnAmt;
+                        //Create space between checkbox and label
+                        OMR_ProjectVars.currCell.appendChild(document.createElement('br'));
+
+                        //Create the content holding the checkbox input
+                        OMR_ProjectVars.check = document.createElement('input');
+                        OMR_ProjectVars.check.type = 'checkbox';
+                        OMR_ProjectVars.check.value = item;
+                        OMR_ProjectVars.check.id = item;
+                        OMR_ProjectVars.check.name = 'records[]';
+                        OMR_ProjectVars.check.className = 'records';
+                        
+                        //Append checkbox input to table cell here
+                        OMR_ProjectVars.currCell.appendChild(OMR_ProjectVars.check);
+                    });
                 }
 
-                //Unhide check all, uncheck all, and create buttons on success
+                //Unhide recordsDiv div
+                OMR_ProjectVars.recordsDiv = document.getElementById('recordsDiv');
+                OMR_ProjectVars.recordsDiv.removeAttribute('hidden');
+
+                //Unhide check/uncheck all and create buttons on success
                 OMR_ProjectVars.createBtn = document.getElementById('create');
                 OMR_ProjectVars.createBtn.removeAttribute('hidden');
+
 
                 OMR_ProjectVars.checkAll = document.getElementById('checkAll');
                 OMR_ProjectVars.checkAll.removeAttribute('hidden');

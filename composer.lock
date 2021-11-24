@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d578a94bd799c96060ed89b8685542a3",
+    "content-hash": "3d692835fc3bdbff4ea320a531717148",
     "packages": [
         {
             "name": "iu-redcap/phpcap",
@@ -98,6 +98,55 @@
                 "source": "https://github.com/cojohnson1999/sdaps-php/tree/bugfix-update"
             },
             "time": "2021-07-28T15:31:48+00:00"
+        },
+        {
+            "name": "thiagoalessio/tesseract_ocr",
+            "version": "2.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thiagoalessio/tesseract-ocr-for-php.git",
+                "reference": "0f10bd7b02bdcba59c4fbd98fbd93a56f93b09b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thiagoalessio/tesseract-ocr-for-php/zipball/0f10bd7b02bdcba59c4fbd98fbd93a56f93b09b7",
+                "reference": "0f10bd7b02bdcba59c4fbd98fbd93a56f93b09b7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/php-code-coverage": "^2.2.4 || ^9.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "thiagoalessio\\TesseractOCR\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "thiagoalessio",
+                    "email": "thiagoalessio@me.com"
+                }
+            ],
+            "description": "A wrapper to work with Tesseract OCR inside PHP.",
+            "keywords": [
+                "OCR",
+                "Tesseract",
+                "text recognition"
+            ],
+            "support": {
+                "irc": "irc://irc.freenode.net/tesseract-ocr-for-php",
+                "issues": "https://github.com/thiagoalessio/tesseract-ocr-for-php/issues",
+                "source": "https://github.com/thiagoalessio/tesseract-ocr-for-php"
+            },
+            "time": "2021-06-04T21:21:33+00:00"
         }
     ],
     "packages-dev": [],
