@@ -38,7 +38,9 @@
             <button id="getRecords" type="button" class="btn btn-light">Get Records</button>
         </div>
         <div id="recordsDiv" hidden>
-            <table id="recordsTable" class="table table-bordered table-striped table-responsive"></table>
+            <div class="verticalScroll tableWrapperVertical">
+                <table id="recordsTable" class="table table-bordered table-striped table-responsive"></table>
+            </div>
             <input id="checkAll" type="button" class="btn btn-light" value="Check All"/>
         </div>
     <br>

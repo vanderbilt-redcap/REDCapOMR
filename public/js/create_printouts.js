@@ -320,7 +320,7 @@ $(document).ready(function() {
                         OMR_ProjectVars.currRow;
                         
                         //Add new row if we reach 100 records in the current row or if we're starting to build the table
-                        if(recordNum % 100 === 0) {
+                        if(recordNum % 25  === 0) {
                             OMR_ProjectVars.currRow = OMR_ProjectVars.recordsTable.insertRow();
                             OMR_ProjectVars.rowIndex = 0;
                         }
