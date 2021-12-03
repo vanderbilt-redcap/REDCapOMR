@@ -167,6 +167,15 @@ $(document).ready(function() {
                 }
 
                 for(let i = 0; i < OMR_ProjectVars.fields.length; i++) {
+                    if(i == 0) {
+                        OMR_ProjectVars.opt = document.createElement('option');
+                        OMR_ProjectVars.opt.setAttribute('disabled', '');
+                        OMR_ProjectVars.opt.setAttribute('selected', '');
+                        OMR_ProjectVars.opt.setAttribute('value', '');
+                        OMR_ProjectVars.opt.innerHTML = '-- Select an option --';
+                        OMR_ProjectVars.fieldsSelect.appendChild(OMR_ProjectVars.opt);
+                    }
+
                     OMR_ProjectVars.opt = document.createElement('option');
                     OMR_ProjectVars.opt.value = OMR_ProjectVars.fields[i]['original_field_name'];
                     OMR_ProjectVars.opt.innerHTML = OMR_ProjectVars.fields[i]['original_field_name'];
@@ -212,16 +221,14 @@ $(document).ready(function() {
 
 
     
-    $("#instruments").change(function(){
+    $("#instruments").change(function() {
         //Get the names of the fields of the REDCap form the user selected
         getFieldNames();
 
-        //Unhides the select box and its text
-        OMR_ProjectVars.elements = document.getElementsByClassName('hidden-inst');
-        for(let i = 0; i < OMR_ProjectVars.elements.length; i++) {
-            OMR_ProjectVars.elements[i].removeAttribute('hidden');
-        }
-        
+        //Display the field selection select box
+        OMR_ProjectVars.fieldDiv = document.getElementById('fieldDiv');
+        OMR_ProjectVars.fieldDiv.removeAttribute('hidden');
+
         OMR_ProjectVars.projectPath = document.getElementById('instruments').value;
 
         $.ajax({
@@ -244,57 +251,95 @@ $(document).ready(function() {
                 else {
                     OMR_ProjectVars.exportDiv.removeAttribute('hidden');
                     if(response == 'true') {
+                        OMR_ProjectVars.fieldDiv.removeAttribute('hidden');
                         OMR_ProjectVars.runButton.removeAttribute('hidden');
                         OMR_ProjectVars.sdapsTable.removeAttribute('hidden');
                         OMR_ProjectVars.noUploads.setAttribute('hidden', '');
                     }
                     else {
                         OMR_ProjectVars.noUploads.removeAttribute('hidden');
+                        OMR_ProjectVars.fieldDiv.setAttribute('hidden', '');
                         OMR_ProjectVars.sdapsTable.setAttribute('hidden', '');
                         OMR_ProjectVars.runButton.setAttribute('hidden', '');
                     }
                 }
-
-                //Creates function to send ajax call to our csv file and print its contents
-                OMR_ProjectVars.createTable = function() {
-                    $.ajax({
-                        url: OMR_ProjectVars.projectPath + '/data_1.csv',
-                        dataType: 'text',
-                        success: function(data) {
-                            OMR_ProjectVars.sdapsData = data.split(/\r?\n|\r/);
-                            OMR_ProjectVars.tableData = '<table class="table table-bordered table-striped">';
-            
-                            for(OMR_ProjectVars.count = 0; OMR_ProjectVars.count < OMR_ProjectVars.sdapsData.length-1; OMR_ProjectVars.count++) {
-                                OMR_ProjectVars.cellData = OMR_ProjectVars.sdapsData[OMR_ProjectVars.count].split(",");
-                                OMR_ProjectVars.tableData += '<tr>';
-             
-                                for(OMR_ProjectVars.cellCount = 0; OMR_ProjectVars.cellCount<OMR_ProjectVars.cellData.length; OMR_ProjectVars.cellCount++) {
-                                    if(OMR_ProjectVars.count === 0) {
-                                        OMR_ProjectVars.tableData += '<th>'+OMR_ProjectVars.cellData[OMR_ProjectVars.cellCount]+'</th>';
-                                    }
-                                    else {
-                                        OMR_ProjectVars.tableData += '<td>'+OMR_ProjectVars.cellData[OMR_ProjectVars.cellCount]+'</td>';
-                                    }
-                                }
-                                OMR_ProjectVars.tableData += '</tr>';
-                            }
-                            OMR_ProjectVars.tableData += '</table></div>';
-                            $('#sdapsTable').html(OMR_ProjectVars.tableData);
-                        },
-                        error: function(response) {
-                            console.log('Could not find file ' + OMR_ProjectVars.projectPath + '/data_1.csv');
-                        }
-                    });
-                };
-
-                //Call our function to create the table and its data
-                OMR_ProjectVars.createTable();
-            },
-            error: function() {
-                alert('Failed to find csv data in project: ' + OMR_ProjectVars.projectPath);
             }
         });
     });
+
+
+
+    $("#fields").change(function() {
+        OMR_ProjectVars.tableButtonsDiv = document.getElementById('tableButtonsDiv');
+
+        OMR_ProjectVars.tableButtonsDiv.removeAttribute('hidden');
+
+        $.ajax({
+            type: 'POST',
+            //url: OMR_ProjectVars.projectPath + '/data_1.csv',
+            url: "../requires/create_export_table.php",
+            data: {
+                apiToken: $('#apiToken').val(),
+                apiUrl: $('#apiUrl').val(),
+                instruments: $('#instruments').val(),
+                fieldName: $('#fields').val()
+            },
+            dataType: 'JSON',
+            beforeSend: function() {
+                $('.lds-ring').css("display", "flex");
+                $('.background').css("display", "flex");
+                $('#tableText').css("display", "flex");
+            },
+            complete: function() {
+                $('.lds-ring').css("display", "none");
+                $('.background').css("display", "none");
+                $('#tableText').css("display", "none");
+            },
+            success: function(response) {
+                //If the error variable is filled, alert and log it
+                if($.trim(response.error)) {
+                    alert(response.error);
+                    console.log(response.error);
+                    response.error = '';
+                }
+                //If we can't trim the response, then it is a blank string (false)
+                if(!$.trim(response.results)) {
+                    alert('No projects were found for the project ID of the API token you entered.');
+                    console.log('No projects were found for the project ID of the API token you entered.');
+                }
+                else {
+                    console.log(response.results);
+
+                    OMR_ProjectVars.sdapsData = response.results;
+                    OMR_ProjectVars.sdapsData = OMR_ProjectVars.sdapsData.split(/\r?\n|\r/);
+                    OMR_ProjectVars.tableData = '<table class="table table-bordered table-striped">';
+    
+                    for(OMR_ProjectVars.count = 0; OMR_ProjectVars.count < OMR_ProjectVars.sdapsData.length-1; OMR_ProjectVars.count++) {
+                        OMR_ProjectVars.cellData = OMR_ProjectVars.sdapsData[OMR_ProjectVars.count].split(",");
+                        OMR_ProjectVars.tableData += '<tr>';
+    
+                        for(OMR_ProjectVars.cellCount = 0; OMR_ProjectVars.cellCount<OMR_ProjectVars.cellData.length; OMR_ProjectVars.cellCount++) {
+                            if(OMR_ProjectVars.count === 0) {
+                                OMR_ProjectVars.tableData += '<th>'+OMR_ProjectVars.cellData[OMR_ProjectVars.cellCount]+'</th>';
+                            }
+                            else {
+                                OMR_ProjectVars.tableData += '<td>'+OMR_ProjectVars.cellData[OMR_ProjectVars.cellCount]+'</td>';
+                            }
+                        }
+                        OMR_ProjectVars.tableData += '</tr>';
+                    }
+                    OMR_ProjectVars.tableData += '</table></div>';
+                    $('#sdapsTable').html(OMR_ProjectVars.tableData);
+                }
+            },
+            error: function(response) {
+                alert(response);
+                console.log(response);
+            }
+        });
+    });
+
+
 
     $('#run').on('click', function() {
         $.ajax({
@@ -310,20 +355,34 @@ $(document).ready(function() {
             beforeSend: function() {
                 $('.lds-ring').css("display", "flex");
                 $('.background').css("display", "flex");
-                $('#loadingText').css("display", "flex");
+                $('#exportText').css("display", "flex");
             },
             complete: function() {
                 $('.lds-ring').css("display", "none");
                 $('.background').css("display", "none");
-                $('#loadingText').css("display", "none");
+                $('#exportText').css("display", "none");
             },
             success: function(response) {
-                console.log(response);
-                alert(response);
+                //Parse the HTML tags from the data
+                OMR_ProjectVars.html = response;
+                OMR_ProjectVars.div = document.createElement("div");
+                OMR_ProjectVars.div.innerHTML = OMR_ProjectVars.html;
+
+                //Remove the content between the curly braces in the return
+                OMR_ProjectVars.exportText = OMR_ProjectVars.div.innerText.replace(/{.*}/, "");
+                console.log(OMR_ProjectVars.exportText);
+                alert(OMR_ProjectVars.exportText);
             },
             error: function(response) {
-                console.log(response);
-                alert(response);
+                //Parse the HTML tags from the data
+                OMR_ProjectVars.html = response;
+                OMR_ProjectVars.div = document.createElement("div");
+                OMR_ProjectVars.div.innerHTML = OMR_ProjectVars.html;
+
+                //Remove the content between the curly braces in the return
+                OMR_ProjectVars.exportText = OMR_ProjectVars.div.innerText.replace(/{.*}/, "");
+                console.log(OMR_ProjectVars.exportText);
+                alert(OMR_ProjectVars.exportText);
             }
         });
     });

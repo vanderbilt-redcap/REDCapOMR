@@ -11,7 +11,9 @@
 
 <body>
     <div class="background"></div>
-    <div class="lds-ring"><div></div><div></div><div></div><div></div></div><p id="loadingText"><br>Exporting results to REDCap...</p>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    <p id="exportText"><br>Exporting results to REDCap...</p>
+    <p id="tableText"><br>Generating table of scanned data...</p>
 
     <form id="formHeader">
         <div id="validateDiv">
@@ -27,22 +29,26 @@
             <br>
         </div>
         <div id="exportDiv" class="hidden" hidden>
-            <p class="hidden" hidden>Select the instrument used in project:</p>
-            <select class="hidden" name="instruments" id="instruments" hidden>
-            </select>
-            <br>
-            <p class="hidden-inst" hidden>Select field name of REDCap project's ID field:</p>
-            <select class="hidden-inst" name="fields" id="fields" hidden>
+            <p class="hidden">Select the instrument used in project:</p>
+            <select class="hidden" name="instruments" id="instruments">
             </select>
             <br>
             <br>
-            <button id="run" type="button" class="btn btn-primary" hidden>Export Results to REDCap</button>
-            <br>
-            <p id="noUploadsText" hidden>No csv data has been generated from recognition for this project.  Do so <a href="run_recognition.php">here</a>.</p>
-            <br>
-            <div class="table-responsive table-body" id="sdapsTable" hidden>
         </div>
+        <div id="fieldDiv" hidden>
+            <p>Select field name of REDCap project's ID field:</p>
+            <select name="fields" id="fields">
+            </select>
         </div>
+        <div id="tableButtonsDiv" hidden>
+            <br>
+            <br>
+            <button id="run" type="button" class="btn btn-primary">Export Results to REDCap</button>
+            <br>
+            <br>
+            <div class="table-responsive table-body" id="sdapsTable"></div>
+        </div>
+        <p id="noUploadsText" hidden>No csv data has been generated from recognition for this project.  Do so <a href="run_recognition.php">here</a>.</p>
     </form>
 </body>
 </html>
