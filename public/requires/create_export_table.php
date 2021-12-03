@@ -83,7 +83,7 @@ function fillRecords($redcapFormData, $meta, $sdapsData) {
     //Array to hold index values of review cols to skip
     $reviewIndex = array();
 
-    //Loop through each row
+    //Loop through each row of SDAPS csv file
     for($i = 0; ($data = fgetcsv($sdapsData, 0, ',')) !== false; $i++) {
         $j = 0;
         $k = 0;
@@ -140,12 +140,9 @@ function fillRecords($redcapFormData, $meta, $sdapsData) {
 
 
 
-    //Return our REDCap header data back into a string
-    $redcapFormData = implode(',', $redcapFormData);
-    //Create the header of our final csv file to be sent to the server
-    $csv = $redcapFormData . "\r\n";
-
-
+    //Create the header of our final csv file to be sent to REDCap (in an array)
+    $csv = array();
+    $csv[0] = $redcapFormData;
 
     //We skip the first row with the form headers, we only care about the content
     //i references the rows of the csv, j references the REDCap header field we're on
@@ -153,18 +150,18 @@ function fillRecords($redcapFormData, $meta, $sdapsData) {
         for($j = 0; $j < count($trimmedCsv[$i]); $j++) {
             //For our record_id field, we just add the value to the csv file
             if($j === 0) {
-                $csv = $csv . $trimmedCsv[$i][0][0] . ',';
+                $csv[$i][] = "{$trimmedCsv[$i][0][0]}";
             }
             //Add the file associated with a certain record ID to the file upload field
             //(NEEDS WORK)
             else if($formFieldTypes[$j] === 'file') {
                 //TODO: Do fileImport() call here or after forms are imported
 
-                $csv = $csv . ',';
+                $csv[$i][] = "";
             }
             //We don't have support for OCR, so we enter nothing for those fields
             else if($formFieldTypes[$j] === 'text' || $formFieldTypes[$j] === 'notes') {
-                $csv = $csv . ',';
+                $csv[$i][] = "";
             }
             //Add support for radio buttons
             else if($formFieldTypes[$j] === 'radio') {
@@ -178,7 +175,7 @@ function fillRecords($redcapFormData, $meta, $sdapsData) {
                    $trimmedCsv[$i][$j][0] === 'NA' ||
                    $trimmedCsv[$i][$j][0] == 'error-multi-select'
                    ) {
-                    $csv = $csv . ',';
+                    $csv[$i][] = "";
                 }
                 else {
                     //If our answer choices don't start at 1, adjust the final answer to avoid data insertion errors
@@ -191,26 +188,33 @@ function fillRecords($redcapFormData, $meta, $sdapsData) {
                     }
 
                     //Record the answer into the csv result to go to REDCap
-                    $csv = $csv . $trimmedCsv[$i][$j][0] . ',';
+                    $csv[$i][] = "{$trimmedCsv[$i][$j][0]}";
                 }
             }
             //Add support for checkboxes
             else if($formFieldTypes[$j] === 'checkbox') {
+                $keyLen = 0;
                 //Iterate through each checkbox choice and add to csv
                 foreach($trimmedCsv[$i][$j] as $key => $val) {
-                    $csv = $csv . $trimmedCsv[$i][$j][$key] . ',';
+                    $csv[$i][] = "{$trimmedCsv[$i][$j][$key]}";
                 }
             }
             //Skip over any other data types in the survey that aren't on the printout
             else {
-                $csv = $csv . ',';
+                $csv[$i][] = "";
             }
         }
         //Append the record status to the end and start new line (should be 1 since not reviewed)
-        $csv = $csv . "1\r\n";
+        $csv[$i][] = "1";
     }
 
-    return $csv;
+    $csvStr = '';
+    for($i = 0; $i < count($csv); $i++) {
+        $csvStr = $csvStr . implode(',', $csv[$i]);
+        $csvStr = $csvStr . "\r\n";
+    }
+
+    return $csvStr;
 }
 
 

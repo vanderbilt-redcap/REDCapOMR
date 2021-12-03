@@ -50,7 +50,7 @@ class json2latex {
         }
 
         //Determines if the testing mode (ability to put X marks in boxes in PDF editor) is enabled.
-        //1 = on, non-1 = off
+        //1 = on, not 1 = off
         $testingMode = 0;
         $testingString = '';
         if($testingMode === 1) {
