@@ -131,7 +131,7 @@ $(document).ready(function() {
                 if(!$('#error').length) {
                     OMR_ProjectVars.error = document.createElement('h4');
                     OMR_ProjectVars.error.id = 'error';
-                    OMR_ProjectVars.error.innerHTML = 'API token is incorrect for the given URL.';
+                    OMR_ProjectVars.error.innerHTML = '3 - API token is incorrect for the given URL.';
                     OMR_ProjectVars.form.appendChild(OMR_ProjectVars.error);
                 }
             }

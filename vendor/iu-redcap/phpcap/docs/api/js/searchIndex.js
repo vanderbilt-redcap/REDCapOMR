@@ -428,7 +428,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\IU\\PHPCap\\RedCapProject\u003A\u003AexportFile\u0028\u0029",
             "name": "exportFile",
-            "summary": "Exports\u0020the\u0020specified\u0020file.",
+            "summary": "Exports\u0020the\u0020specified\u0020file.\u0020The\u0020contents\u0020of\u0020the\u0020file\u0020are\u0020returned\u0020by\u0020the\u0020method.",
             "url": "classes/IU-PHPCap-RedCapProject.html#method_exportFile"
         },                {
             "fqsen": "\\IU\\PHPCap\\RedCapProject\u003A\u003AimportFile\u0028\u0029",

@@ -425,19 +425,19 @@ class RecordsTest extends TestCase
     public function testExportRecordsApRecordIdsAsEav()
     {
         $result = self::$basicDemographyProject->exportRecordsAp(
-            ['recordIds' => [1001, 1010, 1100], 'fields' => ['age', 'bmi'], 'type' => 'eav']
+            ['recordIds' => [1001, 1010, 1100], 'fields' => ['bmi', 'weight'], 'type' => 'eav']
         );
         
         # 3 rows X 2 fields = 6 records (since EAV type is being used).
         $this->assertEquals(6, count($result), 'Correct number of records.');
         
         $expectedResult = [
-            ['record' => 1001, 'field_name' => 'age', 'value' => 51],
             ['record' => 1001, 'field_name' => 'bmi', 'value' => 27.7],
-            ['record' => 1010, 'field_name' => 'age', 'value' => 36],
+            ['record' => 1001, 'field_name' => 'weight', 'value' => 83],
             ['record' => 1010, 'field_name' => 'bmi', 'value' => 18.3],
-            ['record' => 1100, 'field_name' => 'age', 'value' => 75],
-            ['record' => 1100, 'field_name' => 'bmi', 'value' => 18.6]
+            ['record' => 1010, 'field_name' => 'weight', 'value' => 62],
+            ['record' => 1100, 'field_name' => 'bmi', 'value' => 18.6],
+            ['record' => 1100, 'field_name' => 'weight', 'value' => 68]
         ];
         
         $this->assertEquals($expectedResult, $result, 'Results check.');
@@ -1128,12 +1128,12 @@ class RecordsTest extends TestCase
         
         $this->assertEquals(102, count($records), 'Record count check after import.');
         
-        # delete the records that were just added that are in arm 1,
+        # delete the records that were just added that are in arm 1,$array = array_map('strtolower', $array);
         # which should be only records with ID 1102
-        $recordsDeleted = self::$longitudinalDataProject->deleteRecords([1101,1102], $arm = 1);
+        $recordsDeleted = self::$longitudinalDataProject->deleteRecords([1102], $arm = 1);
         
         # Note: as of May 10, 2017, this assertion fails (apparently) because of a REDCap API bug
-        #$this->assertEquals(1, $recordsDeleted, 'Records deleted check after first delete.');
+        $this->assertEquals(1, $recordsDeleted, 'Records deleted check after first delete.');
         
         $records = self::$longitudinalDataProject->exportRecordsAp(
             ['events' => ['enrollment_arm_1', 'enrollment_arm_2']]
