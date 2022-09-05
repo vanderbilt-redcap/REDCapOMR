@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '999bb14592629bae367514fc67a32349856b8a6a',
+        'reference' => '39154d0a32e4dc870b8339683a2b3f64375cfe11',
         'name' => 'cojohnson1999/redcap-omr',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '999bb14592629bae367514fc67a32349856b8a6a',
+            'reference' => '39154d0a32e4dc870b8339683a2b3f64375cfe11',
             'dev_requirement' => false,
         ),
         'iu-redcap/phpcap' => array(

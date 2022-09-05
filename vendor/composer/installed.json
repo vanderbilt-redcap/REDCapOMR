@@ -67,13 +67,14 @@
                 "php": ">=5.3.0"
             },
             "time": "2021-07-28T15:31:48+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.0-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "JansenFelipe\\SdapsPHP": "src/"
@@ -94,7 +95,7 @@
                 "sdaps"
             ],
             "support": {
-                "source": "https://github.com/cojohnson1999/sdaps-php/tree/1.0"
+                "source": "https://github.com/cojohnson1999/sdaps-php/tree/bugfix-update"
             },
             "install-path": "../jansenfelipe/sdaps-php"
         },

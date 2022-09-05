@@ -102,15 +102,6 @@ class SdapsPHP {
         //Without this, we get duplicate pages and duplicate rows on scanned tif and exported csv
         if(count(glob($pathProject.DIRECTORY_SEPARATOR.'*.tif')) > 0) {
             self::reset($pathProject);
-
-            //Grab all the tif files present previously
-            $files = glob($pathProject.DIRECTORY_SEPARATOR.'*.tif');
-
-            //Remove each one with rm. rm *.tif didn't work for some reason, but this did
-            foreach($files as $file) {
-                $file = substr($file, strrpos($file, '/') + 1);
-                exec(escapeshellcmd('rm ' . $pathProject . $file));
-            }
         }
 
         $command = 'sdaps add ' . $pathProject . ' ' . $pathTiffFile;
@@ -135,15 +126,6 @@ class SdapsPHP {
         //Without this, we get duplicate pages and duplicate rows on scanned tif and exported csv
         if(count(glob($pathProject.DIRECTORY_SEPARATOR.'*.tif')) > 0) {
             self::reset($pathProject);
-
-            //Grab all the tif files present previously
-            $files = glob($pathProject.DIRECTORY_SEPARATOR.'*.tif');
-
-            //Remove each one with rm. rm *.tif didn't work for some reason, but this did
-            foreach($files as $file) {
-                $file = substr($file, strrpos($file, '/') + 1);
-                exec(escapeshellcmd('rm ' . $pathProject . $file));
-            }
         }
 
         $command = 'sdaps add --convert ' . $pathProject . ' ' . $pathTiffFile;
@@ -168,15 +150,6 @@ class SdapsPHP {
         //Without this, we get duplicate pages and duplicate rows on scanned tif and exported csv
         if(count(glob($pathProject.DIRECTORY_SEPARATOR.'*.tif')) > 0) {
             self::reset($pathProject);
-
-            //Grab all the tif files present previously
-            $files = glob($pathProject.DIRECTORY_SEPARATOR.'*.tif');
-
-            //Remove each one with rm. rm *.tif didn't work for some reason, but this did
-            foreach($files as $file) {
-                $file = substr($file, strrpos($file, '/') + 1);
-                exec(escapeshellcmd('rm ' . $pathProject . $file));
-            }
         }
 
         //Add each uploaded file dynamically as in the array parameter
@@ -233,8 +206,6 @@ class SdapsPHP {
     public static function csvExport($pathProject) {
         self::sdapsExists();
         self::rmExists();
-
-        //TODO: Check if data_*.csv exists before doing rm on all of those files
 
         exec(escapeshellcmd('rm ' . $pathProject /* . DIRECTORY_SEPARATOR  */. 'data_1.csv'));
 
